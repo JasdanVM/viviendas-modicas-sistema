@@ -50,7 +50,61 @@ class LoginScreen extends StatefulWidget {
   _LoginScreenState createState() => _LoginScreenState();
 }
 
+class CustomDrawer extends StatelessWidget {
+  final bool isMainScreen;
 
+  CustomDrawer({this.isMainScreen = false});
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          MouseRegion(
+            cursor: SystemMouseCursors.click,
+            child: GestureDetector(
+              onTap: isMainScreen
+                  ? null
+                  : () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const MainMenu()
+                        ),
+                      );
+                    },
+              child: SizedBox(
+                width: 150,
+                height: 185, 
+                child: Image.asset(
+                  'assets/vm_icon.png',
+                  fit: BoxFit.contain,
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+                Future.delayed(const Duration(milliseconds: 300), () {
+                  Navigator.pop(context);
+                });
+              },
+              child: const Text('Cerrar Sesión', style: TextStyle(fontSize: 18)),
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size(88, 54),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
 class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final FocusNode _focusNode = FocusNode();
@@ -77,6 +131,7 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     }
   }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -178,11 +233,12 @@ class MainMenu extends StatelessWidget {
   const MainMenu({super.key});
 
   @override
-  Widget build(BuildContext context) {
+Widget build(BuildContext context) {
   return Scaffold(
     appBar: AppBar(
-      title: const Text('Main Menu'),
+      title: const Text('Menú Principal'),
     ),
+    drawer:  CustomDrawer(isMainScreen: true),
     body: Stack(
       children: [
         Center(
@@ -206,13 +262,13 @@ class MainMenu extends StatelessWidget {
                 const SizedBox(height: 100),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(300, 50),
+                    minimumSize: const Size(400, 70),
                   ),
                   onPressed: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const CurrentRentersScreen()),
+                        builder: (context) => const CurrentRentersScreen()),
                     );
                   },
                   child: const Text('Añadir Datos',style: TextStyle(fontSize: 22,)),
@@ -220,21 +276,21 @@ class MainMenu extends StatelessWidget {
                 const SizedBox(height: 20),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(300, 50),
+                    minimumSize: const Size(400, 70),
                   ),
                   onPressed: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const CurrentRentersScreen()),
+                          builder: (context) => const ReportsScreen()),
                     );
                   },
-                  child: const Text('Reportes',style: TextStyle(fontSize: 22,)),
+                  child: const Text('Reportes',style: TextStyle(fontSize: 24,)),
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(300, 50),
+                    minimumSize: const Size(400, 70),
                   ),
                   onPressed: () {
                     Navigator.push(
@@ -242,12 +298,12 @@ class MainMenu extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => const SearchRenterScreen()),
                     );
                   },
-                  child: const Text('Buscar Arrendatario',style: TextStyle(fontSize: 22,)),
+                  child: const Text('Buscar Arrendatario',style: TextStyle(fontSize: 24,)),
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(300, 50),
+                    minimumSize: const Size(400, 70),
                   ),
                   onPressed: () {
                     Navigator.push(
@@ -256,34 +312,7 @@ class MainMenu extends StatelessWidget {
                           builder: (context) => const SearchByHousingScreen()),
                     );
                   },
-                  child: const Text('Buscar por Vivienda',style: TextStyle(fontSize: 22,)),
-                ),
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(300, 50),
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const ViewAccountsScreen()),
-                    );
-                  },
-                  child: const Text('Ver Estado de Cuentas',style: TextStyle(fontSize: 22,)),
-                ),
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(300, 50),
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const ViewPendingAccountsScreen()),
-                    );
-                  },
-                  child: const Text('Ver Cuentas Pendientes',style: TextStyle(fontSize: 22,)),
+                  child: const Text('Buscar por Vivienda',style: TextStyle(fontSize: 24,)),
                 ),
               ],
             ),
@@ -305,6 +334,7 @@ class CurrentRentersScreen extends StatelessWidget {
     appBar: AppBar(
       title: const Text('Reportes'),
     ),
+    drawer:  CustomDrawer(isMainScreen: false),
     body: Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -317,7 +347,7 @@ class CurrentRentersScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const CurrentTenantsListScreen()),
+                    builder: (context) => const CurrentTenantsListScreen()),
                 );
               },
               style: ElevatedButton.styleFrom(
@@ -354,6 +384,183 @@ class CurrentRentersScreen extends StatelessWidget {
 
 }
 
+class ReportsScreen extends StatelessWidget {
+  const ReportsScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Reportes'),
+      ),
+      drawer:  CustomDrawer(isMainScreen: false),
+      body: Stack(
+          children: [
+            Center(
+              child: SizedBox(
+                width: 300,
+                height: 371,
+                child: Opacity(
+                  opacity: 0.5,
+                  child: Image.asset(
+                    'assets/vm_icon.png',
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            ),
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: 600, 
+                    height: 50, 
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const CurrentTenantsListScreen()
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(200, 50), 
+                        textStyle: const TextStyle(fontSize: 22), 
+                      ),
+                      child: const Text('Lista de Arrendatarios Actuales'),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    width: 600,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const PreviousTenantsHistoryScreen()
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(500, 50),
+                        textStyle: const TextStyle(fontSize: 22),
+                      ),
+                      child: const Text('Historial de Arrendatarios Previos'),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    width: 600,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const PreviousTenantsHistoryScreen()
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(500, 50),
+                        textStyle: const TextStyle(fontSize: 22),
+                      ),
+                      child: const Text('Pagos Pendientes de Arrendatarios'),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    width: 600,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const PreviousTenantsHistoryScreen()
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(500, 50),
+                        textStyle: const TextStyle(fontSize: 22),
+                      ),
+                      child: const Text('Estado de Cuenta de un Arrendatario'),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    width: 600,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const PreviousTenantsHistoryScreen()
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(500, 50),
+                        textStyle: const TextStyle(fontSize: 22),
+                      ),
+                      child: const Text('Disponibilidad Viviendas por Ubicación'),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    width: 600,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const PreviousTenantsHistoryScreen()
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(500, 50),
+                        textStyle: const TextStyle(fontSize: 22),
+                      ),
+                      child: const Text('Total Cuentas por pagar a proveedor de un Servicio'),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    width: 600,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const PreviousTenantsHistoryScreen()
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(500, 50),
+                        textStyle: const TextStyle(fontSize: 22),
+                      ),
+                      child: const Text('Factura por daños ocasionados a la propiedad'),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+      )
+    );
+  }
+}
+
 class CurrentTenantsListScreen extends StatelessWidget {
   const CurrentTenantsListScreen({super.key});
 
@@ -363,6 +570,7 @@ class CurrentTenantsListScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Lista de Arrendatarios Actuales'),
       ),
+      drawer:  CustomDrawer(isMainScreen: false),
       body: const Center(
         child: Text('Aquí va la lista de arrendatarios actuales'),
       ),
@@ -379,6 +587,7 @@ class PreviousTenantsHistoryScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Historial de Arrendatarios Previos'),
       ),
+      drawer:  CustomDrawer(isMainScreen: false),
       body: const Center(
         child: Text('Aquí va el historial de arrendatarios previos'),
       ),
@@ -395,6 +604,7 @@ class SearchRenterScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Buscar Arrendatario'),
       ),
+      drawer:  CustomDrawer(isMainScreen: false),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -464,6 +674,7 @@ class SearchByHousingScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Buscar por Vivienda'),
       ),
+      drawer:  CustomDrawer(isMainScreen: false),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -544,6 +755,7 @@ class ViewAccountsScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Ver Estado de Cuentas'),
       ),
+      drawer:  CustomDrawer(isMainScreen: false),
       body: const Center(
         child: Text('View Accounts Screen'),
       ),
@@ -560,6 +772,7 @@ class ViewPendingAccountsScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Ver Cuentas Pendientes'),
       ),
+      drawer:  CustomDrawer(isMainScreen: false),
       body: const Center(
         child: Text('View Pending Accounts Screen'),
       ),
