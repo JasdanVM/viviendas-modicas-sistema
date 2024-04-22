@@ -18,6 +18,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: CustomColor.cVerde,
       ),
       home: const LoginScreen(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
@@ -333,6 +334,14 @@ class CurrentRentersScreen extends StatelessWidget {
   return Scaffold(
     appBar: AppBar(
       title: const Text('Reportes'),
+      actions: [
+          IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
     ),
     drawer:  CustomDrawer(isMainScreen: false),
     body: Center(
@@ -392,6 +401,14 @@ class ReportsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Reportes'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
       ),
       drawer:  CustomDrawer(isMainScreen: false),
       body: Stack(
@@ -569,6 +586,14 @@ class CurrentTenantsListScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Lista de Arrendatarios Actuales'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
       ),
       drawer:  CustomDrawer(isMainScreen: false),
       body: const Center(
@@ -586,6 +611,14 @@ class PreviousTenantsHistoryScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Historial de Arrendatarios Previos'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
       ),
       drawer:  CustomDrawer(isMainScreen: false),
       body: const Center(
@@ -603,6 +636,14 @@ class SearchRenterScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Buscar Arrendatario'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
       ),
       drawer:  CustomDrawer(isMainScreen: false),
       body: Center(
@@ -673,6 +714,14 @@ class SearchByHousingScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Buscar por Vivienda'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
       ),
       drawer:  CustomDrawer(isMainScreen: false),
       body: Center(
@@ -754,6 +803,14 @@ class ViewAccountsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Ver Estado de Cuentas'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
       ),
       drawer:  CustomDrawer(isMainScreen: false),
       body: const Center(
@@ -771,6 +828,14 @@ class ViewPendingAccountsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Ver Cuentas Pendientes'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
       ),
       drawer:  CustomDrawer(isMainScreen: false),
       body: const Center(
