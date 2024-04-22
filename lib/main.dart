@@ -35,9 +35,6 @@ class MyAppButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        foregroundColor: Colors.white, backgroundColor: Colors.green,
-      ),
       onPressed: onPressed,
       child: Text(text),
     );
@@ -90,10 +87,11 @@ class CustomDrawer extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
             child: ElevatedButton(
               onPressed: () {
-                Navigator.pop(context);
-                Future.delayed(const Duration(milliseconds: 300), () {
-                  Navigator.pop(context);
-                });
+                
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginScreen()),
+                );
               },
               child: const Text('Cerrar Sesión', style: TextStyle(fontSize: 18)),
               style: ElevatedButton.styleFrom(
@@ -269,10 +267,10 @@ Widget build(BuildContext context) {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const CurrentRentersScreen()),
+                        builder: (context) => const AdminData()),
                     );
                   },
-                  child: const Text('Añadir Datos',style: TextStyle(fontSize: 22,)),
+                  child: const Text('Administrar Datos',style: TextStyle(fontSize: 22,)),
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
@@ -393,6 +391,131 @@ class CurrentRentersScreen extends StatelessWidget {
 
 }
 
+class AdminData extends StatelessWidget {
+  const AdminData({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Administrar Datos'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      ),
+      drawer:  CustomDrawer(isMainScreen: false),
+      body: Stack(
+          children: [
+            Center(
+              child: SizedBox(
+                width: 300,
+                height: 371,
+                child: Opacity(
+                  opacity: 0.5,
+                  child: Image.asset(
+                    'assets/vm_icon.png',
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            ),
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: 600, 
+                    height: 50, 
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const CurrentTenantsListScreen()
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(200, 50), 
+                        textStyle: const TextStyle(fontSize: 22), 
+                      ),
+                      child: const Text('Añadir Arrendatario al sistema'),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    width: 600,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const PreviousTenantsHistoryScreen()
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(500, 50),
+                        textStyle: const TextStyle(fontSize: 22),
+                      ),
+                      child: const Text('Remover Arrendatario del sistema'),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    width: 600,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const PreviousTenantsHistoryScreen()
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(500, 50),
+                        textStyle: const TextStyle(fontSize: 22),
+                      ),
+                      child: const Text('Introducir información de Pago'),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    width: 600,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const PreviousTenantsHistoryScreen()
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(500, 50),
+                        textStyle: const TextStyle(fontSize: 22),
+                      ),
+                      child: const Text('Introducir información de Mora'),
+                    ),
+                  ),
+                  
+                ],
+              ),
+            )
+          ],
+      )
+    );
+  }
+}
 class ReportsScreen extends StatelessWidget {
   const ReportsScreen({super.key});
 
