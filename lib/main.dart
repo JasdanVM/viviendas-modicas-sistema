@@ -768,21 +768,16 @@ class SearchRenterScreen extends StatelessWidget {
           ),
         ],
       ),
-      drawer:  CustomDrawer(isMainScreen: false),
+      drawer: CustomDrawer(isMainScreen: false),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              child: Image(
-                image: AssetImage('assets/vm_icon.png'),
-                fit: BoxFit.fitHeight,
-                width: 100,
-                height: 100,
-              ),
+            Image(
+              image: AssetImage('assets/vm_icon.png'),
+              fit: BoxFit.fitHeight,
+              width: 100,
+              height: 100,
             ),
             const Text(
               'Buscar Arrendatarios',
@@ -799,11 +794,15 @@ class SearchRenterScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
-            MyAppButton(
-              text: 'Buscar',
-              onPressed: () {
-                print('Search by Name button pressed');
-              },
+            SizedBox(
+              width: 100, 
+              height: 35,
+              child: MyAppButton(
+                text: 'Buscar',
+                onPressed: () {
+                  print('Search by Name button pressed');
+                },
+              ),
             ),
             const SizedBox(height: 20),
             Padding(
@@ -816,11 +815,15 @@ class SearchRenterScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
-            MyAppButton(
-              text: 'Buscar',
-              onPressed: () {
-                print('Search by ID Number button pressed');
-              },
+            SizedBox(
+              width: 100, 
+              height: 35,
+              child: MyAppButton(
+                text: 'Buscar',
+                onPressed: () {
+                  print('Search by Name button pressed');
+                },
+              ),
             ),
           ],
         ),
@@ -846,7 +849,7 @@ class SearchByHousingScreen extends StatelessWidget {
           ),
         ],
       ),
-      drawer:  CustomDrawer(isMainScreen: false),
+      drawer: CustomDrawer(isMainScreen: false),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -854,16 +857,11 @@ class SearchByHousingScreen extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Positioned(
-                top: 0,
-                left: 0,
-                right: 0,
-                child: Image(
-                  image: AssetImage('assets/vm_icon.png'),
-                  fit: BoxFit.fitHeight,
-                  width: 100,
-                  height: 100,
-                ),
+              Image(
+                image: AssetImage('assets/vm_icon.png'),
+                fit: BoxFit.fitHeight,
+                width: 100,
+                height: 100,
               ),
               const Text(
                 'Filtrar ubicación de la vivienda:',
@@ -886,8 +884,7 @@ class SearchByHousingScreen extends StatelessWidget {
                     child: Text(location),
                   );
                 }).toList(),
-                onChanged: (String? newValue) {
-                },
+                onChanged: (String? newValue) {},
               ),
               const SizedBox(height: 20),
               const Text(
@@ -903,11 +900,15 @@ class SearchByHousingScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               Center(
-                child: ElevatedButton(
-                  onPressed: () {
-                    print('Buscar button pressed');
-                  },
-                  child: const Text('Buscar'),
+                child: SizedBox(
+                  width: 100, 
+                  height: 50, 
+                  child: ElevatedButton(
+                    onPressed: () {
+                      print('Buscar button pressed');
+                    },
+                    child: const Text('Buscar', style: TextStyle(fontSize: 18)), // Adjust font size as needed
+                  ),
                 ),
               ),
             ],
