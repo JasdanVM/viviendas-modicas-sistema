@@ -1,11 +1,5 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(MaterialApp(
-    home: NewEntryScreen(),
-  ));
-}
-
 class NewEntryScreen extends StatefulWidget {
   @override
   _NewEntryScreenState createState() => _NewEntryScreenState();
@@ -79,7 +73,7 @@ class _NewEntryScreenState extends State<NewEntryScreen> {
                 SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
-                    // Aquí puedes agregar la lógica para guardar la entrada
+                    // Aquí se puede agregar la lógica para guardar la entrada
                     // utilizando los valores de los controladores
                   },
                   child: SizedBox(
