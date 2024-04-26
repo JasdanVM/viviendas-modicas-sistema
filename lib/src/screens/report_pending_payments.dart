@@ -65,35 +65,37 @@ class PendingPaymentsDTScreen extends StatelessWidget {
       scrollDirection: Axis.horizontal,
       child: SizedBox(
         width: MediaQuery.of(context).size.width,
-        child: DataTable(
-          columnSpacing: 30,
-          headingRowColor: MaterialStateColor.resolveWith(
-            (states) => Theme.of(context).primaryColor,
+        child: SelectionArea(
+          child: DataTable(
+            columnSpacing: 30,
+            headingRowColor: MaterialStateColor.resolveWith(
+              (states) => Theme.of(context).primaryColor,
+            ),
+            headingRowHeight: 40,
+            headingTextStyle: TextStyle(color: Colors.white),
+            columns: [
+              DataColumn(label: Text('Identidad')),
+              DataColumn(label: Text('Nombre')),
+              DataColumn(label: Text('Periodo Deuda')),
+              DataColumn(label: Text('Mora')),
+            ],
+            rows: [
+              DataRow(cells: [
+                DataCell(Text('134545')),
+                DataCell(Text('Juan Pérez')),
+                DataCell(Text('Enero 2024')),
+                DataCell(Text('\50 lps')),
+              ]),
+              DataRow(cells: [
+                DataCell(Text('256565')),
+                DataCell(Text('María García')),
+                DataCell(Text('Febrero 2024')),
+                DataCell(Text('\30 lps')),
+              ]),
+              // ...
+            ],
           ),
-          headingRowHeight: 40,
-          headingTextStyle: TextStyle(color: Colors.white),
-          columns: [
-            DataColumn(label: Text('Identidad')),
-            DataColumn(label: Text('Nombre')),
-            DataColumn(label: Text('Periodo Deuda')),
-            DataColumn(label: Text('Mora')),
-          ],
-          rows: [
-            DataRow(cells: [
-              DataCell(Text('134545')),
-              DataCell(Text('Juan Pérez')),
-              DataCell(Text('Enero 2024')),
-              DataCell(Text('\50 lps')),
-            ]),
-            DataRow(cells: [
-              DataCell(Text('256565')),
-              DataCell(Text('María García')),
-              DataCell(Text('Febrero 2024')),
-              DataCell(Text('\30 lps')),
-            ]),
-            // ...
-          ],
-        ),
+        )
       ),
     );
   }

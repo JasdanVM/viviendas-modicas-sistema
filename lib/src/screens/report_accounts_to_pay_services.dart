@@ -94,36 +94,38 @@ class AccounstToPayServicesDTScreen extends StatelessWidget {
                 scrollDirection: Axis.vertical,
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width,
-                  child: DataTable(
-                    columnSpacing: 10, 
-                    headingRowColor: MaterialStateColor.resolveWith(
-                      (states) => Theme.of(context).primaryColor,
+                  child: SelectionArea(
+                    child: DataTable(
+                      columnSpacing: 10, 
+                      headingRowColor: MaterialStateColor.resolveWith(
+                        (states) => Theme.of(context).primaryColor,
+                      ),
+                      headingRowHeight: 40, 
+                      headingTextStyle: TextStyle(color: Colors.white),
+                      columns: [
+                        DataColumn(label: Text('Proveedor')),
+                        DataColumn(label: Text('Servicio')),
+                        DataColumn(label: Text('Monto Total')),
+                      ],
+                      rows: [
+                        DataRow(cells: [
+                          DataCell(Text('Proveedor 1')),
+                          DataCell(Text('Servicio A')),
+                          DataCell(Text('\$100.00')),
+                        ]),
+                        DataRow(cells: [
+                          DataCell(Text('Proveedor 2')),
+                          DataCell(Text('Servicio B')),
+                          DataCell(Text('\$200.00')),
+                        ]),
+                        DataRow(cells: [
+                          DataCell(Text('Proveedor 3')),
+                          DataCell(Text('Servicio C')),
+                          DataCell(Text('\$300.00')),
+                        ]),
+                      ],
                     ),
-                    headingRowHeight: 40, 
-                    headingTextStyle: TextStyle(color: Colors.white),
-                    columns: [
-                      DataColumn(label: Text('Proveedor')),
-                      DataColumn(label: Text('Servicio')),
-                      DataColumn(label: Text('Monto Total')),
-                    ],
-                    rows: [
-                      DataRow(cells: [
-                        DataCell(Text('Proveedor 1')),
-                        DataCell(Text('Servicio A')),
-                        DataCell(Text('\$100.00')),
-                      ]),
-                      DataRow(cells: [
-                        DataCell(Text('Proveedor 2')),
-                        DataCell(Text('Servicio B')),
-                        DataCell(Text('\$200.00')),
-                      ]),
-                      DataRow(cells: [
-                        DataCell(Text('Proveedor 3')),
-                        DataCell(Text('Servicio C')),
-                        DataCell(Text('\$300.00')),
-                      ]),
-                    ],
-                  ),
+                  )
                 ),
               ),
             ),

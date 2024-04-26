@@ -38,14 +38,20 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: RawKeyboardListener(
+        child: KeyboardListener(
           focusNode: _focusNode,
-          onKey: (event) {
-            if (event is RawKeyDownEvent &&
-                event.logicalKey == LogicalKeyboardKey.enter) {
+          onKeyEvent: (event) {
+            if (event.logicalKey == LogicalKeyboardKey.enter) {
               _handleLogin();
             }
           },
+          // KeyboardListener(
+          // autofocus: true,
+          // onKeyEvent: (event) {
+          //   if (event.logicalKey == LogicalKeyboardKey.enter) {
+          //     _handleLogin();
+          //   }
+          // },
           child: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 300.0),

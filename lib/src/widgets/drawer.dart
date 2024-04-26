@@ -16,19 +16,22 @@ class CustomDrawer extends StatelessWidget {
             cursor: SystemMouseCursors.click,
             child: GestureDetector(
               onTap: isMainScreen
-                  ? null
+                ? null
                   : () {
                       Navigator.pop(context);
                       Navigator.pushNamed(context, Rutas.menuPrincipal.name);
                     },
               child: Tooltip(
                 message: 'Navegar al Menú Principal',
-                child: SizedBox(
-                  width: 150,
-                  height: 185, 
-                  child: Image.asset(
-                    'assets/vm_icon.png',
-                    fit: BoxFit.contain,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    width: 150,
+                    height: 185, 
+                    child: Image.asset(
+                      'assets/vm_icon.png',
+                      fit: BoxFit.contain,
+                    ),
                   ),
                 ),
               ),

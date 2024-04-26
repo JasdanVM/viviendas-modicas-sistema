@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import '../widgets/appbar.dart';
 import '../widgets/drawer.dart';
@@ -65,40 +66,42 @@ class RentersCurrentDTScreen extends StatelessWidget {
       scrollDirection: Axis.horizontal,
       child: SizedBox(
         width: MediaQuery.of(context).size.width,
-        child: DataTable(
-          columnSpacing: 30,
-          headingRowColor: MaterialStateColor.resolveWith(
-            (states) => Theme.of(context).primaryColor,
+        child: SelectionArea(
+          child: DataTable(
+            columnSpacing: 30,
+            headingRowColor: MaterialStateColor.resolveWith(
+              (states) => Theme.of(context).primaryColor,
+            ),
+            headingRowHeight: 40,
+            headingTextStyle: TextStyle(color: Colors.white),
+            columns: [
+              DataColumn(label: Text('Identidad')),
+              DataColumn(label: Text('Nombre')),
+              DataColumn(label: Text('Codigo Vivienda')),
+              DataColumn(label: Text('Fecha de Entrada')),
+              DataColumn(label: Text('Precio Renta')),
+              DataColumn(label: Text('Observaciones')),
+            ],
+            rows: [
+              DataRow(cells: [
+                DataCell(Text('1234567890')),
+                DataCell(Text('Nombre1')),
+                DataCell(Text('1')),
+                DataCell(Text('12/03/2021')),
+                DataCell(Text('2500')),
+                DataCell(Text('Observación1')),
+              ]),
+              DataRow(cells: [
+                DataCell(Text('0987654321')),
+                DataCell(Text('Nombre2')),
+                DataCell(Text('2')),
+                DataCell(Text('03/12/2019')),
+                DataCell(Text('1700')),
+                DataCell(Text('Observación2')),
+              ]),
+              //...
+            ],
           ),
-          headingRowHeight: 40,
-          headingTextStyle: TextStyle(color: Colors.white),
-          columns: [
-            DataColumn(label: Text('Identidad')),
-            DataColumn(label: Text('Nombre')),
-            DataColumn(label: Text('Codigo Vivienda')),
-            DataColumn(label: Text('Fecha de Entrada')),
-            DataColumn(label: Text('Precio Renta')),
-            DataColumn(label: Text('Observaciones')),
-          ],
-          rows: [
-            DataRow(cells: [
-              DataCell(Text('1234567890')),
-              DataCell(Text('Nombre1')),
-              DataCell(Text('1')),
-              DataCell(Text('12/03/2021')),
-              DataCell(Text('2500')),
-              DataCell(Text('Observación1')),
-            ]),
-            DataRow(cells: [
-              DataCell(Text('0987654321')),
-              DataCell(Text('Nombre2')),
-              DataCell(Text('2')),
-              DataCell(Text('03/12/2019')),
-              DataCell(Text('1700')),
-              DataCell(Text('Observación2')),
-            ]),
-            //...
-          ],
         ),
       ),
     );

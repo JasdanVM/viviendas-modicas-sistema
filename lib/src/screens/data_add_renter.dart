@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
+import '../widgets/appbar.dart';
+import '../widgets/drawer.dart';
 
 class NewEntryScreen extends StatefulWidget {
   @override
@@ -6,6 +10,8 @@ class NewEntryScreen extends StatefulWidget {
 }
 
 class _NewEntryScreenState extends State<NewEntryScreen> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final FocusNode _focusNode = FocusNode();
   TextEditingController _identidadController = TextEditingController();
   TextEditingController _nombreController = TextEditingController();
   TextEditingController _codigoViviendaController = TextEditingController();
@@ -20,90 +26,198 @@ class _NewEntryScreenState extends State<NewEntryScreen> {
       firstDate: DateTime(2010, 8),
       lastDate: DateTime(2050),
     );
-    if (picked != null) { // Verificar si el valor seleccionado no es nulo
+    if (picked != null) {
       setState(() {
-        _fechaEntradaController.text = picked.toString();
+        _fechaEntradaController.text = DateFormat('yyyy-MM-dd').format(picked);
       });
     }
+  }
+
+  void _clearFields() {
+    _identidadController.clear();
+    _nombreController.clear();
+    _codigoViviendaController.clear();
+    _fechaEntradaController.clear();
+    _precioRentaController.clear();
+    _observacionesController.clear();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Nueva Entrada'),
-      ),
-      body: SizedBox(
-        height: MediaQuery.of(context).size.height,
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
+      appBar: CustomAppBar(title: 'Nueva Entrada', back: true),
+      drawer:  CustomDrawer(isMainScreen: false),
+      body: Center(
+        child: KeyboardListener(
+          focusNode: _focusNode,
+          onKeyEvent: (event) {
+            if (event.logicalKey == LogicalKeyboardKey.enter) {
+              // Handle enter key press
+            }
+          },
           child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                TextFormField(
-                  controller: _identidadController,
-                  decoration: InputDecoration(labelText: 'Identidad'),
-                ),
-                TextFormField(
-                  controller: _nombreController,
-                  decoration: InputDecoration(labelText: 'Nombre'),
-                ),
-                TextFormField(
-                  controller: _codigoViviendaController,
-                  decoration: InputDecoration(labelText: 'Código de Vivienda'),
-                ),
-                GestureDetector(
-                  onTap: () => _selectDate(context),
-                  child: AbsorbPointer(
-                    child: TextFormField(
-                      controller: _fechaEntradaController,
-                      decoration: InputDecoration(labelText: 'Fecha de Entrada'),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 300.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 20),
+                    Tooltip(
+                      message: 'Ingresa el DNI del Arrendatario',
+                      child: TextFormField(
+                        controller: _identidadController,
+                        decoration: const InputDecoration(
+                          labelText: 'Identidad',
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'La Indentidad es un campo necesario';
+                          }
+                          if (value.length > 13) {
+                            return 'La Identidad no debe tener más de 13 dígitos';
+                          }
+                          return null;
+                        },
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(13),
+                        ],
+                      ),
                     ),
-                  ),
+                    const SizedBox(height: 20),
+                    Tooltip(
+                      message: 'Ingresa el nombre del Arrendatario',
+                      child: TextFormField(
+                        controller: _nombreController,
+                        decoration: const InputDecoration(
+                          labelText: 'Nombre',
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Ingresa tu nombre';
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Tooltip(
+                      message: 'Ingresa el código de vivienda',
+                      child: TextFormField(
+                        controller: _codigoViviendaController,
+                        decoration: const InputDecoration(
+                          labelText: 'Código de Vivienda',
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Ingresa el código de vivienda';
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    GestureDetector(
+                      onTap: () => _selectDate(context),
+                      child: MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        child: Tooltip(
+                          message: "Click para seleccionar una fecha",
+                          child: AbsorbPointer(
+                            child: TextFormField(
+                              controller: _fechaEntradaController,
+                              decoration: const InputDecoration(
+                                labelText: 'Fecha de Entrada',
+                                border: OutlineInputBorder(),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Tooltip(
+                      message: 'Ingresa el precio de renta',
+                      child: TextFormField(
+                        controller: _precioRentaController,
+                        decoration: const InputDecoration(
+                          labelText: 'Precio Renta',
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Ingresa el precio de renta';
+                          }
+                          if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                            return 'El Precio Renta solo debe contener números';
+                          }
+                          return null;
+                        },
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Tooltip(
+                      message: 'Ingresa las observaciones',
+                      child: TextFormField(
+                        controller: _observacionesController,
+                        decoration: const InputDecoration(
+                          labelText: 'Observaciones',
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: (value) {
+                          return null;
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            _clearFields();
+                          },
+                          child: Text('Cancelar'),
+                          style: TextButton.styleFrom(
+                            minimumSize: Size(150, 50),
+                          ),
+                        ),
+                        SizedBox(
+                          width:150,
+                          height: 50,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                // Handle save button press
+                              }
+                            },
+                            child: const Text('Agregar'),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                  ],
                 ),
-                TextFormField(
-                  controller: _precioRentaController,
-                  decoration: InputDecoration(labelText: 'Precio Renta'),
-                ),
-                TextFormField(
-                  controller: _observacionesController,
-                  decoration: InputDecoration(labelText: 'Observaciones'),
-                ),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    // Aquí se puede agregar la lógica para guardar la entrada
-                    // utilizando los valores de los controladores
-                  },
-                  child: SizedBox(
-                    width: double.infinity,
-                    height: 30,
-                    child: Center(child: Text('Agregar')),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.zero,
-                  ),
-                ),
-                SizedBox(height: 10),
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context); // Vuelve a la pantalla anterior
-                  },
-                  child: SizedBox(
-                    width: double.infinity,
-                    height: 30,
-                    child: Center(child: Text('Cancelar')),
-                  ),
-                  style: TextButton.styleFrom(
-                    padding: EdgeInsets.zero,
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
   }
 }

@@ -63,40 +63,42 @@ class PropertyDamageScreen extends StatelessWidget {
                   scrollDirection: Axis.vertical,
                   child: SizedBox(
                     width: MediaQuery.of(context).size.width,
-                    child: DataTable(
-                      columnSpacing: 30,
-                      headingRowColor: MaterialStateColor.resolveWith(
-                        (states) => Theme.of(context).primaryColor,
+                    child: SelectionArea(
+                      child: DataTable(
+                        columnSpacing: 30,
+                        headingRowColor: MaterialStateColor.resolveWith(
+                          (states) => Theme.of(context).primaryColor,
+                        ),
+                        headingRowHeight: 40,
+                        headingTextStyle: TextStyle(color: Colors.white),
+                        columns: [
+                          DataColumn(label: Text('Codigo Vivienda')),
+                          DataColumn(label: Text('Identidad')),
+                          DataColumn(label: Text('Nombre')),
+                          DataColumn(label: Text('Total por Reparaciones')),
+                          DataColumn(label: Text('Monto Final')),
+                          DataColumn(label: Text('Descripciones')),
+                        ],
+                        rows: [
+                          DataRow(cells: [
+                            DataCell(Text('1')),
+                            DataCell(Text('1234567890')),
+                            DataCell(Text('Nombre1')),
+                            DataCell(Text('1000')),
+                            DataCell(Text('500')),
+                            DataCell(Text('Descripción1')),
+                          ]),
+                          DataRow(cells: [
+                            DataCell(Text('2')),
+                            DataCell(Text('0987654321')),
+                            DataCell(Text('Nombre2')),
+                            DataCell(Text('2000')),
+                            DataCell(Text('700')),
+                            DataCell(Text('Descripción2')),
+                          ]),
+                        ],
                       ),
-                      headingRowHeight: 40,
-                      headingTextStyle: TextStyle(color: Colors.white),
-                      columns: [
-                        DataColumn(label: Text('Codigo Vivienda')),
-                        DataColumn(label: Text('Identidad')),
-                        DataColumn(label: Text('Nombre')),
-                        DataColumn(label: Text('Total por Reparaciones')),
-                        DataColumn(label: Text('Monto Final')),
-                        DataColumn(label: Text('Descripciones')),
-                      ],
-                      rows: [
-                        DataRow(cells: [
-                          DataCell(Text('1')),
-                          DataCell(Text('1234567890')),
-                          DataCell(Text('Nombre1')),
-                          DataCell(Text('1000')),
-                          DataCell(Text('500')),
-                          DataCell(Text('Descripción1')),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text('2')),
-                          DataCell(Text('0987654321')),
-                          DataCell(Text('Nombre2')),
-                          DataCell(Text('2000')),
-                          DataCell(Text('700')),
-                          DataCell(Text('Descripción2')),
-                        ]),
-                      ],
-                    ),
+                    )
                   ),
                 ),
               ),

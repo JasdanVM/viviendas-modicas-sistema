@@ -22,6 +22,7 @@ flutter:
 
   assets:
     - assets/
+    - assets/vm_icon.png
 
 flutter_launcher_icons:
   android: "launcher_icon"
