@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import '../shared/constantes.dart';
 import '../widgets/appbar.dart';
 import '../widgets/drawer.dart';
+import '../widgets/tooltip.dart';
 
 class MainMenu extends StatelessWidget {
   const MainMenu({super.key});
@@ -33,7 +34,7 @@ Widget build(BuildContext context) {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(height: 100),
-                Tooltip(
+                CustomTooltip(
                   message: 'Añadir or Remover cierta información del sistema',
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
@@ -46,7 +47,7 @@ Widget build(BuildContext context) {
                   ),
                 ),
                 const SizedBox(height: 20),
-                Tooltip(
+                CustomTooltip(
                   message: 'Acceder a las salidas de información del sistema',
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
@@ -59,7 +60,7 @@ Widget build(BuildContext context) {
                   ),
                 ),
                 const SizedBox(height: 20),
-                Tooltip(
+                CustomTooltip(
                   message: 'Buscar la información individual de un Arrendatario',
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
@@ -72,7 +73,7 @@ Widget build(BuildContext context) {
                   ),
                 ),
                 const SizedBox(height: 20),
-                Tooltip(
+                CustomTooltip(
                   message: 'Buscar entradas del sistema de acuerdo a la Vivienda',
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(

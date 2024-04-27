@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import '../shared/constantes.dart';
 import '../widgets/appbar.dart';
 import '../widgets/drawer.dart';
+import '../widgets/tooltip.dart';
 
 class ReportsScreen extends StatelessWidget {
   const ReportsScreen({super.key});
@@ -34,7 +35,7 @@ class ReportsScreen extends StatelessWidget {
                   SizedBox(
                     width: 600, 
                     height: 50, 
-                    child: Tooltip(
+                    child: CustomTooltip(
                       message: 'Ver a todos los arrendatarios que actualmente viven en Viviendas Módicas',
                       child: ElevatedButton(
                         onPressed: () {
@@ -52,7 +53,7 @@ class ReportsScreen extends StatelessWidget {
                   SizedBox(
                     width: 600,
                     height: 50,
-                    child: Tooltip(
+                    child: CustomTooltip(
                       message: 'Ver las personas que anteriormente fueron arrendatarios de Viviendas Módicas',
                       child: ElevatedButton(
                         onPressed: () {
@@ -70,7 +71,7 @@ class ReportsScreen extends StatelessWidget {
                   SizedBox(
                     width: 600,
                     height: 50,
-                    child: Tooltip(
+                    child: CustomTooltip(
                       message: 'Ver la cantidad total que debe un arrendatario',
                       child: ElevatedButton(
                         onPressed: () {
@@ -88,7 +89,7 @@ class ReportsScreen extends StatelessWidget {
                   SizedBox(
                     width: 600,
                     height: 50,
-                    child: Tooltip(
+                    child: CustomTooltip(
                       message: 'Ver la información de pagos y moras mensuales de un Arrendatario',
                       child: ElevatedButton(
                         onPressed: () {
@@ -106,7 +107,7 @@ class ReportsScreen extends StatelessWidget {
                   SizedBox(
                     width: 600,
                     height: 50,
-                    child: Tooltip(
+                    child: CustomTooltip(
                       message: 'Ver cuantas viviendas poseen un arrendatario de las disponibles',
                       child: ElevatedButton(
                         onPressed: () {
@@ -124,7 +125,7 @@ class ReportsScreen extends StatelessWidget {
                   SizedBox(
                     width: 600,
                     height: 50,
-                    child: Tooltip(
+                    child: CustomTooltip(
                       message: 'Ver las cuentas que se le deben abonar a los proveedores de servicios como Energía Electrica o Agua Potable',
                       child: ElevatedButton(
                         onPressed: () {
@@ -142,7 +143,7 @@ class ReportsScreen extends StatelessWidget {
                   SizedBox(
                     width: 600,
                     height: 50,
-                    child: Tooltip(
+                    child: CustomTooltip(
                       message: 'Ver un reporte de daños ocasionados a una vivienda de los que un arrendatario es responsable',
                       child: ElevatedButton(
                         onPressed: () {

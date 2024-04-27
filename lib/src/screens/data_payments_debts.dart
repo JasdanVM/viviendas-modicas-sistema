@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import '../widgets/appbar.dart';
 import '../widgets/drawer.dart';
+import '../widgets/tooltip.dart';
 
 class PaymentAndMorosoInfoScreen extends StatefulWidget {
   @override
@@ -105,7 +106,7 @@ class _PaymentAndMorosoInfoScreenState extends State<PaymentAndMorosoInfoScreen>
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const SizedBox(height: 20),
-                    Tooltip(
+                    CustomTooltip(
                       message: 'Ingresa la identidad del arrendatario',
                       child: TextFormField(
                         controller: _identidadController,
@@ -126,7 +127,7 @@ class _PaymentAndMorosoInfoScreenState extends State<PaymentAndMorosoInfoScreen>
                       ),
                     ),
                     const SizedBox(height: 20),
-                    Tooltip(
+                    CustomTooltip(
                       message: 'Ingresa el nombre del arrendatario',
                       child: TextFormField(
                         controller: _nombreController,
@@ -135,7 +136,7 @@ class _PaymentAndMorosoInfoScreenState extends State<PaymentAndMorosoInfoScreen>
                           border: OutlineInputBorder(),
                         ),
                         validator: (value) {
-if (value == null || value.isEmpty) {
+                          if (value == null || value.isEmpty) {
                             return 'Ingresa el nombre del arrendatario';
                           }
                           return null;
@@ -143,7 +144,7 @@ if (value == null || value.isEmpty) {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    Tooltip(
+                    CustomTooltip(
                       message: 'Ingresa el monto del pago',
                       child: TextFormField(
                         controller: _montoController,
@@ -166,7 +167,7 @@ if (value == null || value.isEmpty) {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    Tooltip(
+                    CustomTooltip(
                       message: 'Ingresa el monto de la deuda de electricidad',
                       child: TextFormField(
                         controller: _montoDeudaController,
@@ -189,7 +190,7 @@ if (value == null || value.isEmpty) {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    Tooltip(
+                    CustomTooltip(
                       message: 'Ingresa el monto de la deuda de agua',
                       child: TextFormField(
                         controller: _montoDeudaAguaController,
@@ -216,7 +217,7 @@ if (value == null || value.isEmpty) {
                       onTap: () => _selectDate(context, _fechaMorosidadController),
                       child: MouseRegion(
                         cursor: SystemMouseCursors.click,
-                        child: Tooltip(
+                        child: CustomTooltip(
                           message: "Click para seleccionar una fecha",
                           child: AbsorbPointer(
                             child: TextFormField(
@@ -235,7 +236,7 @@ if (value == null || value.isEmpty) {
                       onTap: () => _selectDate(context, _fechaMontoPagoViviendaController),
                       child: MouseRegion(
                         cursor: SystemMouseCursors.click,
-                        child: Tooltip(
+                        child: CustomTooltip(
                           message: "Click para seleccionar una fecha",
                           child: AbsorbPointer(
                             child: TextFormField(

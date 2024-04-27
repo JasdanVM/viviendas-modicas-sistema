@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import '../widgets/appbar.dart';
 import '../widgets/drawer.dart';
+import '../widgets/tooltip.dart';
 
 class NewEntryScreen extends StatefulWidget {
   @override
@@ -64,7 +65,7 @@ class _NewEntryScreenState extends State<NewEntryScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const SizedBox(height: 20),
-                    Tooltip(
+                    CustomTooltip(
                       message: 'Ingresa el DNI del Arrendatario',
                       child: TextFormField(
                         controller: _identidadController,
@@ -88,7 +89,7 @@ class _NewEntryScreenState extends State<NewEntryScreen> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    Tooltip(
+                    CustomTooltip(
                       message: 'Ingresa el nombre del Arrendatario',
                       child: TextFormField(
                         controller: _nombreController,
@@ -105,7 +106,7 @@ class _NewEntryScreenState extends State<NewEntryScreen> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    Tooltip(
+                    CustomTooltip(
                       message: 'Ingresa el código de vivienda',
                       child: TextFormField(
                         controller: _codigoViviendaController,
@@ -126,7 +127,7 @@ class _NewEntryScreenState extends State<NewEntryScreen> {
                       onTap: () => _selectDate(context),
                       child: MouseRegion(
                         cursor: SystemMouseCursors.click,
-                        child: Tooltip(
+                        child: CustomTooltip(
                           message: "Click para seleccionar una fecha",
                           child: AbsorbPointer(
                             child: TextFormField(
@@ -141,7 +142,7 @@ class _NewEntryScreenState extends State<NewEntryScreen> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    Tooltip(
+                    CustomTooltip(
                       message: 'Ingresa el precio de renta',
                       child: TextFormField(
                         controller: _precioRentaController,
@@ -164,7 +165,7 @@ class _NewEntryScreenState extends State<NewEntryScreen> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    Tooltip(
+                    CustomTooltip(
                       message: 'Ingresa las observaciones',
                       child: TextFormField(
                         controller: _observacionesController,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../widgets/appbar.dart';
 import '../widgets/drawer.dart';
+import '../widgets/tooltip.dart';
 
 class RemoveTenantScreen extends StatefulWidget {
   @override
@@ -54,7 +55,7 @@ class _RemoveTenantScreenState extends State<RemoveTenantScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(height: 20),
-                Tooltip(
+                CustomTooltip(
                   message: 'Ingresa el ID del Arrendatario',
                   child: TextFormField(
                     controller: _idController,

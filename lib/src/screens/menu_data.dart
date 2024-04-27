@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import '../shared/constantes.dart';
 import '../widgets/appbar.dart';
 import '../widgets/drawer.dart';
+import '../widgets/tooltip.dart';
 
 class AdminDataScreen extends StatelessWidget {
   const AdminDataScreen({super.key});
@@ -34,7 +35,7 @@ class AdminDataScreen extends StatelessWidget {
                   SizedBox(
                     width: 600, 
                     height: 50, 
-                    child: Tooltip(
+                    child: CustomTooltip(
                       message: 'Introducir los datos de alguien que ha comenzado a arrendar en Viviendas Módicas',
                       child: ElevatedButton(
                         onPressed: () {
@@ -52,7 +53,7 @@ class AdminDataScreen extends StatelessWidget {
                   SizedBox(
                     width: 600,
                     height: 50,
-                    child: Tooltip(
+                    child: CustomTooltip(
                       message: 'Indicar que un individuo ha dejado de arrendar su vivienda, y que se le añada al Historial',
                       child: ElevatedButton(
                         onPressed: () {
@@ -70,7 +71,7 @@ class AdminDataScreen extends StatelessWidget {
                   SizedBox(
                     width: 600,
                     height: 50,
-                    child: Tooltip(
+                    child: CustomTooltip(
                       message: 'Actualizar la informaciuón respecto a los pagos y deudas de arrendatarios',
                       child: ElevatedButton(
                         onPressed: () {
