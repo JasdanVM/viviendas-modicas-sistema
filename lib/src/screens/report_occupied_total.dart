@@ -43,7 +43,7 @@ class OccupiedHousingScreen extends StatelessWidget {
                   const SizedBox(height: 16),
                   Center(
                     child: Text(
-                      'Fecha de Emisión: ',
+                      'Fecha de Emision: ${DateFormat('dd/MM/yyyy').format(DateTime.now())}',
                       style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                   ),
@@ -63,8 +63,14 @@ class OccupiedHousingScreen extends StatelessWidget {
 }
 
 class OccupiedHousingDTScreen extends StatelessWidget {
-  final int _totalHouses = 20; // Replace with your total houses variable
-  final int _occupiedHouses = 5; // Replace with your occupied houses variable
+  final int _totalPlaces = 20; // Replace with your total houses variable
+  final int _occupiedPlaces = 5; // Replace with your occupied houses variable
+  final List<Place> _places = [
+    Place(code: 'LLG-A01', location: 'La Laguna'),
+    Place(code: 'EPV-C02', location: 'El Porvenir'),
+    Place(code: '23A-B03', location: 'La 23 de Abril'),
+    // Add more houses to this list
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -80,13 +86,13 @@ class OccupiedHousingDTScreen extends StatelessWidget {
                 CircularPercentIndicator(
                   radius: 240.0,
                   lineWidth: 20.0,
-                  percent: _occupiedHouses / _totalHouses, 
-                  center: Text('$_occupiedHouses/$_totalHouses', style: TextStyle(fontSize: 36)),
+                  percent: _occupiedPlaces / _totalPlaces, 
+                  center: Text('$_occupiedPlaces/$_totalPlaces', style: TextStyle(fontSize: 36)),
                   progressColor: Colors.green,
                 ),
                 SizedBox(height: 16),
                 Text(
-                  'Viviendas Disponibles: ${_totalHouses-_occupiedHouses}',
+                  'Viviendas Disponibles: ${_totalPlaces-_occupiedPlaces}',
                   style: TextStyle(fontSize: 24),
                   textAlign: TextAlign.center,
                 ),
@@ -113,16 +119,12 @@ class OccupiedHousingDTScreen extends StatelessWidget {
                         DataColumn(label: Text('Código Vivienda')),
                         DataColumn(label: Text('Ubicación')),
                       ],
-                      rows: [
-                        DataRow(cells: [
-                          DataCell(Text('31351')),
-                          DataCell(Text('epv')),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text('3541354')),
-                          DataCell(Text('llg')),
-                        ]),
-                      ],
+                      rows: _places.map((place) {
+                        return DataRow(cells: [
+                          DataCell(Text(place.code)),
+                          DataCell(Text(place.location)),
+                        ]);
+                      }).toList(),
                     ),
                   )
                 ),
@@ -133,4 +135,11 @@ class OccupiedHousingDTScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+class Place {
+  final String code;
+  final String location;
+
+  Place({required this.code, required this.location});
 }
