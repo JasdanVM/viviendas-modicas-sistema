@@ -62,7 +62,7 @@ class ReportsScreen extends StatelessWidget {
                           minimumSize: const Size(500, 50),
                           textStyle: const TextStyle(fontSize: 22),
                         ),
-                        child: const Text('Historial de Arrendatarios Previos'),
+                        child: const Text('Historial de Arrendatarios'),
                       ),
                     ),
                   ),

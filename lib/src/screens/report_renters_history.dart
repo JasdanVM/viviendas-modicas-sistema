@@ -25,15 +25,12 @@ class RentersHistorycreen extends StatelessWidget {
               ),
               Align(
                 alignment: Alignment.centerRight,
-                child: Expanded(
-                  flex: 1,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image.asset(
-                      'assets/vm_icon.png',
-                      height: 100,
-                      fit: BoxFit.contain,
-                    ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.asset(
+                    'assets/vm_icon.png',
+                    height: 100,
+                    fit: BoxFit.contain,
                   ),
                 ),
               ),
