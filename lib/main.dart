@@ -2,7 +2,7 @@ import 'src/shared/constantes.dart';
 import 'src/shared/rutas.dart';
 import 'src/shared/not_found.dart';
 import 'package:flutter/material.dart';
-import '../models/colors.dart';
+import '../src/models/colors.dart';
 
 void main() {
   runApp(const MyApp());
