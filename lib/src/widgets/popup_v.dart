@@ -139,10 +139,15 @@ class _SearchByHousingPopupState extends State<SearchByHousingPopup> {
                         });
                       } else {
                         print('Buscar button pressed');
-                        widget.ruta != null ? Navigator.popAndPushNamed(context, widget.ruta!, arguments: _codigoDeViviendaValue) : null;
+                        if (widget.ruta!= null) {
+                          Navigator.popAndPushNamed(context, widget.ruta!, arguments: _codigoDeViviendaValue);
+                        } else {
+                          Navigator.pop(context, _codigoDeViviendaValue);
+                        }
                       }
                     },
-                    child: Text('Buscar', style: TextStyle(fontSize: 18)),
+                    
+                    child: Text(widget.ruta == null? 'Ingresar' : 'Buscar', style: TextStyle(fontSize: 18)),
                   ),
                 ),
               ),

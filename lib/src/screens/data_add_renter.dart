@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import '../widgets/appbar.dart';
 import '../widgets/drawer.dart';
 import '../widgets/tooltip.dart';
+import '../widgets/popup_v.dart';
 
 class NewEntryScreen extends StatefulWidget {
   @override
@@ -34,6 +35,20 @@ class _NewEntryScreenState extends State<NewEntryScreen> {
     }
   }
 
+  Future<void> _selectPlace(BuildContext context) async {
+    final String? picked = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return SearchByHousingPopup();
+      },
+    );
+    if (picked != null) {
+      setState(() {
+        _codigoViviendaController.text = picked;
+      });
+    }
+  }
+
   void _clearFields() {
     _identidadController.clear();
     _nombreController.clear();
@@ -47,7 +62,7 @@ class _NewEntryScreenState extends State<NewEntryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(title: 'Nueva Entrada', back: true),
-      drawer:  CustomDrawer(isMainScreen: false),
+      drawer: CustomDrawer(isMainScreen: false),
       body: Center(
         child: KeyboardListener(
           focusNode: _focusNode,
@@ -75,7 +90,7 @@ class _NewEntryScreenState extends State<NewEntryScreen> {
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'La Indentidad es un campo necesario';
+                            return 'La Identidad es un campo necesario';
                           }
                           if (value.length > 13) {
                             return 'La Identidad no debe tener más de 13 dígitos';
@@ -98,7 +113,7 @@ class _NewEntryScreenState extends State<NewEntryScreen> {
                           border: OutlineInputBorder(),
                         ),
                         validator: (value) {
-                          if (value == null || value.isEmpty) {
+                          if (value == null ||value.isEmpty) {
                             return 'Ingresa tu nombre';
                           }
                           return null;
@@ -106,20 +121,28 @@ class _NewEntryScreenState extends State<NewEntryScreen> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    CustomTooltip(
-                      message: 'Ingresa el código de vivienda',
-                      child: TextFormField(
-                        controller: _codigoViviendaController,
-                        decoration: const InputDecoration(
-                          labelText: 'Código de Vivienda',
-                          border: OutlineInputBorder(),
+                    GestureDetector(
+                      onTap: () => _selectPlace(context),
+                      child: MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        child: CustomTooltip(
+                          message: 'Ingresa el código de vivienda',
+                          child: AbsorbPointer(
+                            child: TextFormField(
+                              controller: _codigoViviendaController,
+                              decoration: const InputDecoration(
+                                labelText: 'Código de Vivienda',
+                                border: OutlineInputBorder(),
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Selecciona el código de vivienda';
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
                         ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Ingresa el código de vivienda';
-                          }
-                          return null;
-                        },
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -136,6 +159,12 @@ class _NewEntryScreenState extends State<NewEntryScreen> {
                                 labelText: 'Fecha de Entrada',
                                 border: OutlineInputBorder(),
                               ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'La fecha de entrada es un campo necesario';
+                                }
+                                return null;
+                              },
                             ),
                           ),
                         ),
@@ -192,7 +221,7 @@ class _NewEntryScreenState extends State<NewEntryScreen> {
                           ),
                         ),
                         SizedBox(
-                          width:150,
+                          width: 150,
                           height: 50,
                           child: ElevatedButton(
                             onPressed: () {
@@ -210,7 +239,7 @@ class _NewEntryScreenState extends State<NewEntryScreen> {
                 ),
               ),
             ),
-          ),
+),
         ),
       ),
     );

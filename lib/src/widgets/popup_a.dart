@@ -99,7 +99,7 @@ class _SearchRenterPopupState extends State<SearchRenterPopup> {
                     ),
                     SizedBox(height: 10),
                     SizedBox(
-                      width: 150,
+                      width: 200,
                       height: 35,
                       child: CustomTooltip(
                         message: 'Se buscará entre los nombres de arrendatarios', 
@@ -108,8 +108,13 @@ class _SearchRenterPopupState extends State<SearchRenterPopup> {
                             if (_formKeyNombre.currentState!.validate()) {
                               _formKeyNombre.currentState!.save();
                               if (_nombre!= null && _nombre!.isNotEmpty) {
-                              print('Search by Name button pressed');
-                                widget.ruta != null ? Navigator.popAndPushNamed(context, widget.ruta!, arguments: _nombre) : null;
+                                print('Search by Name button pressed');
+                                if (widget.ruta!= null) {
+                                  Navigator.popAndPushNamed(context, widget.ruta!, arguments: _nombre);
+                                } else {
+                                  Navigator.pop(context, _nombre);
+                                }
+                                // widget.ruta != null ? Navigator.popAndPushNamed(context, widget.ruta!, arguments: _nombre) : null;
                               } else {
                                 setState(() {
                                   _nombreError = true;
@@ -117,7 +122,7 @@ class _SearchRenterPopupState extends State<SearchRenterPopup> {
                               }
                             }
                           },
-                          child: Text('Buscar nombre'),
+                          child: Text(widget.ruta == null? 'Ingresar nombre' : 'Buscar nombre', style: TextStyle(fontSize: 18)),
                           style: _numeroDeIdentidadFilled? ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.grey)) : ButtonStyle(),
                         ),
                       ),
@@ -166,7 +171,7 @@ class _SearchRenterPopupState extends State<SearchRenterPopup> {
                     ),
                     SizedBox(height: 10),
                     SizedBox(
-                      width: 150,
+                      width: 200,
                       height: 35,
                       child: CustomTooltip(
                         message: 'Se buscará el DNI exacto del arrendatario', 
@@ -176,7 +181,12 @@ class _SearchRenterPopupState extends State<SearchRenterPopup> {
                               _formKeyNumeroDeIdentidad.currentState!.save();
                               if (_numeroDeIdentidad!= null && _numeroDeIdentidad!.isNotEmpty) {
                                 print('Search by ID button pressed');
-                                widget.ruta != null ? Navigator.popAndPushNamed(context, widget.ruta!, arguments: _numeroDeIdentidad) : null;
+                                if (widget.ruta!= null) {
+                                  Navigator.popAndPushNamed(context, widget.ruta!, arguments: _numeroDeIdentidad);
+                                } else {
+                                  Navigator.pop(context, _numeroDeIdentidad);
+                                }
+                                // widget.ruta != null ? Navigator.popAndPushNamed(context, widget.ruta!, arguments: _numeroDeIdentidad) : null;
                               } else {
                                 setState(() {
                                   _numeroDeIdentidadError = true;
@@ -184,7 +194,7 @@ class _SearchRenterPopupState extends State<SearchRenterPopup> {
                               }
                             }
                           } : null,
-                          child: Text('Buscar identidad'),
+                          child: Text(widget.ruta == null? 'Ingresar identidad' : 'Buscar identidad', style: TextStyle(fontSize: 18)),
                           style: _numeroDeIdentidadFilled || _nombreFilled == false? null : ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.grey)),
                         ),
                       ),
