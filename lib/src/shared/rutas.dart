@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 import '../screens/login_screen.dart';
 import '../screens/menu_main.dart';
 import '../screens/menu_data.dart';
@@ -6,6 +8,7 @@ import '../screens/menu_search.dart';
 import '../screens/menu_search_a.dart';
 import '../screens/menu_search_v.dart';
 import '../screens/search_a_result.dart';
+import '../screens/search_result_test.dart';
 import '../screens/report_renters_current.dart';
 import '../screens/report_renters_history.dart';
 import '../screens/report_pending_payments.dart';
@@ -26,6 +29,8 @@ final rutas = {
   Rutas.buscarMenu.name: (context) => const SearchDataMenu(),
   Rutas.buscarArre.name: (context) => const SearchRenterScreen(),
   Rutas.buscarVivienda.name: (context) => const SearchByHousingScreen(),
+  Rutas.buscarTestResult.name: (context) => DisplaySelectedValueScreen(selectedValue: ModalRoute.of(context)!.settings.arguments as String,),
+  Rutas.buscarTestResult.name: (context) => DisplaySelectedValueScreen(selectedValue: ModalRoute.of(context)!.settings.arguments as String,),
   Rutas.actualArre.name: (context) =>  RentersCurrentcreen(),
   Rutas.historialArre.name: (context) =>  RentersHistorycreen(),
   Rutas.pagosPendienteArre.name: (context) =>  PendingPaymentsScreen(),

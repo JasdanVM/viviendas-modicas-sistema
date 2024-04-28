@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class SearchByHousingPopup extends StatefulWidget {
+  String? ruta;
   @override
   _SearchByHousingPopupState createState() => _SearchByHousingPopupState();
+  SearchByHousingPopup({super.key, this.ruta = null});
+
 }
 
 class _SearchByHousingPopupState extends State<SearchByHousingPopup> {
@@ -12,6 +15,7 @@ class _SearchByHousingPopupState extends State<SearchByHousingPopup> {
   List<String> _allCodigoDeViviendaOptions = [];
   String? _codigoDeViviendaValue;
   bool _codigoDeViviendaError = false;
+  
 
   @override
   void initState() {
@@ -135,7 +139,7 @@ class _SearchByHousingPopupState extends State<SearchByHousingPopup> {
                         });
                       } else {
                         print('Buscar button pressed');
-                        Navigator.of(context).pop(); // Close the popup
+                        widget.ruta != null ? Navigator.popAndPushNamed(context, widget.ruta!, arguments: _codigoDeViviendaValue) : null;
                       }
                     },
                     child: Text('Buscar', style: TextStyle(fontSize: 18)),

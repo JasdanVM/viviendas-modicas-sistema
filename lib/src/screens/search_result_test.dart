@@ -1,20 +1,22 @@
-// class DisplaySelectedValueScreen extends StatelessWidget {
-//   final String selectedValue;
+import 'package:flutter/material.dart';
 
-//   DisplaySelectedValueScreen({required this.selectedValue});
+class DisplaySelectedValueScreen extends StatelessWidget {
+  final String selectedValue;
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Selected Value'),
-//       ),
-//       body: Center(
-//         child: Text(
-//           'Selected Value: $selectedValue',
-//           style: TextStyle(fontSize: 24),
-//         ),
-//       ),
-//     );
-//   }
-// }
+  DisplaySelectedValueScreen({required this.selectedValue});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Selected Value'),
+      ),
+      body: Center(
+        child: Text(
+          'Código Elegido: $selectedValue',
+          style: TextStyle(fontSize: 24),
+        ),
+      ),
+    );
+  }
+}
