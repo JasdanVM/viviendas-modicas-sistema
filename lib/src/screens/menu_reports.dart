@@ -5,8 +5,8 @@ import '../widgets/appbar.dart';
 import '../widgets/drawer.dart';
 import '../widgets/tooltip.dart';
 
-class ReportsScreen extends StatelessWidget {
-  const ReportsScreen({super.key});
+class ReportsMenu extends StatelessWidget {
+  const ReportsMenu({super.key});
 
   @override
   Widget build(BuildContext context) {

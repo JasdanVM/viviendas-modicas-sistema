@@ -6,7 +6,7 @@ import '../widgets/drawer.dart';
 import '../widgets/tooltip.dart';
 
 class AdminDataScreen extends StatelessWidget {
-  const AdminDataScreen({super.key});
+  const AdminDataScreen.AdminDataMenu({super.key});
 
   @override
   Widget build(BuildContext context) {

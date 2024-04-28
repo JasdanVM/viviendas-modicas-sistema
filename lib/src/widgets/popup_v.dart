@@ -1,17 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import '../shared/constantes.dart';
-import '../widgets/appbar.dart';
-import '../widgets/drawer.dart';
+import 'package:flutter/widgets.dart';
 
-class SearchByHousingScreen extends StatefulWidget {
-  const SearchByHousingScreen({super.key});
-
+class SearchByHousingPopup extends StatefulWidget {
   @override
-  _SearchByHousingScreenState createState() => _SearchByHousingScreenState();
+  _SearchByHousingPopupState createState() => _SearchByHousingPopupState();
 }
 
-class _SearchByHousingScreenState extends State<SearchByHousingScreen> {
+class _SearchByHousingPopupState extends State<SearchByHousingPopup> {
   String? _ubicacion;
   List<String> _codigoDeViviendaOptions = [];
   List<String> _allCodigoDeViviendaOptions = [];
@@ -27,25 +22,42 @@ class _SearchByHousingScreenState extends State<SearchByHousingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Buscar por Vivienda'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
       ),
-      drawer: CustomDrawer(isMainScreen: false),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      child: contentBox(context),
+    );
+  }
+
+  contentBox(context) {
+    return Stack(
+      children: <Widget>[
+        Container(
+          width: MediaQuery.of(context).size.width * 0.9,
+          padding: EdgeInsets.only(
+            top: 50,
+            bottom: 16,
+            left: 16,
+            right: 16,
+          ),
+          margin: EdgeInsets.only(top: 16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            shape: BoxShape.rectangle,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 10.0,
+                offset: Offset(0.0, 10.0),
+              ),
+            ],
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image(
                 image: AssetImage('assets/vm_icon.png'),
@@ -53,13 +65,13 @@ class _SearchByHousingScreenState extends State<SearchByHousingScreen> {
                 width: 100,
                 height: 100,
               ),
-              const Text(
+              Text(
                 'Filtrar ubicación de la vivienda:',
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 10),
+              SizedBox(height: 10),
               DropdownButtonFormField<String>(
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'Ubicación',
                   border: OutlineInputBorder(),
                 ),
@@ -84,12 +96,12 @@ class _SearchByHousingScreenState extends State<SearchByHousingScreen> {
                   });
                 },
               ),
-              const SizedBox(height: 20),
-              const Text(
+              SizedBox(height: 20),
+              Text(
                 'Buscar por código de vivienda:',
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 10),
+              SizedBox(height: 10),
               DropdownButtonFormField<String>(
                 decoration: InputDecoration(
                   labelText: 'Código de vivienda',
@@ -110,11 +122,11 @@ class _SearchByHousingScreenState extends State<SearchByHousingScreen> {
                   });
                 },
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
               Center(
                 child: SizedBox(
-                  width: 100, 
-                  height: 50, 
+                  width: 100,
+                  height: 50,
                   child: ElevatedButton(
                     onPressed: () {
                       if (_codigoDeViviendaValue == null) {
@@ -123,16 +135,17 @@ class _SearchByHousingScreenState extends State<SearchByHousingScreen> {
                         });
                       } else {
                         print('Buscar button pressed');
+                        Navigator.of(context).pop(); // Close the popup
                       }
                     },
-                    child: const Text('Buscar', style: TextStyle(fontSize: 18)),
+                    child: Text('Buscar', style: TextStyle(fontSize: 18)),
                   ),
                 ),
               ),
             ],
           ),
         ),
-      ),
+      ],
     );
   }
 
@@ -156,7 +169,7 @@ class _SearchByHousingScreenState extends State<SearchByHousingScreen> {
         _codigoDeViviendaOptions = _allCodigoDeViviendaOptions.where((code) => code.startsWith(prefix)).toList();
       });
     }
-    _codigoDeViviendaValue =null;
+    _codigoDeViviendaValue = null;
   }
 }
 

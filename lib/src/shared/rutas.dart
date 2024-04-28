@@ -2,8 +2,10 @@ import '../screens/login_screen.dart';
 import '../screens/menu_main.dart';
 import '../screens/menu_data.dart';
 import '../screens/menu_reports.dart';
+import '../screens/menu_search.dart';
 import '../screens/menu_search_a.dart';
 import '../screens/menu_search_v.dart';
+import '../screens/search_a_result.dart';
 import '../screens/report_renters_current.dart';
 import '../screens/report_renters_history.dart';
 import '../screens/report_pending_payments.dart';
@@ -19,8 +21,9 @@ import 'constantes.dart';
 final rutas = {
   Rutas.inicioSesion.name: (context) => const LoginScreen(),
   Rutas.menuPrincipal.name: (context) => const MainMenu(),
-  Rutas.menuReportes.name: (context) => const ReportsScreen(),
-  Rutas.menuData.name: (context) => const AdminDataScreen(),
+  Rutas.menuReportes.name: (context) => const ReportsMenu(),
+  Rutas.menuData.name: (context) => const AdminDataScreen.AdminDataMenu(),
+  Rutas.buscarMenu.name: (context) => const SearchDataMenu(),
   Rutas.buscarArre.name: (context) => const SearchRenterScreen(),
   Rutas.buscarVivienda.name: (context) => const SearchByHousingScreen(),
   Rutas.actualArre.name: (context) =>  RentersCurrentcreen(),
