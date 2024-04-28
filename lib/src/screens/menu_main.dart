@@ -62,7 +62,7 @@ class MainMenu extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
                   CustomTooltip(
-                    message: 'Buscar datos',
+                    message: 'Buscar entradas de la base de datos',
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         minimumSize: const Size(400, 70),

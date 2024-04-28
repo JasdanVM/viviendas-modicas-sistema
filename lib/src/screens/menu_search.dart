@@ -49,7 +49,7 @@ class SearchDataMenu extends StatelessWidget {
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
-                        return SearchByHousingPopup(ruta: null,);
+                        return SearchByHousingPopup(ruta: Rutas.buscarVResult.name,);
                       },
                     );
                   },

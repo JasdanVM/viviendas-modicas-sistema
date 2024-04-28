@@ -6,11 +6,11 @@
 
 // class RentersSearchResultScreen extends StatelessWidget {
 //   final String _searchValue;
-//   final bool _isNombreSearch;
+//   // final bool _isNombreSearch;
 
-//   RentersSearchResultScreen({required String searchValue, required bool isNombreSearch})
-//       : _searchValue = searchValue,
-//         _isNombreSearch = isNombreSearch;
+//   RentersSearchResultScreen({required String searchValue, /*required bool isNombreSearch*/})
+//       : _searchValue = searchValue;
+//         // _isNombreSearch = isNombreSearch;
 
 //   @override
 //   Widget build(BuildContext context) {
@@ -54,7 +54,7 @@
 //                 ],
 //               ),
 //               const SizedBox(height: 16),
-//               RentersSearchResultDTScreen(searchValue: _searchValue, isNombreSearch: _isNombreSearch),
+//               RentersSearchResultDTScreen(searchValue: _searchValue/*, isNombreSearch: _isNombreSearch*/),
 //             ],
 //           ),
 //         ),
@@ -65,38 +65,38 @@
 
 // class RentersSearchResultDTScreen extends StatelessWidget {
 //   final String _searchValue;
-//   final bool _isNombreSearch;
+//   // final bool _isNombreSearch;
 
-//   RentersSearchResultDTScreen({required String searchValue, required bool isNombreSearch})
-//       : _searchValue = searchValue,
-//         _isNombreSearch = isNombreSearch;
+//   RentersSearchResultDTScreen({required String searchValue/*, required bool isNombreSearch*/})
+//       : _searchValue = searchValue/*,
+//         _isNombreSearch = isNombreSearch*/;
 
 //   @override
 //   Widget build(BuildContext context) {
 //     // Here, you can perform the database operation based on the search value and type
 //     // For example:
 //     List<DataRow> rows = [];
-//     if (_isNombreSearch) {
-//       // Search for arrendatarios with similar name
-//       // rows = database.searchByName(_searchValue).map((arrendatario) => DataRow(cells: [
-//       //   DataCell(Text(arrendatario.identidad)),
-//       //   DataCell(Text(arrendatario.nombre)),
-//       //   DataCell(Text(arrendatario.codigoVivienda)),
-//       //   DataCell(Text(DateFormat('dd/MM/yyyy').format(arrendatario.fechaEntrada))),
-//       //   DataCell(Text(arrendatario.precioRenta.toString())),
-//       //   DataCell(Text(arrendatario.observaciones)),
-//       // ])).toList();
-//     } else {
-//       // Search for arrendatario with exact ID
-//       // rows = database.searchById(_searchValue).map((arrendatario) => DataRow(cells: [
-//       //   DataCell(Text(arrendatario.identidad)),
-//       //   DataCell(Text(arrendatario.nombre)),
-//       //   DataCell(Text(arrendatario.codigoVivienda)),
-//       //   DataCell(Text(DateFormat('dd/MM/yyyy').format(arrendatario.fechaEntrada))),
-//       //   DataCell(Text(arrendatario.precioRenta.toString())),
-//       //   DataCell(Text(arrendatario.observaciones)),
-//       // ])).toList();
-//     }
+//     // if (_isNombreSearch) {
+//     //   // Search for arrendatarios with similar name
+//     //   // rows = database.searchByName(_searchValue).map((arrendatario) => DataRow(cells: [
+//     //   //   DataCell(Text(arrendatario.identidad)),
+//     //   //   DataCell(Text(arrendatario.nombre)),
+//     //   //   DataCell(Text(arrendatario.codigoVivienda)),
+//     //   //   DataCell(Text(DateFormat('dd/MM/yyyy').format(arrendatario.fechaEntrada))),
+//     //   //   DataCell(Text(arrendatario.precioRenta.toString())),
+//     //   //   DataCell(Text(arrendatario.observaciones)),
+//     //   // ])).toList();
+//     // } else {
+//     //   // Search for arrendatario with exact ID
+//     //   // rows = database.searchById(_searchValue).map((arrendatario) => DataRow(cells: [
+//     //   //   DataCell(Text(arrendatario.identidad)),
+//     //   //   DataCell(Text(arrendatario.nombre)),
+//     //   //   DataCell(Text(arrendatario.codigoVivienda)),
+//     //   //   DataCell(Text(DateFormat('dd/MM/yyyy').format(arrendatario.fechaEntrada))),
+//     //   //   DataCell(Text(arrendatario.precioRenta.toString())),
+//     //   //   DataCell(Text(arrendatario.observaciones)),
+//     //   // ])).toList();
+//     // }
 
 //     return SingleChildScrollView(
 //       child: Padding(
@@ -117,3 +117,25 @@
 //     );
 //   }
 // }
+import 'package:flutter/material.dart';
+
+class RentersSearchResultScreen extends StatelessWidget {
+  final String selectedValue;
+
+  RentersSearchResultScreen({required this.selectedValue});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Selected Value'),
+      ),
+      body: Center(
+        child: Text(
+          'Código Elegido: $selectedValue',
+          style: TextStyle(fontSize: 24),
+        ),
+      ),
+    );
+  }
+}
