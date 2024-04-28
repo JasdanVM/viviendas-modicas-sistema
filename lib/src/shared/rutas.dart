@@ -20,6 +20,7 @@ import '../screens/report_property_damage.dart';
 import '../screens/data_add_renter.dart';
 import '../screens/data_remove_renter.dart';
 import '../screens/data_payments_debts.dart';
+import '../screens/data_edit_empty_payments.dart';
 import 'constantes.dart';
 
 final rutas = {
@@ -42,4 +43,5 @@ final rutas = {
   Rutas.anadirArre.name: (context) =>  NewEntryScreen(),
   Rutas.removerArre.name: (context) =>  RemoveTenantScreen(),
   Rutas.introducirPagosMoras.name: (context) =>  PaymentAndMorosoInfoScreen(),
+  Rutas.editarPagosDesocupadas.name: (context) =>  EditPaymentsEmptyPlace(),
 };

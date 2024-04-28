@@ -23,5 +23,6 @@ enum Rutas {
   facturaDanoPropiedad,
   anadirArre,
   removerArre,
-  introducirPagosMoras
+  introducirPagosMoras,
+  editarPagosDesocupadas
 }

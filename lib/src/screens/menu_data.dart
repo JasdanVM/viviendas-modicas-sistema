@@ -89,16 +89,19 @@ class AdminDataScreen extends StatelessWidget {
                   SizedBox(
                     width: 600,
                     height: 50,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, Rutas.nada.name);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: const Size(500, 50),
-                        textStyle: const TextStyle(fontSize: 22),
+                    child: CustomTooltip(
+                      message: 'Cmabiar la información de pago de servicios en viviendas desocupadas',
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, Rutas.editarPagosDesocupadas.name);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: const Size(500, 50),
+                          textStyle: const TextStyle(fontSize: 22),
+                        ),
+                        child: const Text('Editar Pagos por Conexiones de Viviendas Desocupadas'),
                       ),
-                      child: const Text('...'),
-                    ),
+                      )
                   ),
                   
                 ],

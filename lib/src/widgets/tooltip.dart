@@ -12,7 +12,7 @@ class CustomTooltip extends StatelessWidget {
     return Tooltip(
       message: message,
       decoration: BoxDecoration(
-        color: Color(0xFF141414), // Change the background color to #141414
+        color: Color(0xFF141414),
         borderRadius: BorderRadius.circular(5),
       ),
       textStyle: TextStyle(
