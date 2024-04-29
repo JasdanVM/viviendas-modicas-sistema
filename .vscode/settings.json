@@ -1,4 +1,7 @@
 {
     "java.compile.nullAnalysis.mode": "automatic",
-    "cmake.sourceDirectory": "E:/UNAH/Clases/proyecto_f/viviendas_modicas_sistema/windows/flutter"
+    "cmake.sourceDirectory": "E:/UNAH/Clases/proyecto_f/viviendas_modicas_sistema/windows/flutter",
+    "cSpell.words": [
+        "Arrendatarios"
+    ]
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import '../../data/local/db/app_db.dart';
+import 'package:drift/drift.dart' as drift;
 
 class SearchByHousingPopup extends StatefulWidget {
   String? ruta;
@@ -10,6 +12,7 @@ class SearchByHousingPopup extends StatefulWidget {
 }
 
 class _SearchByHousingPopupState extends State<SearchByHousingPopup> {
+  late AppDb _db;
   String? _ubicacion;
   List<String> _codigoDeViviendaOptions = [];
   List<String> _allCodigoDeViviendaOptions = [];
@@ -20,6 +23,7 @@ class _SearchByHousingPopupState extends State<SearchByHousingPopup> {
   @override
   void initState() {
     super.initState();
+    _db = AppDb();
     _getAllCodigoDeViviendaOptions();
     _codigoDeViviendaValue = null;
   }
@@ -159,8 +163,7 @@ class _SearchByHousingPopupState extends State<SearchByHousingPopup> {
   }
 
   void _getAllCodigoDeViviendaOptions() async {
-    // Replace with actual database call
-    List<String> codes = await DatabaseService.getCodigoDeViviendaOptions();
+    List<String> codes = await getCodigoDeViviendaOptions();
     setState(() {
       _allCodigoDeViviendaOptions = codes;
       _codigoDeViviendaOptions = codes;
@@ -180,19 +183,21 @@ class _SearchByHousingPopupState extends State<SearchByHousingPopup> {
     }
     _codigoDeViviendaValue = null;
   }
+
+    Future<List<String>> getCodigoDeViviendaOptions() async {
+    final viviendaUbicaciones = await _db.select(_db.viviendaUbicacion).get();
+    return viviendaUbicaciones.map((e) => e.codigoVivienda).toList();
+  }
+  
 }
 
-class DatabaseService {
-  static Future<List<String>> getCodigoDeViviendaOptions() async {
-    // Replace with actual database call
-    return [
-      "LLG-A01",
-      "LLG-A02",
-      "LLG-A03",
-      "EPV-A01",
-      "EPV-A02",
-      "EPV-C01",
-      "23A-C01",
-    ];
-  }
-}
+// class DatabaseService {
+//   final AppDb _appDb;
+
+//   DatabaseService(this._appDb);
+
+//   Future<List<String>> getCodigoDeViviendaOptions() async {
+//     final viviendaUbicaciones = await _appDb.select(_appDb.viviendaUbicacion).get();
+//     return viviendaUbicaciones.map((e) => e.codigoVivienda).toList();
+//   }
+// }

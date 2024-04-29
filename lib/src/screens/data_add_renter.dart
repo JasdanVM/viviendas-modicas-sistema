@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:viviendas_modicas_sistema/data/local/db/app_db.dart';
 import '../widgets/appbar.dart';
 import '../widgets/drawer.dart';
 import '../widgets/tooltip.dart';
 import '../widgets/popup_v.dart';
+import 'package:drift/drift.dart' as drift;
 
 class NewEntryScreen extends StatefulWidget {
   @override
@@ -12,6 +14,7 @@ class NewEntryScreen extends StatefulWidget {
 }
 
 class _NewEntryScreenState extends State<NewEntryScreen> {
+  late AppDb _db;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final FocusNode _focusNode = FocusNode();
   TextEditingController _identidadController = TextEditingController();
@@ -49,6 +52,25 @@ class _NewEntryScreenState extends State<NewEntryScreen> {
     }
   }
 
+  @override
+  void initState(){
+    super.initState();
+    _db = AppDb();
+  }
+
+  @override
+  void dispose(){
+    _db.close();
+    _nombreController.dispose();
+    _identidadController.dispose();
+    _codigoViviendaController.dispose();
+    _fechaEntradaController.dispose();
+    _precioRentaController.dispose();
+    _observacionesController.dispose();
+    _focusNode.dispose();
+    super.dispose();
+  }
+
   void _clearFields() {
     _identidadController.clear();
     _nombreController.clear();
@@ -62,13 +84,13 @@ class _NewEntryScreenState extends State<NewEntryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(title: 'Nueva Entrada', back: true),
-      drawer: CustomDrawer(isMainScreen: false),
+      drawer:  CustomDrawer(isMainScreen: false),
       body: Center(
         child: KeyboardListener(
           focusNode: _focusNode,
           onKeyEvent: (event) {
-            if (event.logicalKey == LogicalKeyboardKey.enter) {
-              // Handle enter key press
+            if (event.logicalKey == LogicalKeyboardKey.enter && _formKey.currentState!.validate()) {
+              agregarArrendatarios();
             }
           },
           child: SingleChildScrollView(
@@ -90,7 +112,7 @@ class _NewEntryScreenState extends State<NewEntryScreen> {
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'La Identidad es un campo necesario';
+                            return 'La Indentidad es un campo necesario';
                           }
                           if (value.length > 13) {
                             return 'La Identidad no debe tener más de 13 dígitos';
@@ -113,7 +135,7 @@ class _NewEntryScreenState extends State<NewEntryScreen> {
                           border: OutlineInputBorder(),
                         ),
                         validator: (value) {
-                          if (value == null ||value.isEmpty) {
+                          if (value == null || value.isEmpty) {
                             return 'Ingresa tu nombre';
                           }
                           return null;
@@ -159,12 +181,6 @@ class _NewEntryScreenState extends State<NewEntryScreen> {
                                 labelText: 'Fecha de Entrada',
                                 border: OutlineInputBorder(),
                               ),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'La fecha de entrada es un campo necesario';
-                                }
-                                return null;
-                              },
                             ),
                           ),
                         ),
@@ -221,12 +237,13 @@ class _NewEntryScreenState extends State<NewEntryScreen> {
                           ),
                         ),
                         SizedBox(
-                          width: 150,
+                          width:150,
                           height: 50,
                           child: ElevatedButton(
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
                                 // Handle save button press
+                                agregarArrendatarios();
                               }
                             },
                             child: const Text('Agregar'),
@@ -239,15 +256,57 @@ class _NewEntryScreenState extends State<NewEntryScreen> {
                 ),
               ),
             ),
-),
+          ),
         ),
       ),
     );
   }
 
-  @override
-  void dispose() {
-    _focusNode.dispose();
-    super.dispose();
+  // @override
+  // void dispose() {
+  //   _focusNode.dispose();
+  //   super.dispose();
+  // }
+
+  void agregarArrendatarios(){
+    final entity = ArrendatariosCompanion(
+      nombre: drift.Value(_nombreController.text),
+      identidad: drift.Value(_identidadController.text),
+    );
+    _db.insertArrendatario(entity).then((value) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          Future.delayed(Duration(seconds: 3), () {
+            Navigator.of(context).pop();
+            Navigator.of(context).pop();
+          });
+          return AlertDialog(
+            title: Text('Arrendatario Agregado con éxito'),
+            content: Text('Nombre: ${_nombreController.text}, Identidad: ${_identidadController.text}'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                },
+                child: Text('Cerrar'),
+              ),
+            ],
+          );
+        },
+      );
+    }).then((_) {
+      final actualArrendatarioEntity = ActualArrendatariosCompanion(
+        obs: drift.Value(_observacionesController.text),
+        fechaEntrada: drift.Value(DateTime.parse(_fechaEntradaController.text)),
+        precioRenta: drift.Value(double.parse(_precioRentaController.text)),
+        codVivienda: drift.Value(_codigoViviendaController.text),
+      );
+      return _db.insertActualArrendatario(actualArrendatarioEntity);
+    });
   }
+
+  
 }
+

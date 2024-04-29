@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
+import 'package:viviendas_modicas_sistema/data/local/db/app_db.dart';
+import 'package:viviendas_modicas_sistema/data/local/entity/arrendatarios_entidad.dart';
 import '../widgets/appbar.dart';
 import '../widgets/drawer.dart';
 
@@ -46,7 +49,9 @@ class RentersHistorycreen extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 16),
-              RentersHistoryDTScreen(),
+              Expanded(
+                child: RentersHistoryDTScreen(),
+              ),
             ],
           ),
         ),
@@ -55,56 +60,128 @@ class RentersHistorycreen extends StatelessWidget {
   }
 }
 
-class RentersHistoryDTScreen extends StatelessWidget {
+class RentersHistoryDTScreen extends StatefulWidget {
+  const RentersHistoryDTScreen({Key? key}) : super(key: key);
+
+  @override
+  State<RentersHistoryDTScreen> createState() => _RentersHistoryDTScreen();
+}
+
+class _RentersHistoryDTScreen extends State<RentersHistoryDTScreen> {
+  late AppDb _db;
+  int _pageNum = 1;
+  int _rowsPerPage = 0;
+  List<Arrendatario> _arrendatarios = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _db = AppDb();
+    _loadData();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final dataTableHeight = screenHeight * 0.5; // adjust this value to fit your needs
+    final rowHeight = 40; // adjust this value to fit your needs
+    _rowsPerPage = (dataTableHeight / rowHeight).toInt();
+  }
+
+  @override
+  void dispose() {
+    _db.close();
+    super.dispose();
+  }
+
+  void _loadData() async {
+    final List<Arrendatario> arrendatarios = await _db.getArrendatarios();
+    setState(() {
+      _arrendatarios = arrendatarios;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: SizedBox(
-        width: MediaQuery.of(context).size.width,
-        child: SelectionArea(
-          child: DataTable(
-            columnSpacing: 10, // Espacio entre columnas
-            headingRowColor: MaterialStateColor.resolveWith(
-              (states) => Theme.of(context).primaryColor,
+    return Column(
+      children: [
+        Expanded(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: DataTable(
+                columnSpacing: 10, // Espacio entre columnas
+                headingRowColor: MaterialStateColor.resolveWith(
+                  (states) => Theme.of(context).primaryColor,
+                ),
+                headingRowHeight: 40,
+                headingTextStyle: TextStyle(color: Colors.white),
+                columns: [
+                  DataColumn(label: Text('Identidad')),
+                  DataColumn(label: Text('Nombre')),
+                  DataColumn(label: Text('Fecha Entrada')),
+                  DataColumn(label: Text('Fecha Salida')),
+                  DataColumn(label: Text('Precio Renta')),
+                  DataColumn(label: Text('Deuda Pendiente')),
+                  DataColumn(label: Text('Daños Propiedad')),
+                  DataColumn(label: Text('Observaciones')),
+                ],
+                rows: [
+                  DataRow(cells: [
+                    DataCell(Text('1')),
+                    DataCell(Text('Juan Pérez')),
+                    DataCell(Text('01/04/2024')),
+                    DataCell(Text('15/04/2024')),
+                    DataCell(Text('\5000 lps')),
+                    DataCell(Text('\500 lps')),
+                    DataCell(Text('0')),
+                    DataCell(Text('Ninguna')),
+                  ]),
+                  DataRow(cells: [
+                    DataCell(Text('2')),
+                    DataCell(Text('María López')),
+                    DataCell(Text('03/04/2024')),
+                    DataCell(Text('20/04/2024')),
+                    DataCell(Text('\6000 lps')),
+                    DataCell(Text('\0 lps')),
+                    DataCell(Text('1000')),
+                    DataCell(Text('Pequeños arreglos necesarios')),
+                  ]),
+                ],
+              ),
             ),
-            headingRowHeight: 40,
-            headingTextStyle: TextStyle(color: Colors.white),
-            columns: [
-              DataColumn(label: Text('Identidad')),
-              DataColumn(label: Text('Nombre')),
-              DataColumn(label: Text('Fecha Entrada')),
-              DataColumn(label: Text('Fecha Salida')),
-              DataColumn(label: Text('Precio Renta')),
-              DataColumn(label: Text('Deuda Pendiente')),
-              DataColumn(label: Text('Daños Propiedad')),
-              DataColumn(label: Text('Observaciones')),
-            ],
-            rows: [
-              DataRow(cells: [
-                DataCell(Text('1')),
-                DataCell(Text('Juan Pérez')),
-                DataCell(Text('01/04/2024')),
-                DataCell(Text('15/04/2024')),
-                DataCell(Text('\5000 lps')),
-                DataCell(Text('\500 lps')),
-                DataCell(Text('0')),
-                DataCell(Text('Ninguna')),
-              ]),
-              DataRow(cells: [
-                DataCell(Text('2')),
-                DataCell(Text('María López')),
-                DataCell(Text('03/04/2024')),
-                DataCell(Text('20/04/2024')),
-                DataCell(Text('\6000 lps')),
-                DataCell(Text('\0 lps')),
-                DataCell(Text('1000')),
-                DataCell(Text('Pequeños arreglos necesarios')),
-              ]),
-            ],
           ),
         ),
-      ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: _pageNum > 1
+                  ? () {
+                      setState(() {
+                        _pageNum--;
+                      });
+                    }
+                  : null,
+            ),
+            Text('Página #$_pageNum'),
+            IconButton(
+              icon: Icon(Icons.arrow_forward),
+              onPressed: _pageNum < (_arrendatarios.length / _rowsPerPage).ceil()
+                  ? () {
+                      setState(() {
+                        _pageNum++;
+                      });
+                    }
+                  : null,
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
