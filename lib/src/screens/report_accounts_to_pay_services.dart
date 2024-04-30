@@ -71,6 +71,7 @@ class AccounstToPayServicesScreen extends StatelessWidget {
     );
   }
 }
+
 class AccounstToPayServicesDTScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -90,40 +91,34 @@ class AccounstToPayServicesDTScreen extends StatelessWidget {
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  child: SelectionArea(
-                    child: DataTable(
-                      columnSpacing: 10, 
-                      headingRowColor: MaterialStateColor.resolveWith(
-                        (states) => Theme.of(context).primaryColor,
+                    width: MediaQuery.of(context).size.width,
+                    child: SelectionArea(
+                      child: DataTable(
+                        columnSpacing: 10,
+                        headingRowColor: MaterialStateColor.resolveWith(
+                          (states) => Theme.of(context).primaryColor,
+                        ),
+                        headingRowHeight: 40,
+                        headingTextStyle: TextStyle(color: Colors.white),
+                        columns: [
+                          DataColumn(label: Text('Proveedor')),
+                          DataColumn(label: Text('Servicio')),
+                          DataColumn(label: Text('Monto Total')),
+                        ],
+                        rows: [
+                          DataRow(cells: [
+                            DataCell(Text('Aguas del Puerto')),
+                            DataCell(Text('Agua Potable')),
+                            DataCell(Text('\ 8000.00')),
+                          ]),
+                          DataRow(cells: [
+                            DataCell(Text('ENEE')),
+                            DataCell(Text('Energia Electrica')),
+                            DataCell(Text('\ 12000 lps')),
+                          ]),
+                        ],
                       ),
-                      headingRowHeight: 40, 
-                      headingTextStyle: TextStyle(color: Colors.white),
-                      columns: [
-                        DataColumn(label: Text('Proveedor')),
-                        DataColumn(label: Text('Servicio')),
-                        DataColumn(label: Text('Monto Total')),
-                      ],
-                      rows: [
-                        DataRow(cells: [
-                          DataCell(Text('Proveedor 1')),
-                          DataCell(Text('Servicio A')),
-                          DataCell(Text('\$100.00')),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text('Proveedor 2')),
-                          DataCell(Text('Servicio B')),
-                          DataCell(Text('\$200.00')),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text('Proveedor 3')),
-                          DataCell(Text('Servicio C')),
-                          DataCell(Text('\$300.00')),
-                        ]),
-                      ],
-                    ),
-                  )
-                ),
+                    )),
               ),
             ),
           ),

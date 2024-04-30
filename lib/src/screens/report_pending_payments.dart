@@ -78,16 +78,52 @@ class PendingPaymentsDTScreen extends StatelessWidget {
             ],
             rows: [
               DataRow(cells: [
-                DataCell(Text('134545')),
+                DataCell(Text('0508195278925')),
                 DataCell(Text('Juan Pérez')),
                 DataCell(Text('Enero 2024')),
-                DataCell(Text('\50 lps')),
+                DataCell(Text('\ 6000 lps')),
               ]),
               DataRow(cells: [
-                DataCell(Text('256565')),
+                DataCell(Text('0512197400279')),
                 DataCell(Text('María García')),
                 DataCell(Text('Febrero 2024')),
-                DataCell(Text('\30 lps')),
+                DataCell(Text('\ 3000 lps')),
+              ]),
+              DataRow(cells: [
+                DataCell(Text('0502197812356')),
+                DataCell(Text('Juan Pérez')),
+                DataCell(Text('Diciembre 2023')),
+                DataCell(Text('\ 1000 lps')),
+              ]),
+              DataRow(cells: [
+                DataCell(Text('0501195345820')),
+                DataCell(Text('Guillermo Hernandez')),
+                DataCell(Text('Septiembre 2023')),
+                DataCell(Text('\ 500 lps')),
+              ]),
+              DataRow(cells: [
+                DataCell(Text('0506198213564')),
+                DataCell(Text('Marcos orellana')),
+                DataCell(Text('Marzo 2024')),
+                DataCell(Text('\ 1000 lps')),
+              ]),
+              DataRow(cells: [
+                DataCell(Text('1616198215340')),
+                DataCell(Text('Alejandro Rodriguez')),
+                DataCell(Text('Agosto 2023')),
+                DataCell(Text('\ 700 lps')),
+              ]),
+              DataRow(cells: [
+                DataCell(Text('0508197513564')),
+                DataCell(Text('Josue Chirinos')),
+                DataCell(Text('Marzo 2024')),
+                DataCell(Text('\ 1000 lps')),
+              ]),
+              DataRow(cells: [
+                DataCell(Text('1616198215340')),
+                DataCell(Text('Genesis Rodriguez')),
+                DataCell(Text('Agosto 2023')),
+                DataCell(Text('\ 700 lps')),
               ]),
               // ...
             ],
