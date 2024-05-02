@@ -151,6 +151,7 @@ class _NewEntryScreenState extends State<NewEntryScreen> {
                           message: 'Ingresa el código de vivienda',
                           child: AbsorbPointer(
                             child: TextFormField(
+                              readOnly: true,
                               controller: _codigoViviendaController,
                               decoration: const InputDecoration(
                                 labelText: 'Código de Vivienda',
@@ -176,6 +177,7 @@ class _NewEntryScreenState extends State<NewEntryScreen> {
                           message: "Click para seleccionar una fecha",
                           child: AbsorbPointer(
                             child: TextFormField(
+                              readOnly: true,
                               controller: _fechaEntradaController,
                               decoration: const InputDecoration(
                                 labelText: 'Fecha de Entrada',
