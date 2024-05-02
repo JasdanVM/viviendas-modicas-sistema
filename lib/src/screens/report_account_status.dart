@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
+import 'package:viviendas_modicas_sistema/data/local/db/app_db.dart';
+import 'package:viviendas_modicas_sistema/data/local/entity/arrendatarios_entidad.dart';
 import '../widgets/appbar.dart';
 import '../widgets/drawer.dart';
+
 
 class AccountStatusScreen extends StatelessWidget {
   @override
@@ -35,6 +39,14 @@ class AccountStatusScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
+              Text(
+                  'Nombre de Arrendatario: Jesús Armando Torres',
+                  style: TextStyle(fontSize: 16),
+                ),
+              Text(
+                'Identidad de Arrendatario: 0506198723451',
+                style: TextStyle(fontSize: 16),
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -54,7 +66,9 @@ class AccountStatusScreen extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 16),
-              AccountStatusDTScreen(),
+              Expanded(
+                child: AccountStatusDTScreen(),
+                ),
             ],
           ),
         ),
@@ -62,138 +76,165 @@ class AccountStatusScreen extends StatelessWidget {
     );
   }
 }
-class AccountStatusDTScreen extends StatelessWidget {
+
+class AccountStatusDTScreen extends StatefulWidget {
+  const AccountStatusDTScreen({Key? key}) : super(key: key);
+
+  @override
+  State<AccountStatusDTScreen> createState() => _AccountStatusDTScreen();
+}
+
+class _AccountStatusDTScreen extends State<AccountStatusDTScreen> {
+  int _pageNum = 1;
+  int _rowsPerPage = 0;
+  List<int> _filas = [1,2,3,4];
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final dataTableHeight = screenHeight * 0.5; // adjust this value to fit your needs
+    final rowHeight = 40; // adjust this value to fit your needs
+    _rowsPerPage = (dataTableHeight / rowHeight).toInt();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: SelectionArea(
-            child: DataTable(
-              columnSpacing: 10, // Espacio entre las columnas
-              headingRowColor: MaterialStateColor.resolveWith(
-                (states) => Theme.of(context).primaryColor,
+    return Column(
+      children: [
+        Expanded(
+          child: 
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: SelectionArea(
+                    child: DataTable(
+                      columnSpacing: 10, // Espacio entre las columnas
+                      headingRowColor: MaterialStateColor.resolveWith(
+                        (states) => Theme.of(context).primaryColor,
+                      ),
+                      headingRowHeight: 40, // Set the desired height here
+                      headingTextStyle: TextStyle(color: Colors.white),
+                      columns: [
+                        DataColumn(label: Text('Pago Renta')),
+                        DataColumn(label: Text('Deuda Renta')),
+                        DataColumn(label: Text('Pago Energía Eléctrica')),
+                        DataColumn(label: Text('Deuda Energía Eléctrica')),
+                        DataColumn(label: Text('Pago Agua Potable')),
+                        DataColumn(label: Text('Deuda Agua Potable')),
+                        DataColumn(label: Text('Observaciones')),
+                      ],
+                      rows: [
+                        DataRow(cells: [
+                          DataCell(Text('\ 2000')),
+                          DataCell(Text('\ 50')),
+                          DataCell(Text('\ 100')),
+                          DataCell(Text('\ 20')),
+                          DataCell(Text('\ 30')),
+                          DataCell(Text('\ 10')),
+                          DataCell(Text('\ ninguno')),
+                        ]),
+                        DataRow(cells: [
+                          DataCell(Text('\ 5000')),
+                          DataCell(Text('\ 500')),
+                          DataCell(Text('\ 450')),
+                          DataCell(Text('\ 0')),
+                          DataCell(Text('\ 100')),
+                          DataCell(Text('\ 0')),
+                          DataCell(Text('\ ninguno')),
+                        ]),
+                        DataRow(cells: [
+                          DataCell(Text('\ 2500')),
+                          DataCell(Text('\ 0')),
+                          DataCell(Text('\ 500')),
+                          DataCell(Text('\ 0')),
+                          DataCell(Text('\ 250')),
+                          DataCell(Text('\ 0')),
+                          DataCell(Text('\ ninguno')),
+                        ]),
+                        DataRow(cells: [
+                          DataCell(Text('\ 5500')),
+                          DataCell(Text('\ 1500')),
+                          DataCell(Text('\ 800')),
+                          DataCell(Text('\ 0')),
+                          DataCell(Text('\ 150')),
+                          DataCell(Text('\ 0')),
+                          DataCell(Text('\ ninguno')),
+                        ]),
+                        DataRow(cells: [
+                          DataCell(Text('\ 2500')),
+                          DataCell(Text('\ 500')),
+                          DataCell(Text('\ 800')),
+                          DataCell(Text('\ 800')),
+                          DataCell(Text('\ 250')),
+                          DataCell(Text('\ 250')),
+                          DataCell(Text('\ ninguno')),
+                        ]),
+                        DataRow(cells: [
+                          DataCell(Text('\ 2000')),
+                          DataCell(Text('\ 0')),
+                          DataCell(Text('\ 500')),
+                          DataCell(Text('\ 0')),
+                          DataCell(Text('\ 200')),
+                          DataCell(Text('\ 0')),
+                          DataCell(Text('\ ninguno')),
+                        ]),
+                        DataRow(cells: [
+                          DataCell(Text('\ 3000')),
+                          DataCell(Text('\ 1500')),
+                          DataCell(Text('\ 500')),
+                          DataCell(Text('\ 500')),
+                          DataCell(Text('\ 250')),
+                          DataCell(Text('\ 0')),
+                          DataCell(Text('\ ninguno')),
+                        ]),
+                        DataRow(cells: [
+                          DataCell(Text('\ 1500')),
+                          DataCell(Text('\ 0')),
+                          DataCell(Text('\ 500')),
+                          DataCell(Text('\ 0')),
+                          DataCell(Text('\ 250')),
+                          DataCell(Text('\ 0')),
+                          DataCell(Text('\ ninguno')),
+                        ]),
+                      ],
+                    ),
+                  ),
+                ),
               ),
-              headingRowHeight: 40, // Set the desired height here
-              headingTextStyle: TextStyle(color: Colors.white),
-              columns: [
-                DataColumn(label: Text('Identidad')),
-                DataColumn(label: Text('Nombre')),
-                DataColumn(label: Text('Código Vivienda')),
-                DataColumn(label: Text('Pago Renta')),
-                DataColumn(label: Text('Deuda Renta')),
-                DataColumn(label: Text('Pago Energía Eléctrica')),
-                DataColumn(label: Text('Deuda Energía Eléctrica')),
-                DataColumn(label: Text('Pago Agua Potable')),
-                DataColumn(label: Text('Deuda Agua Potable')),
-                DataColumn(label: Text('Observaciones')),
-              ],
-              rows: [
-                DataRow(cells: [
-                  DataCell(Text('0501158932597')),
-                  DataCell(Text('Juan Pérez')),
-                  DataCell(Text('EPV')),
-                  DataCell(Text('\ 2000')),
-                  DataCell(Text('\ 50')),
-                  DataCell(Text('\ 100')),
-                  DataCell(Text('\ 20')),
-                  DataCell(Text('\ 30')),
-                  DataCell(Text('\ 10')),
-                  DataCell(Text('\ ninguno')),
-                ]),
-                 DataRow(cells: [
-                  DataCell(Text('0506195223569')),
-                  DataCell(Text('Alonso Fernandez')),
-                  DataCell(Text('23A')),
-                  DataCell(Text('\ 5000')),
-                  DataCell(Text('\ 500')),
-                  DataCell(Text('\ 450')),
-                  DataCell(Text('\ 0')),
-                  DataCell(Text('\ 100')),
-                  DataCell(Text('\ 0')),
-                  DataCell(Text('\ ninguno')),
-                ]),
-                 DataRow(cells: [
-                  DataCell(Text('0101195603495')),
-                  DataCell(Text('fanny Garcia')),
-                  DataCell(Text('LLG')),
-                  DataCell(Text('\ 2500')),
-                  DataCell(Text('\ 0')),
-                  DataCell(Text('\ 500')),
-                  DataCell(Text('\ 0')),
-                  DataCell(Text('\ 250')),
-                  DataCell(Text('\ 0')),
-                  DataCell(Text('\ ninguno')),
-                ]),
-                DataRow(cells: [
-                  DataCell(Text('0103197603752')),
-                  DataCell(Text('Amanda Lusardo')),
-                  DataCell(Text('LLG')),
-                  DataCell(Text('\ 5500')),
-                  DataCell(Text('\ 1500')),
-                  DataCell(Text('\ 800')),
-                  DataCell(Text('\ 0')),
-                  DataCell(Text('\ 150')),
-                  DataCell(Text('\ 0')),
-                  DataCell(Text('\ ninguno')),
-                ]),
-                DataRow(cells: [
-                  DataCell(Text('0101195603495')),
-                  DataCell(Text('David Martinez')),
-                  DataCell(Text('23A')),
-                  DataCell(Text('\ 2500')),
-                  DataCell(Text('\ 500')),
-                  DataCell(Text('\ 800')),
-                  DataCell(Text('\ 800')),
-                  DataCell(Text('\ 250')),
-                  DataCell(Text('\ 250')),
-                  DataCell(Text('\ Debe agua y luz')),
-                ]),
-                DataRow(cells: [
-                  DataCell(Text('0501199612953')),
-                  DataCell(Text('Mario Villaueva')),
-                  DataCell(Text('EPV')),
-                  DataCell(Text('\ 2000')),
-                  DataCell(Text('\ 0')),
-                  DataCell(Text('\ 500')),
-                  DataCell(Text('\ 0')),
-                  DataCell(Text('\ 200')),
-                  DataCell(Text('\ 0')),
-                  DataCell(Text('\ ninguno')),
-                ]),
-                DataRow(cells: [
-                  DataCell(Text('1782198935492')),
-                  DataCell(Text('Glenda Mejia')),
-                  DataCell(Text('23A')),
-                  DataCell(Text('\ 3000')),
-                  DataCell(Text('\ 1500')),
-                  DataCell(Text('\ 500')),
-                  DataCell(Text('\ 500')),
-                  DataCell(Text('\ 250')),
-                  DataCell(Text('\ 0')),
-                  DataCell(Text('\ Debe luz')),
-                ]),
-                DataRow(cells: [
-                  DataCell(Text('1234198012345')),
-                  DataCell(Text('Ferderico Gomez')),
-                  DataCell(Text('LLG')),
-                  DataCell(Text('\ 1500')),
-                  DataCell(Text('\ 0')),
-                  DataCell(Text('\ 500')),
-                  DataCell(Text('\ 0')),
-                  DataCell(Text('\ 250')),
-                  DataCell(Text('\ 0')),
-                  DataCell(Text('\ ninguno')),
-                ]),
-              ],
-            ),
-            
-          )
+            )
         ),
-      ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: _pageNum > 1
+              ? () {
+                  setState(() {
+                    _pageNum--;
+                  });
+                }
+              : null,
+            ),
+            Text('Página #$_pageNum'),
+            IconButton(
+              icon: Icon(Icons.arrow_forward),
+              onPressed: _pageNum < (_filas.length / _rowsPerPage).ceil()
+              ? () {
+                  setState(() {
+                    _pageNum++;
+                  });
+                }
+              : null,
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

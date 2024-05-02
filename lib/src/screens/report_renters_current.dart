@@ -6,14 +6,6 @@ import 'package:viviendas_modicas_sistema/data/local/entity/arrendatarios_entida
 import '../widgets/appbar.dart';
 import '../widgets/drawer.dart';
 
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:intl/intl.dart';
-import 'package:viviendas_modicas_sistema/data/local/db/app_db.dart';
-import 'package:viviendas_modicas_sistema/data/local/entity/arrendatarios_entidad.dart';
-import '../widgets/appbar.dart';
-import '../widgets/drawer.dart';
-
 class RentersCurrentcreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -30,7 +22,7 @@ class RentersCurrentcreen extends StatelessWidget {
               const SizedBox(height: 16),
               Center(
                 child: Text(
-                  'Estado de Cuenta del Arrendatario',
+                  'Lista de Arrendatarios Actuales',
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
               ),
@@ -93,8 +85,8 @@ class _RentersCurrentDTScreen extends State<RentersCurrentDTScreen> {
     super.didChangeDependencies();
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-    final dataTableHeight = screenHeight * 0.5; // adjust this value to fit your needs
-    final rowHeight = 40; // adjust this value to fit your needs
+    final dataTableHeight = screenHeight * 0.5;
+    final rowHeight = 40;
     _rowsPerPage = (dataTableHeight / rowHeight).toInt();
   }
 

@@ -4,7 +4,8 @@ import 'package:intl/intl.dart';
 import '../widgets/appbar.dart';
 import '../widgets/drawer.dart';
 import '../widgets/tooltip.dart';
-
+import 'package:viviendas_modicas_sistema/data/local/db/app_db.dart';
+import 'package:viviendas_modicas_sistema/data/local/entity/arrendatarios_entidad.dart';
 class EditPaymentsEmptyPlace extends StatefulWidget {
   @override
   _EditPaymentsEmptyPlaceState createState() => _EditPaymentsEmptyPlaceState();
@@ -43,6 +44,30 @@ class _EditPaymentsEmptyPlaceState extends State<EditPaymentsEmptyPlace> {
       _rows.removeAt(index);
     });
   }
+
+  // Future<void> _save() async {
+  //   if (_formKey.currentState!.validate()) {
+  //     for (var row in _rows) {
+  //       // Create or update CuentasPSDesocupados objects based on form data
+  //       CuentasPSDesocupados cuenta = CuentasPSDesocupados(
+  //         cVivienda: row['codigoVivienda'].text,
+  //         // Set other fields based on the form data in the row map
+  //         cProveedorEnergia: row['proveedorEnergia'].text,
+  //         montoEnergia: double.parse(row['montoEnergia'].text),
+  //         cProveedorAgua: row['proveedorAgua'].text,
+  //         montoAgua: double.parse(row['montoAgua'].text),
+  //       );
+
+  //       // Use appropriate methods from your database package to insert or update
+  //       await _database.cuentasPSDesocupadosDao.insert(cuenta); // Or update based on logic
+  //     }
+  //     // Show success message or perform other actions after saving
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(content: Text('Información guardada exitosamente')),
+  //     );
+  //   }
+  // }
+
 
   @override
   Widget build(BuildContext context) {
@@ -90,6 +115,7 @@ class _EditPaymentsEmptyPlaceState extends State<EditPaymentsEmptyPlace> {
                             ),
                             DataCell(
                               TextFormField(
+                                enabled: false,
                                 controller: row['ubicacion'],
                                 decoration: InputDecoration(
                                   labelText: 'Ubicación',
