@@ -37,7 +37,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     showDialog<void>(
                       context: context,
                       builder: (BuildContext context) {
-                        print('TRES DOS');
                         return AlertDialog(
                           title: const Text('¿Deseas salir?'),
                           content: const Text(

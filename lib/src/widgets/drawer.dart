@@ -3,10 +3,9 @@ import '../shared/constantes.dart';
 
 class CustomDrawer extends StatelessWidget {
   final bool isMainScreen;
-  
-  final VoidCallback? onHomeButtonPressed;
+  final bool homeConfirm;
 
-  CustomDrawer({this.isMainScreen = false, this.onHomeButtonPressed});
+  CustomDrawer({this.isMainScreen = false, this.homeConfirm = false});
 
   @override
   Widget build(BuildContext context) {
@@ -21,10 +20,26 @@ class CustomDrawer extends StatelessWidget {
                 ? null
                   : () {
                       Navigator.pop(context);
-                      if (onHomeButtonPressed != null) {
-                        onHomeButtonPressed!();
-                      } else {
+                      if (!homeConfirm) {
                         Navigator.pushNamed(context, Rutas.menuPrincipal.name);
+                      } else {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                                title: Text('¿Deseas salir al Menú Principal?'),
+                                content: Text('Tienes información sin guardar'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: Text('Cancelar'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () => Navigator.pushNamed(context, Rutas.menuPrincipal.name),
+                                    child: Text('Aceptar'),
+                                  ),
+                                ],
+                              ),
+                        );
                       }
                     },
               child: Tooltip(

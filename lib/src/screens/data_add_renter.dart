@@ -94,7 +94,7 @@ class _NewEntryScreenState extends State<NewEntryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(title: 'Nueva Entrada', back: true, backConfirm: _hasUnsavedChanges,),
-      drawer: CustomDrawer(isMainScreen: false, onHomeButtonPressed: _onHomeButtonPressed,),
+      drawer: CustomDrawer(isMainScreen: false, homeConfirm: _hasUnsavedChanges,),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndTop,
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -452,16 +452,16 @@ class _NewEntryScreenState extends State<NewEntryScreen> {
       timer?.cancel();
     });
   }
-  Future<void> _onHomeButtonPressed() async {
-    if (_hasUnsavedChanges) {
-      final shouldNavigate = await _showUnsavedChangesDialog();
-      if (shouldNavigate) {
-        Navigator.pushNamed(context, Rutas.menuPrincipal.name);
-      }
-    } else {
-      Navigator.pushNamed(context, Rutas.menuPrincipal.name);
-    }
-  }
+  // Future<void> _onHomeButtonPressed() async {
+  //   if (_hasUnsavedChanges) {
+  //     final shouldNavigate = await _showUnsavedChangesDialog();
+  //     if (shouldNavigate) {
+  //       Navigator.pushNamed(context, Rutas.menuPrincipal.name);
+  //     }
+  //   } else {
+  //     Navigator.pushNamed(context, Rutas.menuPrincipal.name);
+  //   }
+  // }
 
   // void _onBackButtonPressed() {
   //   print('TRES UNO');
@@ -499,26 +499,26 @@ class _NewEntryScreenState extends State<NewEntryScreen> {
   //     },
   //   );
   // }
-  Future<bool> _showUnsavedChangesDialog() async {
-    final choice = await showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-            title: Text('¿Deseas salir al Menú Principal?'),
-            content: Text('Tienes información sin guardar'),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context, false),
-                child: Text('Cancelar'),
-              ),
-              TextButton(
-                onPressed: () => Navigator.pop(context, true),
-                child: Text('Aceptar'),
-              ),
-            ],
-          ),
-    );
-    return choice ?? false; // Regresa null en caso de que no se escoja ninguna opción
-  }
+  // Future<bool> _showUnsavedChangesDialog() async {
+  //   final choice = await showDialog(
+  //     context: context,
+  //     builder: (context) => AlertDialog(
+  //           title: Text('¿Deseas salir al Menú Principal?'),
+  //           content: Text('Tienes información sin guardar'),
+  //           actions: [
+  //             TextButton(
+  //               onPressed: () => Navigator.pop(context, false),
+  //               child: Text('Cancelar'),
+  //             ),
+  //             TextButton(
+  //               onPressed: () => Navigator.pop(context, true),
+  //               child: Text('Aceptar'),
+  //             ),
+  //           ],
+  //         ),
+  //   );
+  //   return choice ?? false; // Regresa null en caso de que no se escoja ninguna opción
+  // }
 
   
 
