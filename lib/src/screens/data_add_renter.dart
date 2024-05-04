@@ -30,7 +30,7 @@ class _NewEntryScreenState extends State<NewEntryScreen> {
   TextEditingController _fechaEntradaController = TextEditingController();
   TextEditingController _precioRentaController = TextEditingController();
   TextEditingController _observacionesController = TextEditingController();
-
+  late String _selectedDate;
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -39,6 +39,7 @@ class _NewEntryScreenState extends State<NewEntryScreen> {
       lastDate: DateTime(2050),
     );
     if (picked != null) {
+      _selectedDate = DateFormat('yyyy-MM-dd').format(picked);
       _fechaEntradaController.text = DateFormat('dd-MM-yyyy').format(picked);
     }
   }
@@ -136,7 +137,7 @@ class _NewEntryScreenState extends State<NewEntryScreen> {
                                       const SizedBox(width: 16),
                                       Expanded(
                                         child: Text(
-                                          'Al activar los botones con apariencia de llave en los campos de ingreso de datos se remueven algunas de las validaciones de ese campo. Esto debe reservarse para casos excepcionales, favor de usar responsablemente.',
+                                          'Activar el botón con ícono de llave permite desactivar ciertas validaciones en ese campo de entrada. Esta función es para ingreasr datos en situaciones excepcionales. Por favor, utilícela con responsabilidad.',
                                           style: TextStyle(fontSize: 16),
                                         ),
                                       ),
@@ -388,7 +389,7 @@ class _NewEntryScreenState extends State<NewEntryScreen> {
       final actualArrendatarioEntity = ActualArrendatariosCompanion(
         idArrendatario: drift.Value(_identidadController.text),
         obs: drift.Value(_observacionesController.text),
-        fechaEntrada: drift.Value(DateTime.parse(_fechaEntradaController.text)),
+        fechaEntrada: drift.Value(DateTime.parse(_selectedDate)),
         precioRenta: drift.Value(double.parse(_precioRentaController.text)),
         cVivienda: drift.Value(_codigoViviendaController.text),
       );

@@ -2901,6 +2901,170 @@ class CuentasPSDesocupadosCompanion
   }
 }
 
+class vArrendatariosActuale extends DataClass {
+  final String identidad;
+  final String nombre;
+  final String cVivienda;
+  final DateTime fechaEntrada;
+  final double precioRenta;
+  final String? obs;
+  const vArrendatariosActuale(
+      {required this.identidad,
+      required this.nombre,
+      required this.cVivienda,
+      required this.fechaEntrada,
+      required this.precioRenta,
+      this.obs});
+  factory vArrendatariosActuale.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return vArrendatariosActuale(
+      identidad: serializer.fromJson<String>(json['identidad']),
+      nombre: serializer.fromJson<String>(json['nombre']),
+      cVivienda: serializer.fromJson<String>(json['cVivienda']),
+      fechaEntrada: serializer.fromJson<DateTime>(json['fechaEntrada']),
+      precioRenta: serializer.fromJson<double>(json['precioRenta']),
+      obs: serializer.fromJson<String?>(json['obs']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'identidad': serializer.toJson<String>(identidad),
+      'nombre': serializer.toJson<String>(nombre),
+      'cVivienda': serializer.toJson<String>(cVivienda),
+      'fechaEntrada': serializer.toJson<DateTime>(fechaEntrada),
+      'precioRenta': serializer.toJson<double>(precioRenta),
+      'obs': serializer.toJson<String?>(obs),
+    };
+  }
+
+  vArrendatariosActuale copyWith(
+          {String? identidad,
+          String? nombre,
+          String? cVivienda,
+          DateTime? fechaEntrada,
+          double? precioRenta,
+          Value<String?> obs = const Value.absent()}) =>
+      vArrendatariosActuale(
+        identidad: identidad ?? this.identidad,
+        nombre: nombre ?? this.nombre,
+        cVivienda: cVivienda ?? this.cVivienda,
+        fechaEntrada: fechaEntrada ?? this.fechaEntrada,
+        precioRenta: precioRenta ?? this.precioRenta,
+        obs: obs.present ? obs.value : this.obs,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('vArrendatariosActuale(')
+          ..write('identidad: $identidad, ')
+          ..write('nombre: $nombre, ')
+          ..write('cVivienda: $cVivienda, ')
+          ..write('fechaEntrada: $fechaEntrada, ')
+          ..write('precioRenta: $precioRenta, ')
+          ..write('obs: $obs')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(identidad, nombre, cVivienda, fechaEntrada, precioRenta, obs);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is vArrendatariosActuale &&
+          other.identidad == this.identidad &&
+          other.nombre == this.nombre &&
+          other.cVivienda == this.cVivienda &&
+          other.fechaEntrada == this.fechaEntrada &&
+          other.precioRenta == this.precioRenta &&
+          other.obs == this.obs);
+}
+
+class $vArrendatariosActualesView
+    extends ViewInfo<$vArrendatariosActualesView, vArrendatariosActuale>
+    implements HasResultSet {
+  final String? _alias;
+  @override
+  final _$AppDb attachedDatabase;
+  $vArrendatariosActualesView(this.attachedDatabase, [this._alias]);
+  $ArrendatariosTable get arrendatarios =>
+      attachedDatabase.arrendatarios.createAlias('t0');
+  $ActualArrendatariosTable get actualarrendatarios =>
+      attachedDatabase.actualArrendatarios.createAlias('t1');
+  @override
+  List<GeneratedColumn> get $columns =>
+      [identidad, nombre, cVivienda, fechaEntrada, precioRenta, obs];
+  @override
+  String get aliasedName => _alias ?? entityName;
+  @override
+  String get entityName => 'v_arrendatarios_actuales';
+  @override
+  Map<SqlDialect, String>? get createViewStatements => null;
+  @override
+  $vArrendatariosActualesView get asDslTable => this;
+  @override
+  vArrendatariosActuale map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return vArrendatariosActuale(
+      identidad: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}identidad'])!,
+      nombre: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}nombre'])!,
+      cVivienda: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}c_vivienda'])!,
+      fechaEntrada: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime, data['${effectivePrefix}fecha_entrada'])!,
+      precioRenta: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}precio_renta'])!,
+      obs: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}obs']),
+    );
+  }
+
+  late final GeneratedColumn<String> identidad = GeneratedColumn<String>(
+      'identidad', aliasedName, false,
+      generatedAs: GeneratedAs(arrendatarios.identidad, false),
+      type: DriftSqlType.string);
+  late final GeneratedColumn<String> nombre = GeneratedColumn<String>(
+      'nombre', aliasedName, false,
+      generatedAs: GeneratedAs(arrendatarios.nombre, false),
+      type: DriftSqlType.string);
+  late final GeneratedColumn<String> cVivienda = GeneratedColumn<String>(
+      'c_vivienda', aliasedName, false,
+      generatedAs: GeneratedAs(actualarrendatarios.cVivienda, false),
+      type: DriftSqlType.string);
+  late final GeneratedColumn<DateTime> fechaEntrada = GeneratedColumn<DateTime>(
+      'fecha_entrada', aliasedName, false,
+      generatedAs: GeneratedAs(actualarrendatarios.fechaEntrada, false),
+      type: DriftSqlType.dateTime);
+  late final GeneratedColumn<double> precioRenta = GeneratedColumn<double>(
+      'precio_renta', aliasedName, false,
+      generatedAs: GeneratedAs(actualarrendatarios.precioRenta, false),
+      type: DriftSqlType.double);
+  late final GeneratedColumn<String> obs = GeneratedColumn<String>(
+      'obs', aliasedName, true,
+      generatedAs: GeneratedAs(actualarrendatarios.obs, false),
+      type: DriftSqlType.string);
+  @override
+  $vArrendatariosActualesView createAlias(String alias) {
+    return $vArrendatariosActualesView(attachedDatabase, alias);
+  }
+
+  @override
+  Query? get query =>
+      (attachedDatabase.selectOnly(arrendatarios)..addColumns($columns)).join([
+        innerJoin(
+            actualarrendatarios,
+            actualarrendatarios.idArrendatario
+                .equalsExp(arrendatarios.identidad))
+      ]);
+  @override
+  Set<String> get readTables => const {'arrendatarios', 'actual_arrendatarios'};
+}
+
 abstract class _$AppDb extends GeneratedDatabase {
   _$AppDb(QueryExecutor e) : super(e);
   late final $ArrendatariosTable arrendatarios = $ArrendatariosTable(this);
@@ -2920,6 +3084,8 @@ abstract class _$AppDb extends GeneratedDatabase {
       $ProveedoresServiciosTable(this);
   late final $CuentasPSDesocupadosTable cuentasPSDesocupados =
       $CuentasPSDesocupadosTable(this);
+  late final $vArrendatariosActualesView vArrendatariosActuales =
+      $vArrendatariosActualesView(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -2934,6 +3100,7 @@ abstract class _$AppDb extends GeneratedDatabase {
         danosPropiedad,
         cuentaProveedoresServicios,
         proveedoresServicios,
-        cuentasPSDesocupados
+        cuentasPSDesocupados,
+        vArrendatariosActuales
       ];
 }

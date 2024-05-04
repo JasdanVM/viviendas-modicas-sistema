@@ -97,6 +97,7 @@ class _RentersCurrentDTScreen extends State<RentersCurrentDTScreen> {
   }
 
   void _loadData() async {
+    // (await _db.select(_db.vArrendatariosActuales).get()).forEach(print);
     final List<Arrendatario> arrendatarios = await _db.getArrendatarios();
     setState(() {
       _arrendatarios = arrendatarios;

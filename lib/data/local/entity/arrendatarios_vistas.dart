@@ -1,37 +1,19 @@
-// // In lib/data/local/entity/arrendatarios_vistas.dart
+import 'package:drift/drift.dart';
+import 'package:viviendas_modicas_sistema/data/local/db/app_db.dart';
+import 'package:viviendas_modicas_sistema/data/local/entity/arrendatarios_entidad.dart';// Replace with your actual path
 
-// import 'package:drift/drift.dart';
-// import 'package:viviendas_modicas_sistema/data/local/entity/arrendatarios_entidad.dart';// Replace with your actual path
+abstract class vArrendatariosActuales extends View{
+  Arrendatarios get arrendatarios;
+  ActualArrendatarios get actualarrendatarios;
 
-// @DriftView(
-//   // Optional: You can provide a view name here (defaults to class name)
-//   // viewName: 'vw_Arrendatarios_Completo',
-// )
-// class VwArrendatariosCompleto extends View {
-//   final String idArrendatario; // From ActualArrendatarios
-//   final String nombre; // From Arrendatarios
-//   final String cVivienda; // From ActualArrendatarios
-//   final DateTime fechaEntrada; // From ActualArrendatarios
-//   final double precioRenta; // From ActualArrendatarios
-//   final String? obs; // From ActualArrendatarios
+  Expression<String> get data =>
+    arrendatarios.nombre + const Constant(' - ') + actualarrendatarios.cVivienda;
 
-//   @override
-//   @_$VwArrendatariosCompletoConstructor() // Generated constructor after build_runner build
-//   VwArrendatariosCompleto({
-//     required this.idArrendatario,
-//     required this.nombre,
-//     required this.cVivienda,
-//     required this.fechaEntrada,
-//     required this.precioRenta,
-//     this.obs,
-//   });
+  @override
+  Query as() => select([
+    arrendatarios.identidad, arrendatarios.nombre, actualarrendatarios.cVivienda, actualarrendatarios.fechaEntrada, actualarrendatarios.precioRenta, actualarrendatarios.obs
+  ]).from(arrendatarios).join([innerJoin(actualarrendatarios, actualarrendatarios.idArrendatario.equalsExp(arrendatarios.identidad))]);
 
-//   @override
-//   Query as() {
-//     return select(vwArrendatariosCompleto) // Use vwArrendatariosCompleto here (defined in the class)
-//         .from(actualArrendatarios)
-//         .join([
-//           innerJoin(arrendatarios, arrendatarios.identidad.equalsExp(actualArrendatarios.idArrendatario)),
-//         ]);
-//   }
-// }
+  static get() {}
+}
+

@@ -4,6 +4,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
 import 'package:drift/drift.dart';
 import 'package:viviendas_modicas_sistema/data/local/entity/arrendatarios_entidad.dart';
+import 'package:viviendas_modicas_sistema/data/local/entity/arrendatarios_vistas.dart';
 part 'app_db.g.dart';
 
 LazyDatabase _openConnection() {
@@ -27,6 +28,9 @@ LazyDatabase _openConnection() {
     CuentaProveedoresServicios,
     CuentasPSDesocupados
   ],
+  views: [
+    vArrendatariosActuales
+  ]
 )
 class AppDb extends _$AppDb {
   AppDb() : super(_openConnection());
@@ -37,6 +41,10 @@ class AppDb extends _$AppDb {
   Future<List<Arrendatario>> getArrendatarios() async {
     return await select(arrendatarios).get();
   }
+
+  Future<List<vArrendatariosActuales>> getvArrendatariosActuales() async {
+  return await vArrendatariosActuales.get();
+}
 
   Future<Arrendatario> getArrendatario(String nombre) async {
     return await (select(arrendatarios)
