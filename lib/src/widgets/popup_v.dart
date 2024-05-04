@@ -106,7 +106,7 @@ class _SearchByHousingPopupState extends State<SearchByHousingPopup> {
               ),
               SizedBox(height: 20),
               Text(
-                'Buscar por código de vivienda:',
+                widget.ruta == null? 'Seleccionar código de vivienda:' : 'Buscar por código de vivienda:',
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 10),

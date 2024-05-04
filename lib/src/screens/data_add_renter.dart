@@ -204,7 +204,7 @@ class _NewEntryScreenState extends State<NewEntryScreen> {
                               setState(() {
                                 _allowForeignID =!_allowForeignID;
                               });
-                            } 
+                            },
                           ),
                         ),
                         validator: (value) {

@@ -12,6 +12,7 @@ class PaymentAndMorosoInfoScreen extends StatefulWidget {
 
 class _PaymentAndMorosoInfoScreenState extends State<PaymentAndMorosoInfoScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool _hasUnsavedChanges = false;
   final FocusNode _focusNode = FocusNode();
   TextEditingController _identidadController = TextEditingController();
   TextEditingController _nombreController = TextEditingController();
@@ -45,6 +46,7 @@ class _PaymentAndMorosoInfoScreenState extends State<PaymentAndMorosoInfoScreen>
     _montoDeudaAguaController.clear();
     _fechaMorosidadController.clear();
     _fechaMontoPagoViviendaController.clear();
+    setState(() => _hasUnsavedChanges = false);
   }
 
   void _submitPaymentAndMorosoInfo() {
@@ -87,8 +89,8 @@ class _PaymentAndMorosoInfoScreenState extends State<PaymentAndMorosoInfoScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: 'Registro de Pago y Morosidad', back: true),
-      drawer:  CustomDrawer(isMainScreen: false),
+      appBar: CustomAppBar(title: 'Registro de Pago y Morosidad', back: true, backConfirm: _hasUnsavedChanges,),
+      drawer:  CustomDrawer(isMainScreen: false, homeConfirm: _hasUnsavedChanges,),
       body: Center(
         child: KeyboardListener(
           focusNode: _focusNode,
@@ -124,6 +126,7 @@ class _PaymentAndMorosoInfoScreenState extends State<PaymentAndMorosoInfoScreen>
                           FilteringTextInputFormatter.digitsOnly,
                           LengthLimitingTextInputFormatter(13),
                         ],
+                        onChanged: (value) => setState(() => _hasUnsavedChanges = true),
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -141,6 +144,7 @@ class _PaymentAndMorosoInfoScreenState extends State<PaymentAndMorosoInfoScreen>
                           }
                           return null;
                         },
+                        onChanged: (value) => setState(() => _hasUnsavedChanges = true),
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -164,6 +168,7 @@ class _PaymentAndMorosoInfoScreenState extends State<PaymentAndMorosoInfoScreen>
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
                         ],
+                        onChanged: (value) => setState(() => _hasUnsavedChanges = true),
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -187,6 +192,7 @@ class _PaymentAndMorosoInfoScreenState extends State<PaymentAndMorosoInfoScreen>
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
                         ],
+                        onChanged: (value) => setState(() => _hasUnsavedChanges = true),
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -210,6 +216,7 @@ class _PaymentAndMorosoInfoScreenState extends State<PaymentAndMorosoInfoScreen>
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
                         ],
+                        onChanged: (value) => setState(() => _hasUnsavedChanges = true),
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -226,6 +233,7 @@ class _PaymentAndMorosoInfoScreenState extends State<PaymentAndMorosoInfoScreen>
                                 labelText: 'Fecha de Morosidad',
                                 border: OutlineInputBorder(),
                               ),
+                              onChanged: (value) => setState(() => _hasUnsavedChanges = true),
                             ),
                           ),
                         ),
@@ -245,6 +253,7 @@ class _PaymentAndMorosoInfoScreenState extends State<PaymentAndMorosoInfoScreen>
                                 labelText: 'Fecha del Monto del Pago de la Vivienda',
                                 border: OutlineInputBorder(),
                               ),
+                              onChanged: (value) => setState(() => _hasUnsavedChanges = true),
                             ),
                           ),
                         ),

@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import '../widgets/appbar.dart';
 import '../widgets/drawer.dart';
 import '../widgets/tooltip.dart';
+import '../widgets/popup_v.dart';
 import 'package:viviendas_modicas_sistema/data/local/db/app_db.dart';
 import 'package:viviendas_modicas_sistema/data/local/entity/arrendatarios_entidad.dart';
 class EditPaymentsEmptyPlace extends StatefulWidget {
@@ -13,6 +14,7 @@ class EditPaymentsEmptyPlace extends StatefulWidget {
 
 class _EditPaymentsEmptyPlaceState extends State<EditPaymentsEmptyPlace> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool _hasUnsavedChanges = false;
   final FocusNode _focusNode = FocusNode();
 
   List<Map<String, TextEditingController>> _rows = [
@@ -45,6 +47,22 @@ class _EditPaymentsEmptyPlaceState extends State<EditPaymentsEmptyPlace> {
     });
   }
 
+  Future<void> _selectPlace(BuildContext context, dynamic controllerData) async {
+    if (controllerData is TextEditingController) {
+      final String? picked = await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return SearchByHousingPopup();
+        },
+      );
+      if (picked != null) {
+        setState(() {
+          controllerData.text = picked;
+        });
+      }
+    }
+  }
+
   // Future<void> _save() async {
   //   if (_formKey.currentState!.validate()) {
   //     for (var row in _rows) {
@@ -73,8 +91,8 @@ class _EditPaymentsEmptyPlaceState extends State<EditPaymentsEmptyPlace> {
   Widget build(BuildContext context) {
     return Scaffold(
       primary: false,
-      appBar: CustomAppBar(title: 'Montos a Pagar por Conexión de Viviendas Desocupadas', back: true),
-      drawer: CustomDrawer(isMainScreen: false),
+      appBar: CustomAppBar(title: 'Montos a Pagar por Conexión de Viviendas Desocupadas', back: true, backConfirm: _hasUnsavedChanges,),
+      drawer: CustomDrawer(isMainScreen: false, homeConfirm: _hasUnsavedChanges,),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -106,12 +124,17 @@ class _EditPaymentsEmptyPlaceState extends State<EditPaymentsEmptyPlace> {
                           cells: [
                             DataCell(
                               TextFormField(
+                                readOnly: true,
                                 controller: row['codigoVivienda'],
                                 decoration: InputDecoration(
                                   labelText: 'Código Vivienda',
                                   border: OutlineInputBorder(),
                                 ),
-                                style: TextStyle(fontSize: 18),),
+                                style: TextStyle(fontSize: 18),
+                                mouseCursor: SystemMouseCursors.click,
+                                onTap: () => _selectPlace(context, row['codigoVivienda']),
+                                onChanged: (value) => setState(() => _hasUnsavedChanges = true),
+                              ),
                             ),
                             DataCell(
                               TextFormField(
@@ -132,6 +155,7 @@ class _EditPaymentsEmptyPlaceState extends State<EditPaymentsEmptyPlace> {
                                   border: OutlineInputBorder(),
                                 ),
                                 style: TextStyle(fontSize: 18),
+                                onChanged: (value) => setState(() => _hasUnsavedChanges = true),
                               ),
                             ),
                             DataCell(
@@ -142,6 +166,7 @@ class _EditPaymentsEmptyPlaceState extends State<EditPaymentsEmptyPlace> {
                                   border: OutlineInputBorder(),
                                 ),
                                 style: TextStyle(fontSize: 18),
+                                onChanged: (value) => setState(() => _hasUnsavedChanges = true),
                               ),
                             ),
                             DataCell(
@@ -152,6 +177,7 @@ class _EditPaymentsEmptyPlaceState extends State<EditPaymentsEmptyPlace> {
                                   border: OutlineInputBorder(),
                                 ),
                                 style: TextStyle(fontSize: 18),
+                                onChanged: (value) => setState(() => _hasUnsavedChanges = true),
                               ),
                             ),
                             DataCell(
@@ -162,6 +188,7 @@ class _EditPaymentsEmptyPlaceState extends State<EditPaymentsEmptyPlace> {
                                   border: OutlineInputBorder(),
                                 ),
                                 style: TextStyle(fontSize: 18),
+                                onChanged: (value) => setState(() => _hasUnsavedChanges = true),
                               ),
                             ),
                           ],
