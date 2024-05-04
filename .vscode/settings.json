@@ -1,0 +1,4 @@
+{
+    "java.compile.nullAnalysis.mode": "automatic",
+    "cmake.sourceDirectory": "E:/UNAH/proyecto_vm/viviendas-modicas-sistema-main/windows/runner"
+}
