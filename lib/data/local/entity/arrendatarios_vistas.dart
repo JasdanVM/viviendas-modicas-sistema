@@ -44,3 +44,4 @@ abstract class vViviendaDetalle extends View{
   static get() {}
 }
 
+

@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:path/path.dart';
 import 'package:viviendas_modicas_sistema/src/models/theme_provider.dart';
 
@@ -15,7 +16,8 @@ Future<void> initDatabase() async {
   await appDb.fillViviendaUbicacion();
 }
 
-void main() {
+void main() async {
+  await GetStorage.init();
   runApp(
     ChangeNotifierProvider(
       create: (context) => ThemeProvider(),

@@ -29,7 +29,7 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
   void _handleLogin() {
     if (_formKey.currentState!= null && _formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      if (_username == 'Admin' && _password == '1234') {
+      if (_username == 'Admin' && _password == '123456789') {
         print('Login Successful!');
         setState(() {
           _loginError = false;

@@ -7,6 +7,8 @@ import '../widgets/appbar.dart';
 import '../widgets/drawer.dart';
 
 class OccupiedHousingScreen extends StatelessWidget {
+  late int total;
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
