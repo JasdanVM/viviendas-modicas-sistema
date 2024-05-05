@@ -17,12 +17,12 @@ class ActualArrendatarios extends Table {
 class HistorialArrendatarios extends Table {
   TextColumn get cVivienda => text().withLength(min: 1, max: 10)();
   TextColumn get idArrendatario => text().references(Arrendatarios, #identidad)();
-  DateTimeColumn get fEntrada => dateTime().references(ActualArrendatarios,#fechaEntrada)();
+  DateTimeColumn get fechaEntrada => dateTime()();
   DateTimeColumn get fechaSalida => dateTime()();
-  RealColumn get pRenta => real().references(ActualArrendatarios, #precioRenta)();
+  RealColumn get precioRenta => real()();
   RealColumn get deudaPendiente => real()();
   RealColumn get danoPropiedad => real()();
-  TextColumn get observaciones => text().withLength(min: 0, max: 255).nullable()();
+  TextColumn get obs => text().withLength(min: 0, max: 255).nullable()();
 }
 
 

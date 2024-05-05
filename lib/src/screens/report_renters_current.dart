@@ -71,7 +71,7 @@ class _RentersCurrentDTScreen extends State<RentersCurrentDTScreen> {
   late AppDb _db;
   int _pageNum = 1;
   int _rowsPerPage = 0;
-  List<Arrendatario> _arrendatarios = [];
+  List<vArrendatariosActuale> _arrendatariosActuales = [];
 
   @override
   void initState() {
@@ -97,10 +97,10 @@ class _RentersCurrentDTScreen extends State<RentersCurrentDTScreen> {
   }
 
   void _loadData() async {
-    // (await _db.select(_db.vArrendatariosActuales).get()).forEach(print);
-    final List<Arrendatario> arrendatarios = await _db.getArrendatarios();
+    (await _db.select(_db.vArrendatariosActuales).get()).forEach(print);
+    final List<vArrendatariosActuale> arrendatarios = await _db.select(_db.vArrendatariosActuales).get();
     setState(() {
-      _arrendatarios = arrendatarios;
+      _arrendatariosActuales = arrendatarios;
     });
   }
 
@@ -124,22 +124,22 @@ class _RentersCurrentDTScreen extends State<RentersCurrentDTScreen> {
                 columns: [
                   DataColumn(label: Text('Identidad')),
                   DataColumn(label: Text('Nombre')),
-                  // DataColumn(label: Text('Codigo Vivienda')),
-                  // DataColumn(label: Text('Fecha de Entrada')),
-                  // DataColumn(label: Text('Precio Renta')),
-                  // DataColumn(label: Text('Observaciones')),
+                  DataColumn(label: Text('Codigo Vivienda')),
+                  DataColumn(label: Text('Fecha de Entrada')),
+                  DataColumn(label: Text('Precio Renta')),
+                  DataColumn(label: Text('Observaciones')),
                 ],
-                rows: _arrendatarios
+                rows: _arrendatariosActuales
                   .skip((_pageNum - 1) * _rowsPerPage)
                   .take(_rowsPerPage)
                   .map((arrendatario) => DataRow(
                       cells: [
                         DataCell(Text(arrendatario.identidad.toString())),
                         DataCell(Text(arrendatario.nombre.toString())),
-                        // DataCell(Text(arrendatario.codigoVivienda.toString())),
-                        // DataCell(Text(arrendatario.fechaEntrada.toString())),
-                        // DataCell(Text(arrendatario.precioRenta.toString())),
-                        // DataCell(Text(arrendatario.observaciones.toString())),
+                        DataCell(Text(arrendatario.cVivienda.toString())),
+                        DataCell(Text(arrendatario.fechaEntrada.toString())),
+                        DataCell(Text(arrendatario.precioRenta.toString())),
+                        DataCell(Text(arrendatario.obs.toString())),
                       ],
                     )).toList(),
               ),
@@ -162,7 +162,7 @@ class _RentersCurrentDTScreen extends State<RentersCurrentDTScreen> {
             Text('Página #$_pageNum'),
             IconButton(
               icon: Icon(Icons.arrow_forward),
-              onPressed: _pageNum < (_arrendatarios.length / _rowsPerPage).ceil()
+              onPressed: _pageNum < (_arrendatariosActuales.length / _rowsPerPage).ceil()
               ? () {
                   setState(() {
                     _pageNum++;

@@ -17,3 +17,18 @@ abstract class vArrendatariosActuales extends View{
   static get() {}
 }
 
+abstract class vArrendatariosHistorial extends View{
+  Arrendatarios get arrendatarios;
+  HistorialArrendatarios get historialarrendatarios;
+
+  // Expression<String> get data =>
+  //   arrendatarios.nombre + const Constant(' - ') + historialarrendatarios.cVivienda;
+
+  @override
+  Query as() => select([
+    arrendatarios.identidad, arrendatarios.nombre, historialarrendatarios.cVivienda, historialarrendatarios.fechaEntrada, historialarrendatarios.fechaSalida, historialarrendatarios.precioRenta, historialarrendatarios.obs
+  ]).from(arrendatarios).join([innerJoin(historialarrendatarios, historialarrendatarios.idArrendatario.equalsExp(arrendatarios.identidad))]);
+
+  static get() {}
+}
+

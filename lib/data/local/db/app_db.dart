@@ -29,7 +29,8 @@ LazyDatabase _openConnection() {
     CuentasPSDesocupados
   ],
   views: [
-    vArrendatariosActuales
+    vArrendatariosActuales,
+    vArrendatariosHistorial
   ]
 )
 class AppDb extends _$AppDb {
@@ -41,10 +42,6 @@ class AppDb extends _$AppDb {
   Future<List<Arrendatario>> getArrendatarios() async {
     return await select(arrendatarios).get();
   }
-
-  Future<List<vArrendatariosActuales>> getvArrendatariosActuales() async {
-  return await vArrendatariosActuales.get();
-}
 
   Future<Arrendatario> getArrendatario(String nombre) async {
     return await (select(arrendatarios)
