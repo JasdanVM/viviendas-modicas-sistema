@@ -14,6 +14,7 @@ class RentersSearchResultScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final value = selectedValue.startsWith('#')? selectedValue.substring(1) : selectedValue;
     return Scaffold(
       appBar: CustomAppBar(title: 'Viviendas Módicas', back: true),
       drawer: CustomDrawer(isMainScreen: false),
@@ -21,7 +22,7 @@ class RentersSearchResultScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column( //issue
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const SizedBox(height: 16),
@@ -44,9 +45,9 @@ class RentersSearchResultScreen extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               Expanded(
-                child: selectedValue.length == 13
-                ? RentersSearchResultDTScreen(searchQuery: selectedValue,)
-                  : RentersSearchResultDTScreenByName(searchQuery: selectedValue,),
+                child: selectedValue.startsWith('#')
+                ? RentersSearchResultDTScreen(searchQuery: value,)
+                  : RentersSearchResultDTScreenByName(searchQuery: value,),
               ),
             ],
           ),

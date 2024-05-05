@@ -182,6 +182,7 @@ class _SearchRenterPopupState extends State<SearchRenterPopup> {
                               if (_numeroDeIdentidad!= null && _numeroDeIdentidad!.isNotEmpty) {
                                 print('Search by ID button pressed');
                                 if (widget.ruta!= null) {
+                                  _numeroDeIdentidad = ('#' + _numeroDeIdentidad!);
                                   Navigator.popAndPushNamed(context, widget.ruta!, arguments: _numeroDeIdentidad);
                                 } else {
                                   Navigator.pop(context, _numeroDeIdentidad);
