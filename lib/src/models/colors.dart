@@ -19,3 +19,61 @@ class CustomColor {
   );
 }
 
+ThemeData lightMode = ThemeData(
+  brightness: Brightness.light,
+  useMaterial3: false,
+  primarySwatch: CustomColor.cVerde,
+);
+
+// ThemeData darkMode = ThemeData(
+//   brightness: Brightness.dark,
+//   useMaterial3: false,
+//   primarySwatch: CustomColor.cVerde,
+//   buttonTheme: ButtonThemeData(
+//     buttonColor: CustomColor.cVerde, // Set button background color
+//     textTheme: ButtonTextTheme.primary, // Ensure primary text color is used
+//   ),
+//   floatingActionButtonTheme: FloatingActionButtonThemeData(
+//     backgroundColor: CustomColor.cVerde, // Set FAB background color
+//     foregroundColor: Colors.white, // Set FAB icon color to white
+//   ),
+//   popupMenuTheme: PopupMenuThemeData(
+//     color: CustomColor.cVerde, // Set popup menu background color
+//   ),
+//   // For text buttons, we create a custom text theme
+//   textButtonTheme: TextButtonThemeData(
+//     style: TextButton.styleFrom(
+//       foregroundColor: Color(0xFF107C10), // Set text button text color to a lighter shade of green
+//     ),
+//   ),
+// );
+ThemeData darkMode = ThemeData.dark().copyWith(
+  useMaterial3: false,
+  colorScheme: ColorScheme.fromSwatch(
+    primarySwatch: CustomColor.cVerde,
+  ),
+  inputDecorationTheme: InputDecorationTheme(
+    enabledBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.grey[400] ?? Colors.white,), // Set border color to white when inactive
+    ),
+  ),
+  textButtonTheme: TextButtonThemeData(
+    style: TextButton.styleFrom(
+      foregroundColor: Color(0xFF107C10), // Set text button text color to #107C10
+    ),
+  ),
+  // Apply custom green to buttons
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ButtonStyle(
+      backgroundColor: MaterialStateProperty.all<Color>(CustomColor.cVerde),
+    ),
+  ),
+  // Apply custom green to floating action buttons
+  floatingActionButtonTheme: FloatingActionButtonThemeData(
+    backgroundColor: CustomColor.cVerde,
+  ),
+  // Apply custom green to popups
+  popupMenuTheme: PopupMenuThemeData(
+    color: CustomColor.cVerde,
+  ),
+);

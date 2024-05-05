@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../models/asset.dart';
+import '../shared/constantes.dart';
 import '../widgets/appbar.dart';
 import '../widgets/drawer.dart';
 
@@ -28,7 +30,7 @@ class PendingPaymentsScreen extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
                   child: Image.asset(
-                    'assets/vm_icon.png',
+                    getAssetPath(context),
                     height: 100,
                     fit: BoxFit.contain,
                   ),

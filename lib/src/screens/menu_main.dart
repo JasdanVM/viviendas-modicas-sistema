@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../models/asset.dart';
 import '../shared/constantes.dart';
 import '../widgets/appbar.dart';
 import '../widgets/drawer.dart';
@@ -23,7 +24,7 @@ class MainMenu extends StatelessWidget {
               child: Opacity(
                 opacity: 0.5,
                 child: Image.asset(
-                  'assets/vm_icon.png',
+                  getAssetPath(context),
                   fit: BoxFit.cover,
                 ),
               ),

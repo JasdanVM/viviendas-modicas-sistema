@@ -730,29 +730,24 @@ class $HistorialArrendatariosTable extends HistorialArrendatarios
       requiredDuringInsert: true,
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'REFERENCES arrendatarios (identidad)'));
-  static const VerificationMeta _fEntradaMeta =
-      const VerificationMeta('fEntrada');
+  static const VerificationMeta _fechaEntradaMeta =
+      const VerificationMeta('fechaEntrada');
   @override
-  late final GeneratedColumn<DateTime> fEntrada = GeneratedColumn<DateTime>(
-      'f_entrada', aliasedName, false,
-      type: DriftSqlType.dateTime,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'REFERENCES actual_arrendatarios (fecha_entrada)'));
+  late final GeneratedColumn<DateTime> fechaEntrada = GeneratedColumn<DateTime>(
+      'fecha_entrada', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
   static const VerificationMeta _fechaSalidaMeta =
       const VerificationMeta('fechaSalida');
   @override
   late final GeneratedColumn<DateTime> fechaSalida = GeneratedColumn<DateTime>(
       'fecha_salida', aliasedName, false,
       type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  static const VerificationMeta _pRentaMeta = const VerificationMeta('pRenta');
+  static const VerificationMeta _precioRentaMeta =
+      const VerificationMeta('precioRenta');
   @override
-  late final GeneratedColumn<double> pRenta = GeneratedColumn<double>(
-      'p_renta', aliasedName, false,
-      type: DriftSqlType.double,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'REFERENCES actual_arrendatarios (precio_renta)'));
+  late final GeneratedColumn<double> precioRenta = GeneratedColumn<double>(
+      'precio_renta', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
   static const VerificationMeta _deudaPendienteMeta =
       const VerificationMeta('deudaPendiente');
   @override
@@ -765,11 +760,10 @@ class $HistorialArrendatariosTable extends HistorialArrendatarios
   late final GeneratedColumn<double> danoPropiedad = GeneratedColumn<double>(
       'dano_propiedad', aliasedName, false,
       type: DriftSqlType.double, requiredDuringInsert: true);
-  static const VerificationMeta _observacionesMeta =
-      const VerificationMeta('observaciones');
+  static const VerificationMeta _obsMeta = const VerificationMeta('obs');
   @override
-  late final GeneratedColumn<String> observaciones = GeneratedColumn<String>(
-      'observaciones', aliasedName, true,
+  late final GeneratedColumn<String> obs = GeneratedColumn<String>(
+      'obs', aliasedName, true,
       additionalChecks:
           GeneratedColumn.checkTextLength(minTextLength: 0, maxTextLength: 255),
       type: DriftSqlType.string,
@@ -778,12 +772,12 @@ class $HistorialArrendatariosTable extends HistorialArrendatarios
   List<GeneratedColumn> get $columns => [
         cVivienda,
         idArrendatario,
-        fEntrada,
+        fechaEntrada,
         fechaSalida,
-        pRenta,
+        precioRenta,
         deudaPendiente,
         danoPropiedad,
-        observaciones
+        obs
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -810,11 +804,13 @@ class $HistorialArrendatariosTable extends HistorialArrendatarios
     } else if (isInserting) {
       context.missing(_idArrendatarioMeta);
     }
-    if (data.containsKey('f_entrada')) {
-      context.handle(_fEntradaMeta,
-          fEntrada.isAcceptableOrUnknown(data['f_entrada']!, _fEntradaMeta));
+    if (data.containsKey('fecha_entrada')) {
+      context.handle(
+          _fechaEntradaMeta,
+          fechaEntrada.isAcceptableOrUnknown(
+              data['fecha_entrada']!, _fechaEntradaMeta));
     } else if (isInserting) {
-      context.missing(_fEntradaMeta);
+      context.missing(_fechaEntradaMeta);
     }
     if (data.containsKey('fecha_salida')) {
       context.handle(
@@ -824,11 +820,13 @@ class $HistorialArrendatariosTable extends HistorialArrendatarios
     } else if (isInserting) {
       context.missing(_fechaSalidaMeta);
     }
-    if (data.containsKey('p_renta')) {
-      context.handle(_pRentaMeta,
-          pRenta.isAcceptableOrUnknown(data['p_renta']!, _pRentaMeta));
+    if (data.containsKey('precio_renta')) {
+      context.handle(
+          _precioRentaMeta,
+          precioRenta.isAcceptableOrUnknown(
+              data['precio_renta']!, _precioRentaMeta));
     } else if (isInserting) {
-      context.missing(_pRentaMeta);
+      context.missing(_precioRentaMeta);
     }
     if (data.containsKey('deuda_pendiente')) {
       context.handle(
@@ -846,11 +844,9 @@ class $HistorialArrendatariosTable extends HistorialArrendatarios
     } else if (isInserting) {
       context.missing(_danoPropiedadMeta);
     }
-    if (data.containsKey('observaciones')) {
+    if (data.containsKey('obs')) {
       context.handle(
-          _observacionesMeta,
-          observaciones.isAcceptableOrUnknown(
-              data['observaciones']!, _observacionesMeta));
+          _obsMeta, obs.isAcceptableOrUnknown(data['obs']!, _obsMeta));
     }
     return context;
   }
@@ -865,18 +861,18 @@ class $HistorialArrendatariosTable extends HistorialArrendatarios
           .read(DriftSqlType.string, data['${effectivePrefix}c_vivienda'])!,
       idArrendatario: attachedDatabase.typeMapping.read(
           DriftSqlType.string, data['${effectivePrefix}id_arrendatario'])!,
-      fEntrada: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}f_entrada'])!,
+      fechaEntrada: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime, data['${effectivePrefix}fecha_entrada'])!,
       fechaSalida: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}fecha_salida'])!,
-      pRenta: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}p_renta'])!,
+      precioRenta: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}precio_renta'])!,
       deudaPendiente: attachedDatabase.typeMapping.read(
           DriftSqlType.double, data['${effectivePrefix}deuda_pendiente'])!,
       danoPropiedad: attachedDatabase.typeMapping
           .read(DriftSqlType.double, data['${effectivePrefix}dano_propiedad'])!,
-      observaciones: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}observaciones']),
+      obs: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}obs']),
     );
   }
 
@@ -890,33 +886,33 @@ class HistorialArrendatario extends DataClass
     implements Insertable<HistorialArrendatario> {
   final String cVivienda;
   final String idArrendatario;
-  final DateTime fEntrada;
+  final DateTime fechaEntrada;
   final DateTime fechaSalida;
-  final double pRenta;
+  final double precioRenta;
   final double deudaPendiente;
   final double danoPropiedad;
-  final String? observaciones;
+  final String? obs;
   const HistorialArrendatario(
       {required this.cVivienda,
       required this.idArrendatario,
-      required this.fEntrada,
+      required this.fechaEntrada,
       required this.fechaSalida,
-      required this.pRenta,
+      required this.precioRenta,
       required this.deudaPendiente,
       required this.danoPropiedad,
-      this.observaciones});
+      this.obs});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['c_vivienda'] = Variable<String>(cVivienda);
     map['id_arrendatario'] = Variable<String>(idArrendatario);
-    map['f_entrada'] = Variable<DateTime>(fEntrada);
+    map['fecha_entrada'] = Variable<DateTime>(fechaEntrada);
     map['fecha_salida'] = Variable<DateTime>(fechaSalida);
-    map['p_renta'] = Variable<double>(pRenta);
+    map['precio_renta'] = Variable<double>(precioRenta);
     map['deuda_pendiente'] = Variable<double>(deudaPendiente);
     map['dano_propiedad'] = Variable<double>(danoPropiedad);
-    if (!nullToAbsent || observaciones != null) {
-      map['observaciones'] = Variable<String>(observaciones);
+    if (!nullToAbsent || obs != null) {
+      map['obs'] = Variable<String>(obs);
     }
     return map;
   }
@@ -925,14 +921,12 @@ class HistorialArrendatario extends DataClass
     return HistorialArrendatariosCompanion(
       cVivienda: Value(cVivienda),
       idArrendatario: Value(idArrendatario),
-      fEntrada: Value(fEntrada),
+      fechaEntrada: Value(fechaEntrada),
       fechaSalida: Value(fechaSalida),
-      pRenta: Value(pRenta),
+      precioRenta: Value(precioRenta),
       deudaPendiente: Value(deudaPendiente),
       danoPropiedad: Value(danoPropiedad),
-      observaciones: observaciones == null && nullToAbsent
-          ? const Value.absent()
-          : Value(observaciones),
+      obs: obs == null && nullToAbsent ? const Value.absent() : Value(obs),
     );
   }
 
@@ -942,12 +936,12 @@ class HistorialArrendatario extends DataClass
     return HistorialArrendatario(
       cVivienda: serializer.fromJson<String>(json['cVivienda']),
       idArrendatario: serializer.fromJson<String>(json['idArrendatario']),
-      fEntrada: serializer.fromJson<DateTime>(json['fEntrada']),
+      fechaEntrada: serializer.fromJson<DateTime>(json['fechaEntrada']),
       fechaSalida: serializer.fromJson<DateTime>(json['fechaSalida']),
-      pRenta: serializer.fromJson<double>(json['pRenta']),
+      precioRenta: serializer.fromJson<double>(json['precioRenta']),
       deudaPendiente: serializer.fromJson<double>(json['deudaPendiente']),
       danoPropiedad: serializer.fromJson<double>(json['danoPropiedad']),
-      observaciones: serializer.fromJson<String?>(json['observaciones']),
+      obs: serializer.fromJson<String?>(json['obs']),
     );
   }
   @override
@@ -956,126 +950,125 @@ class HistorialArrendatario extends DataClass
     return <String, dynamic>{
       'cVivienda': serializer.toJson<String>(cVivienda),
       'idArrendatario': serializer.toJson<String>(idArrendatario),
-      'fEntrada': serializer.toJson<DateTime>(fEntrada),
+      'fechaEntrada': serializer.toJson<DateTime>(fechaEntrada),
       'fechaSalida': serializer.toJson<DateTime>(fechaSalida),
-      'pRenta': serializer.toJson<double>(pRenta),
+      'precioRenta': serializer.toJson<double>(precioRenta),
       'deudaPendiente': serializer.toJson<double>(deudaPendiente),
       'danoPropiedad': serializer.toJson<double>(danoPropiedad),
-      'observaciones': serializer.toJson<String?>(observaciones),
+      'obs': serializer.toJson<String?>(obs),
     };
   }
 
   HistorialArrendatario copyWith(
           {String? cVivienda,
           String? idArrendatario,
-          DateTime? fEntrada,
+          DateTime? fechaEntrada,
           DateTime? fechaSalida,
-          double? pRenta,
+          double? precioRenta,
           double? deudaPendiente,
           double? danoPropiedad,
-          Value<String?> observaciones = const Value.absent()}) =>
+          Value<String?> obs = const Value.absent()}) =>
       HistorialArrendatario(
         cVivienda: cVivienda ?? this.cVivienda,
         idArrendatario: idArrendatario ?? this.idArrendatario,
-        fEntrada: fEntrada ?? this.fEntrada,
+        fechaEntrada: fechaEntrada ?? this.fechaEntrada,
         fechaSalida: fechaSalida ?? this.fechaSalida,
-        pRenta: pRenta ?? this.pRenta,
+        precioRenta: precioRenta ?? this.precioRenta,
         deudaPendiente: deudaPendiente ?? this.deudaPendiente,
         danoPropiedad: danoPropiedad ?? this.danoPropiedad,
-        observaciones:
-            observaciones.present ? observaciones.value : this.observaciones,
+        obs: obs.present ? obs.value : this.obs,
       );
   @override
   String toString() {
     return (StringBuffer('HistorialArrendatario(')
           ..write('cVivienda: $cVivienda, ')
           ..write('idArrendatario: $idArrendatario, ')
-          ..write('fEntrada: $fEntrada, ')
+          ..write('fechaEntrada: $fechaEntrada, ')
           ..write('fechaSalida: $fechaSalida, ')
-          ..write('pRenta: $pRenta, ')
+          ..write('precioRenta: $precioRenta, ')
           ..write('deudaPendiente: $deudaPendiente, ')
           ..write('danoPropiedad: $danoPropiedad, ')
-          ..write('observaciones: $observaciones')
+          ..write('obs: $obs')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(cVivienda, idArrendatario, fEntrada,
-      fechaSalida, pRenta, deudaPendiente, danoPropiedad, observaciones);
+  int get hashCode => Object.hash(cVivienda, idArrendatario, fechaEntrada,
+      fechaSalida, precioRenta, deudaPendiente, danoPropiedad, obs);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is HistorialArrendatario &&
           other.cVivienda == this.cVivienda &&
           other.idArrendatario == this.idArrendatario &&
-          other.fEntrada == this.fEntrada &&
+          other.fechaEntrada == this.fechaEntrada &&
           other.fechaSalida == this.fechaSalida &&
-          other.pRenta == this.pRenta &&
+          other.precioRenta == this.precioRenta &&
           other.deudaPendiente == this.deudaPendiente &&
           other.danoPropiedad == this.danoPropiedad &&
-          other.observaciones == this.observaciones);
+          other.obs == this.obs);
 }
 
 class HistorialArrendatariosCompanion
     extends UpdateCompanion<HistorialArrendatario> {
   final Value<String> cVivienda;
   final Value<String> idArrendatario;
-  final Value<DateTime> fEntrada;
+  final Value<DateTime> fechaEntrada;
   final Value<DateTime> fechaSalida;
-  final Value<double> pRenta;
+  final Value<double> precioRenta;
   final Value<double> deudaPendiente;
   final Value<double> danoPropiedad;
-  final Value<String?> observaciones;
+  final Value<String?> obs;
   final Value<int> rowid;
   const HistorialArrendatariosCompanion({
     this.cVivienda = const Value.absent(),
     this.idArrendatario = const Value.absent(),
-    this.fEntrada = const Value.absent(),
+    this.fechaEntrada = const Value.absent(),
     this.fechaSalida = const Value.absent(),
-    this.pRenta = const Value.absent(),
+    this.precioRenta = const Value.absent(),
     this.deudaPendiente = const Value.absent(),
     this.danoPropiedad = const Value.absent(),
-    this.observaciones = const Value.absent(),
+    this.obs = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   HistorialArrendatariosCompanion.insert({
     required String cVivienda,
     required String idArrendatario,
-    required DateTime fEntrada,
+    required DateTime fechaEntrada,
     required DateTime fechaSalida,
-    required double pRenta,
+    required double precioRenta,
     required double deudaPendiente,
     required double danoPropiedad,
-    this.observaciones = const Value.absent(),
+    this.obs = const Value.absent(),
     this.rowid = const Value.absent(),
   })  : cVivienda = Value(cVivienda),
         idArrendatario = Value(idArrendatario),
-        fEntrada = Value(fEntrada),
+        fechaEntrada = Value(fechaEntrada),
         fechaSalida = Value(fechaSalida),
-        pRenta = Value(pRenta),
+        precioRenta = Value(precioRenta),
         deudaPendiente = Value(deudaPendiente),
         danoPropiedad = Value(danoPropiedad);
   static Insertable<HistorialArrendatario> custom({
     Expression<String>? cVivienda,
     Expression<String>? idArrendatario,
-    Expression<DateTime>? fEntrada,
+    Expression<DateTime>? fechaEntrada,
     Expression<DateTime>? fechaSalida,
-    Expression<double>? pRenta,
+    Expression<double>? precioRenta,
     Expression<double>? deudaPendiente,
     Expression<double>? danoPropiedad,
-    Expression<String>? observaciones,
+    Expression<String>? obs,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (cVivienda != null) 'c_vivienda': cVivienda,
       if (idArrendatario != null) 'id_arrendatario': idArrendatario,
-      if (fEntrada != null) 'f_entrada': fEntrada,
+      if (fechaEntrada != null) 'fecha_entrada': fechaEntrada,
       if (fechaSalida != null) 'fecha_salida': fechaSalida,
-      if (pRenta != null) 'p_renta': pRenta,
+      if (precioRenta != null) 'precio_renta': precioRenta,
       if (deudaPendiente != null) 'deuda_pendiente': deudaPendiente,
       if (danoPropiedad != null) 'dano_propiedad': danoPropiedad,
-      if (observaciones != null) 'observaciones': observaciones,
+      if (obs != null) 'obs': obs,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -1083,22 +1076,22 @@ class HistorialArrendatariosCompanion
   HistorialArrendatariosCompanion copyWith(
       {Value<String>? cVivienda,
       Value<String>? idArrendatario,
-      Value<DateTime>? fEntrada,
+      Value<DateTime>? fechaEntrada,
       Value<DateTime>? fechaSalida,
-      Value<double>? pRenta,
+      Value<double>? precioRenta,
       Value<double>? deudaPendiente,
       Value<double>? danoPropiedad,
-      Value<String?>? observaciones,
+      Value<String?>? obs,
       Value<int>? rowid}) {
     return HistorialArrendatariosCompanion(
       cVivienda: cVivienda ?? this.cVivienda,
       idArrendatario: idArrendatario ?? this.idArrendatario,
-      fEntrada: fEntrada ?? this.fEntrada,
+      fechaEntrada: fechaEntrada ?? this.fechaEntrada,
       fechaSalida: fechaSalida ?? this.fechaSalida,
-      pRenta: pRenta ?? this.pRenta,
+      precioRenta: precioRenta ?? this.precioRenta,
       deudaPendiente: deudaPendiente ?? this.deudaPendiente,
       danoPropiedad: danoPropiedad ?? this.danoPropiedad,
-      observaciones: observaciones ?? this.observaciones,
+      obs: obs ?? this.obs,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -1112,14 +1105,14 @@ class HistorialArrendatariosCompanion
     if (idArrendatario.present) {
       map['id_arrendatario'] = Variable<String>(idArrendatario.value);
     }
-    if (fEntrada.present) {
-      map['f_entrada'] = Variable<DateTime>(fEntrada.value);
+    if (fechaEntrada.present) {
+      map['fecha_entrada'] = Variable<DateTime>(fechaEntrada.value);
     }
     if (fechaSalida.present) {
       map['fecha_salida'] = Variable<DateTime>(fechaSalida.value);
     }
-    if (pRenta.present) {
-      map['p_renta'] = Variable<double>(pRenta.value);
+    if (precioRenta.present) {
+      map['precio_renta'] = Variable<double>(precioRenta.value);
     }
     if (deudaPendiente.present) {
       map['deuda_pendiente'] = Variable<double>(deudaPendiente.value);
@@ -1127,8 +1120,8 @@ class HistorialArrendatariosCompanion
     if (danoPropiedad.present) {
       map['dano_propiedad'] = Variable<double>(danoPropiedad.value);
     }
-    if (observaciones.present) {
-      map['observaciones'] = Variable<String>(observaciones.value);
+    if (obs.present) {
+      map['obs'] = Variable<String>(obs.value);
     }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
@@ -1141,12 +1134,12 @@ class HistorialArrendatariosCompanion
     return (StringBuffer('HistorialArrendatariosCompanion(')
           ..write('cVivienda: $cVivienda, ')
           ..write('idArrendatario: $idArrendatario, ')
-          ..write('fEntrada: $fEntrada, ')
+          ..write('fechaEntrada: $fechaEntrada, ')
           ..write('fechaSalida: $fechaSalida, ')
-          ..write('pRenta: $pRenta, ')
+          ..write('precioRenta: $precioRenta, ')
           ..write('deudaPendiente: $deudaPendiente, ')
           ..write('danoPropiedad: $danoPropiedad, ')
-          ..write('observaciones: $observaciones, ')
+          ..write('obs: $obs, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -3065,6 +3058,193 @@ class $vArrendatariosActualesView
   Set<String> get readTables => const {'arrendatarios', 'actual_arrendatarios'};
 }
 
+class vArrendatariosHistorialData extends DataClass {
+  final String identidad;
+  final String nombre;
+  final String cVivienda;
+  final DateTime fechaEntrada;
+  final DateTime fechaSalida;
+  final double precioRenta;
+  final String? obs;
+  const vArrendatariosHistorialData(
+      {required this.identidad,
+      required this.nombre,
+      required this.cVivienda,
+      required this.fechaEntrada,
+      required this.fechaSalida,
+      required this.precioRenta,
+      this.obs});
+  factory vArrendatariosHistorialData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return vArrendatariosHistorialData(
+      identidad: serializer.fromJson<String>(json['identidad']),
+      nombre: serializer.fromJson<String>(json['nombre']),
+      cVivienda: serializer.fromJson<String>(json['cVivienda']),
+      fechaEntrada: serializer.fromJson<DateTime>(json['fechaEntrada']),
+      fechaSalida: serializer.fromJson<DateTime>(json['fechaSalida']),
+      precioRenta: serializer.fromJson<double>(json['precioRenta']),
+      obs: serializer.fromJson<String?>(json['obs']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'identidad': serializer.toJson<String>(identidad),
+      'nombre': serializer.toJson<String>(nombre),
+      'cVivienda': serializer.toJson<String>(cVivienda),
+      'fechaEntrada': serializer.toJson<DateTime>(fechaEntrada),
+      'fechaSalida': serializer.toJson<DateTime>(fechaSalida),
+      'precioRenta': serializer.toJson<double>(precioRenta),
+      'obs': serializer.toJson<String?>(obs),
+    };
+  }
+
+  vArrendatariosHistorialData copyWith(
+          {String? identidad,
+          String? nombre,
+          String? cVivienda,
+          DateTime? fechaEntrada,
+          DateTime? fechaSalida,
+          double? precioRenta,
+          Value<String?> obs = const Value.absent()}) =>
+      vArrendatariosHistorialData(
+        identidad: identidad ?? this.identidad,
+        nombre: nombre ?? this.nombre,
+        cVivienda: cVivienda ?? this.cVivienda,
+        fechaEntrada: fechaEntrada ?? this.fechaEntrada,
+        fechaSalida: fechaSalida ?? this.fechaSalida,
+        precioRenta: precioRenta ?? this.precioRenta,
+        obs: obs.present ? obs.value : this.obs,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('vArrendatariosHistorialData(')
+          ..write('identidad: $identidad, ')
+          ..write('nombre: $nombre, ')
+          ..write('cVivienda: $cVivienda, ')
+          ..write('fechaEntrada: $fechaEntrada, ')
+          ..write('fechaSalida: $fechaSalida, ')
+          ..write('precioRenta: $precioRenta, ')
+          ..write('obs: $obs')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(identidad, nombre, cVivienda, fechaEntrada,
+      fechaSalida, precioRenta, obs);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is vArrendatariosHistorialData &&
+          other.identidad == this.identidad &&
+          other.nombre == this.nombre &&
+          other.cVivienda == this.cVivienda &&
+          other.fechaEntrada == this.fechaEntrada &&
+          other.fechaSalida == this.fechaSalida &&
+          other.precioRenta == this.precioRenta &&
+          other.obs == this.obs);
+}
+
+class $vArrendatariosHistorialView
+    extends ViewInfo<$vArrendatariosHistorialView, vArrendatariosHistorialData>
+    implements HasResultSet {
+  final String? _alias;
+  @override
+  final _$AppDb attachedDatabase;
+  $vArrendatariosHistorialView(this.attachedDatabase, [this._alias]);
+  $ArrendatariosTable get arrendatarios =>
+      attachedDatabase.arrendatarios.createAlias('t0');
+  $HistorialArrendatariosTable get historialarrendatarios =>
+      attachedDatabase.historialArrendatarios.createAlias('t1');
+  @override
+  List<GeneratedColumn> get $columns => [
+        identidad,
+        nombre,
+        cVivienda,
+        fechaEntrada,
+        fechaSalida,
+        precioRenta,
+        obs
+      ];
+  @override
+  String get aliasedName => _alias ?? entityName;
+  @override
+  String get entityName => 'v_arrendatarios_historial';
+  @override
+  Map<SqlDialect, String>? get createViewStatements => null;
+  @override
+  $vArrendatariosHistorialView get asDslTable => this;
+  @override
+  vArrendatariosHistorialData map(Map<String, dynamic> data,
+      {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return vArrendatariosHistorialData(
+      identidad: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}identidad'])!,
+      nombre: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}nombre'])!,
+      cVivienda: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}c_vivienda'])!,
+      fechaEntrada: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime, data['${effectivePrefix}fecha_entrada'])!,
+      fechaSalida: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}fecha_salida'])!,
+      precioRenta: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}precio_renta'])!,
+      obs: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}obs']),
+    );
+  }
+
+  late final GeneratedColumn<String> identidad = GeneratedColumn<String>(
+      'identidad', aliasedName, false,
+      generatedAs: GeneratedAs(arrendatarios.identidad, false),
+      type: DriftSqlType.string);
+  late final GeneratedColumn<String> nombre = GeneratedColumn<String>(
+      'nombre', aliasedName, false,
+      generatedAs: GeneratedAs(arrendatarios.nombre, false),
+      type: DriftSqlType.string);
+  late final GeneratedColumn<String> cVivienda = GeneratedColumn<String>(
+      'c_vivienda', aliasedName, false,
+      generatedAs: GeneratedAs(historialarrendatarios.cVivienda, false),
+      type: DriftSqlType.string);
+  late final GeneratedColumn<DateTime> fechaEntrada = GeneratedColumn<DateTime>(
+      'fecha_entrada', aliasedName, false,
+      generatedAs: GeneratedAs(historialarrendatarios.fechaEntrada, false),
+      type: DriftSqlType.dateTime);
+  late final GeneratedColumn<DateTime> fechaSalida = GeneratedColumn<DateTime>(
+      'fecha_salida', aliasedName, false,
+      generatedAs: GeneratedAs(historialarrendatarios.fechaSalida, false),
+      type: DriftSqlType.dateTime);
+  late final GeneratedColumn<double> precioRenta = GeneratedColumn<double>(
+      'precio_renta', aliasedName, false,
+      generatedAs: GeneratedAs(historialarrendatarios.precioRenta, false),
+      type: DriftSqlType.double);
+  late final GeneratedColumn<String> obs = GeneratedColumn<String>(
+      'obs', aliasedName, true,
+      generatedAs: GeneratedAs(historialarrendatarios.obs, false),
+      type: DriftSqlType.string);
+  @override
+  $vArrendatariosHistorialView createAlias(String alias) {
+    return $vArrendatariosHistorialView(attachedDatabase, alias);
+  }
+
+  @override
+  Query? get query =>
+      (attachedDatabase.selectOnly(arrendatarios)..addColumns($columns)).join([
+        innerJoin(
+            historialarrendatarios,
+            historialarrendatarios.idArrendatario
+                .equalsExp(arrendatarios.identidad))
+      ]);
+  @override
+  Set<String> get readTables =>
+      const {'arrendatarios', 'historial_arrendatarios'};
+}
+
 abstract class _$AppDb extends GeneratedDatabase {
   _$AppDb(QueryExecutor e) : super(e);
   late final $ArrendatariosTable arrendatarios = $ArrendatariosTable(this);
@@ -3086,6 +3266,8 @@ abstract class _$AppDb extends GeneratedDatabase {
       $CuentasPSDesocupadosTable(this);
   late final $vArrendatariosActualesView vArrendatariosActuales =
       $vArrendatariosActualesView(this);
+  late final $vArrendatariosHistorialView vArrendatariosHistorial =
+      $vArrendatariosHistorialView(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -3101,6 +3283,7 @@ abstract class _$AppDb extends GeneratedDatabase {
         cuentaProveedoresServicios,
         proveedoresServicios,
         cuentasPSDesocupados,
-        vArrendatariosActuales
+        vArrendatariosActuales,
+        vArrendatariosHistorial
       ];
 }

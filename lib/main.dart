@@ -1,9 +1,12 @@
 import 'package:drift/drift.dart';
+import 'package:path/path.dart';
+import 'package:viviendas_modicas_sistema/src/models/theme_provider.dart';
 
 import 'src/shared/constantes.dart';
 import 'src/shared/rutas.dart';
 import 'src/shared/not_found.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../src/models/colors.dart';
 import 'package:viviendas_modicas_sistema/data/local/db/app_db.dart';
 
@@ -13,7 +16,12 @@ Future<void> initDatabase() async {
 }
 
 void main() {
-  runApp(MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => ThemeProvider(),
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -27,10 +35,7 @@ class MyApp extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done) {
           return MaterialApp(
             title: 'Iniciar Viviendas Módicas',
-            theme: ThemeData(
-              useMaterial3: false,
-              primarySwatch: CustomColor.cVerde,
-            ),
+            theme: Provider.of<ThemeProvider>(context).themeData,
             initialRoute: Rutas.inicioSesion.name,
             routes: rutas,
             onGenerateRoute: (settings) {

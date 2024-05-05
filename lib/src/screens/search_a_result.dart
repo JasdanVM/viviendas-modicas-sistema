@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:viviendas_modicas_sistema/data/local/db/app_db.dart';
 import 'package:viviendas_modicas_sistema/data/local/entity/arrendatarios_entidad.dart';
+import '../models/asset.dart';
 import '../widgets/appbar.dart';
 import '../widgets/drawer.dart';
 import 'package:drift/drift.dart' as drift;
@@ -14,7 +15,7 @@ class RentersSearchResultScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final value = selectedValue.startsWith('#')? selectedValue.substring(1) : selectedValue;
+    final value = selectedValue.startsWith('#')? selectedValue.substring(1) : selectedValue; //se remueve el # al principio de la cadena, de tenerlo
     return Scaffold(
       appBar: CustomAppBar(title: 'Viviendas Módicas', back: true),
       drawer: CustomDrawer(isMainScreen: false),
@@ -37,7 +38,7 @@ class RentersSearchResultScreen extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
                   child: Image.asset(
-                    'assets/vm_icon.png',
+                    getAssetPath(context),
                     height: 100,
                     fit: BoxFit.contain,
                   ),
@@ -45,7 +46,7 @@ class RentersSearchResultScreen extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               Expanded(
-                child: selectedValue.startsWith('#')
+                child: selectedValue.startsWith('#') //En caso de que el popup regrese una cadena que inicia con #, es que está mandando un DNI
                 ? RentersSearchResultDTScreen(searchQuery: value,)
                   : RentersSearchResultDTScreenByName(searchQuery: value,),
               ),

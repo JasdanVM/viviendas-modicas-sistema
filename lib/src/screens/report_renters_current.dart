@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:viviendas_modicas_sistema/data/local/db/app_db.dart';
 import 'package:viviendas_modicas_sistema/data/local/entity/arrendatarios_entidad.dart';
+import '../models/asset.dart';
 import '../widgets/appbar.dart';
 import '../widgets/drawer.dart';
 
@@ -31,7 +32,7 @@ class RentersCurrentcreen extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
                   child: Image.asset(
-                    'assets/vm_icon.png',
+                    getAssetPath(context),
                     height: 100,
                     fit: BoxFit.contain,
                   ),
@@ -97,7 +98,7 @@ class _RentersCurrentDTScreen extends State<RentersCurrentDTScreen> {
   }
 
   void _loadData() async {
-    (await _db.select(_db.vArrendatariosActuales).get()).forEach(print);
+    // (await _db.select(_db.vArrendatariosActuales).get()).forEach(print);
     final List<vArrendatariosActuale> arrendatarios = await _db.select(_db.vArrendatariosActuales).get();
     setState(() {
       _arrendatariosActuales = arrendatarios;
@@ -137,8 +138,8 @@ class _RentersCurrentDTScreen extends State<RentersCurrentDTScreen> {
                         DataCell(Text(arrendatario.identidad.toString())),
                         DataCell(Text(arrendatario.nombre.toString())),
                         DataCell(Text(arrendatario.cVivienda.toString())),
-                        DataCell(Text(arrendatario.fechaEntrada.toString())),
-                        DataCell(Text(arrendatario.precioRenta.toString())),
+                        DataCell(Text(DateFormat('dd-MM-yyyy').format(arrendatario.fechaEntrada))),
+                        DataCell(Text(NumberFormat.currency(symbol: 'L. ').format(arrendatario.precioRenta)),),
                         DataCell(Text(arrendatario.obs.toString())),
                       ],
                     )).toList(),
@@ -176,82 +177,3 @@ class _RentersCurrentDTScreen extends State<RentersCurrentDTScreen> {
     );
   }
 }
-//   @override
-//   Widget build(BuildContext context) {
-//     return SingleChildScrollView(
-//       scrollDirection: Axis.horizontal,
-//       child: SizedBox(
-//         width: MediaQuery.of(context).size.width,
-//         child: SelectionArea(
-//           child: DataTable(
-//             columnSpacing: 30,
-//             headingRowColor: MaterialStateColor.resolveWith(
-//               (states) => Theme.of(context).primaryColor,
-//             ),
-//             headingRowHeight: 40,
-//             headingTextStyle: TextStyle(color: Colors.white),
-//             columns: [
-//               DataColumn(label: Text('Identidad')),
-//               DataColumn(label: Text('Nombre')),
-//               DataColumn(label: Text('Codigo Vivienda')),
-//               DataColumn(label: Text('Fecha de Entrada')),
-//               DataColumn(label: Text('Precio Renta')),
-//               DataColumn(label: Text('Observaciones')),
-//             ],
-//             // rows: [
-//               // DataRow(cells: [
-//               //   DataCell(Text('1234567890')),
-//               //   DataCell(Text('Nombre1')),
-//               //   DataCell(Text('1')),
-//               //   DataCell(Text('12/03/2021')),
-//               //   DataCell(Text('2500')),
-//               //   DataCell(Text('Observación1')),
-//               // ]),
-//               // DataRow(cells: [
-//               //   DataCell(Text('0987654321')),
-//               //   DataCell(Text('Nombre2')),
-//               //   DataCell(Text('2')),
-//               //   DataCell(Text('03/12/2019')),
-//               //   DataCell(Text('1700')),
-//               //   DataCell(Text('Observación2')),
-//               // ]),
-//               // //...
-//             // ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-// FutureBuilder<List<Arrendatario>>()
-//   future: _db.getArrendatarios(),
-//   builder:(context,snapshot){
-//     final List<Arrendatario>? arrendatarios = snapshot.data;
-//     if(snapshot.connectionState != ConnectionState.done){
-//       return const Center(
-//         child: CircularProgressIndicator(),
-//       );
-//     }
-//     if(snapshot.hasError){
-//       return Center(
-//         child:Text(snapshot.error.toString()),
-//       );
-//     }
-//     if(Arrendatarios != null){
-//       return ListView.Builder(
-//         itemCount:Arrendatarios.length,
-//         itemBuilder: (context,index){
-//         final arrendatario = arrendatarios[index];
-//         return Card(
-//           child:Column(
-//             children:[
-//               Text(Arrendatario.nombre.toString()),
-//               Text(Arrendatario.identidad.toString())
-//             ],
-//           ),
-//         );
-//       });
-//     }
-//     return const Text('No data found');
-//   }

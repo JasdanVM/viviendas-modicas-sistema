@@ -75,6 +75,51 @@ class AppDb extends _$AppDb {
         .getSingle();
   }
 
+  // Future<bool> estaOcupadaVivienda(String cVivienda) async {
+  //   try {
+  //     final query = select(actualArrendatarios)
+  //     ..where((tbl) => tbl.cVivienda.equals(cVivienda));
+  //     final result = await query.getSingleOrNull();
+  //     return result!= null;
+  //   } catch (e) {
+  //     print('Error: $e'); 
+  //     return false;
+  //   }
+  // }
+
+  // Future<int> verificarViviendaOcupacion(String codigoVivienda) async {
+  //   final count = await (select(count())
+  //   ..from(actualArrendatarios)
+  //   ..where((t) => t.cVivienda.equals(codigoVivienda)))
+  //   .getSingle();
+
+  //   return count;
+  // }
+
+  //   Future<int> verificarViviendaOcupacion(String codigoVivienda) async {
+  //   final count = actualArrendatarios.cVivienda.count();
+  //   final query = select(count).from(actualArrendatarios)
+  //    ..where(actualArrendatarios.cVivienda.equals(codigoVivienda));
+
+  //   return (await query.getSingle())![0] as int;
+  // }
+
+Future<int> verificarViviendaOcupacion(String codigoVivienda) async {
+  final existe = await (select(actualArrendatarios)
+      ..where((tbl) => tbl.cVivienda.equals(codigoVivienda)))
+    .get()
+    .then((rows) => rows.length);
+  return existe;
+}
+
+
+  Future<int> countViviendaUbicaciones() async {
+    final count = viviendaUbicacion.codigoVivienda.count();
+    final query = selectOnly(viviendaUbicacion)..addColumns([count]);
+    final result = await query.getSingle();
+    return result.read(count)!;
+  }
+
   Future<bool> updateActualArrendatario(
       ActualArrendatariosCompanion entity) async {
     return await update(actualArrendatarios).replace(entity);
@@ -90,25 +135,6 @@ class AppDb extends _$AppDb {
           ..where((tbl) => tbl.idArrendatario.equals(idArrendatario)))
         .go();
   }
-
-  // Future<List<Map<String, dynamic>>> getJoinedArrendatarios() async {
-  //   final query = select(arrendatarios).join([
-  //     innerJoin(actualArrendatarios, actualArrendatarios.codVivienda.equalsExp(arrendatarios.identidad)),
-  //   ]);
-
-  //   final results = await query.get();
-
-  //   return results.map((row) {
-  //     return {
-  //       'identidad': row.readTable(arrendatarios).identidad,
-  //       'nombre': row.readTable(arrendatarios).nombre,
-  //       'codVivienda': row.readTable(actualArrendatarios).codVivienda,
-  //       'fechaEntrada': row.readTable(actualArrendatarios).fechaEntrada,
-  //       'precioRenta': row.readTable(actualArrendatarios).precioRenta,
-  //       'obs': row.readTable(actualArrendatarios).obs,
-  //     };
-  //   }).toList();
-  // }
 
   Future<void> fillViviendaUbicacion() async {
     final existingCodigos = (select(viviendaUbicacion)

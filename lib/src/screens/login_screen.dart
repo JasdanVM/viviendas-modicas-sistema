@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../models/asset.dart';
 import '../shared/constantes.dart';
 import 'package:flutter/services.dart';
 
@@ -28,7 +29,7 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
   void _handleLogin() {
     if (_formKey.currentState!= null && _formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      if (_username == 'Admin' && _password == '123456789') {
+      if (_username == 'Admin' && _password == '1234') {
         print('Login Successful!');
         setState(() {
           _loginError = false;
@@ -70,11 +71,11 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const SizedBox(
+                      SizedBox(
                         width: double.infinity,
                         height: 300,
                         child: Image(
-                          image: AssetImage('assets/vm_icon.png'),
+                          image: AssetImage(getAssetPath(context)),
                           fit: BoxFit.fitHeight,
                         ),
                       ),

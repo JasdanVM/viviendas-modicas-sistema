@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import '../models/asset.dart';
+import '../models/theme_provider.dart';
 import '../shared/constantes.dart';
+import 'package:viviendas_modicas_sistema/src/models/colors.dart';
+import 'package:provider/provider.dart';
 
 class CustomDrawer extends StatelessWidget {
   final bool isMainScreen;
   final bool homeConfirm;
-
   CustomDrawer({this.isMainScreen = false, this.homeConfirm = false});
 
   @override
@@ -17,7 +20,7 @@ class CustomDrawer extends StatelessWidget {
             cursor: SystemMouseCursors.click,
             child: GestureDetector(
               onTap: isMainScreen
-                ? null
+              ? null
                   : () {
                       Navigator.pop(context);
                       if (!homeConfirm) {
@@ -26,19 +29,19 @@ class CustomDrawer extends StatelessWidget {
                         showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
-                                title: Text('¿Deseas salir al Menú Principal?'),
-                                content: Text('Tienes información sin guardar'),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: Text('Cancelar'),
-                                  ),
-                                  TextButton(
-                                    onPressed: () => Navigator.pushNamed(context, Rutas.menuPrincipal.name),
-                                    child: Text('Aceptar'),
-                                  ),
-                                ],
+                            title: Text('¿Deseas salir al Menú Principal?'),
+                            content: Text('Tienes información sin guardar'),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: Text('Cancelar'),
                               ),
+                              TextButton(
+                                onPressed: () => Navigator.pushNamed(context, Rutas.menuPrincipal.name),
+                                child: Text('Aceptar'),
+                              ),
+                            ],
+                          ),
                         );
                       }
                     },
@@ -50,7 +53,7 @@ class CustomDrawer extends StatelessWidget {
                     width: 150,
                     height: 185, 
                     child: Image.asset(
-                      'assets/vm_icon.png',
+                      getAssetPath(context),
                       fit: BoxFit.contain,
                     ),
                   ),
@@ -58,11 +61,18 @@ class CustomDrawer extends StatelessWidget {
               ),
             ),
           ),
+          SwitchListTile(
+            
+            title: Text('Modo Oscuro'),
+            value: Provider.of<ThemeProvider>(context).themeData == darkMode,
+            onChanged: (value) {
+              Provider.of<ThemeProvider>(context, listen: false).toggleTheme();
+            },
+          ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
             child: ElevatedButton(
               onPressed: () {
-                
                 Navigator.pushNamed(context, Rutas.inicioSesion.name);
               },
               child: const Text('Cerrar Sesión', style: TextStyle(fontSize: 18)),

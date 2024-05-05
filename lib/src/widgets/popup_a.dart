@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../models/asset.dart';
 import '../widgets/tooltip.dart';
 
 class SearchRenterPopup extends StatefulWidget {
@@ -44,7 +45,7 @@ class _SearchRenterPopupState extends State<SearchRenterPopup> {
           ),
           margin: EdgeInsets.only(top: 16),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).scaffoldBackgroundColor,
             shape: BoxShape.rectangle,
             borderRadius: BorderRadius.circular(10),
             boxShadow: [
@@ -59,7 +60,7 @@ class _SearchRenterPopupState extends State<SearchRenterPopup> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Image(
-                image: AssetImage('assets/vm_icon.png'),
+                image: AssetImage(getAssetPath(context)),
                 fit: BoxFit.fitHeight,
                 width: 100,
                 height: 100,

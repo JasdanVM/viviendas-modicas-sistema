@@ -25,7 +25,6 @@ class HistorialArrendatarios extends Table {
   TextColumn get obs => text().withLength(min: 0, max: 255).nullable()();
 }
 
-
 class ViviendaUbicacion extends Table {
   TextColumn get codigoVivienda => text().withLength(min: 1, max: 10)();
   TextColumn get ubicacion => text().withLength(min: 1, max: 255)();

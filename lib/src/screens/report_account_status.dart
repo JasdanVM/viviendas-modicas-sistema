@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:viviendas_modicas_sistema/data/local/db/app_db.dart';
 import 'package:viviendas_modicas_sistema/data/local/entity/arrendatarios_entidad.dart';
+import '../models/asset.dart';
 import '../widgets/appbar.dart';
 import '../widgets/drawer.dart';
 
@@ -32,7 +33,7 @@ class AccountStatusScreen extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
                   child: Image.asset(
-                    'assets/vm_icon.png',
+                    getAssetPath(context),
                     height: 100,
                     fit: BoxFit.contain,
                   ),

@@ -3,6 +3,9 @@ import 'package:flutter/widgets.dart';
 import '../../data/local/db/app_db.dart';
 import 'package:drift/drift.dart' as drift;
 
+import '../models/asset.dart';
+import '../shared/constantes.dart';
+
 class SearchByHousingPopup extends StatefulWidget {
   String? ruta;
   @override
@@ -53,7 +56,7 @@ class _SearchByHousingPopupState extends State<SearchByHousingPopup> {
           ),
           margin: EdgeInsets.only(top: 16),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).scaffoldBackgroundColor,
             shape: BoxShape.rectangle,
             borderRadius: BorderRadius.circular(10),
             boxShadow: [
@@ -68,7 +71,7 @@ class _SearchByHousingPopupState extends State<SearchByHousingPopup> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Image(
-                image: AssetImage('assets/vm_icon.png'),
+                image: AssetImage(getAssetPath(context)),
                 fit: BoxFit.fitHeight,
                 width: 100,
                 height: 100,

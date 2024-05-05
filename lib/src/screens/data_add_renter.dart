@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import '../shared/constantes.dart';
 import 'package:viviendas_modicas_sistema/data/local/db/app_db.dart';
@@ -21,6 +20,7 @@ class _NewEntryScreenState extends State<NewEntryScreen> {
   late AppDb _db;
   bool _allowFutureDates = false;
   bool _allowForeignID = false;
+  late int _viviendaCheck = 0;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _hasUnsavedChanges = false;
   final FocusNode _focusNode = FocusNode();
@@ -253,15 +253,17 @@ class _NewEntryScreenState extends State<NewEntryScreen> {
                           labelText: 'Código de Vivienda',
                           border: OutlineInputBorder(),
                         ),
+                        mouseCursor: SystemMouseCursors.click,
+                        onTap: () => _selectPlace(context),
+                        onChanged: (value) => setState(() => _hasUnsavedChanges = true),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Selecciona el código de vivienda';
+                          } else if ( _viviendaCheck > 0 ) {
+                            return 'Esa vivienda ya está ocupada por un arrendatario';
                           }
                           return null;
                         },
-                        onChanged: (value) => setState(() => _hasUnsavedChanges = true),
-                        mouseCursor: SystemMouseCursors.click,
-                        onTap: () => _selectPlace(context),
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -356,9 +358,9 @@ class _NewEntryScreenState extends State<NewEntryScreen> {
                           width: 150,
                           height: 50,
                           child: ElevatedButton(
-                            onPressed: () {
+                            onPressed: () async {
+                              _viviendaCheck = await _db.verificarViviendaOcupacion(_codigoViviendaController.text);
                               if (_formKey.currentState!.validate()) {
-                                // Handle save button press
                                 agregarArrendatarios();
                               } else {
                                 faltaDatos();
