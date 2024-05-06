@@ -29,6 +29,7 @@ import 'package:drift/drift.dart' as drift;
 // }
 class PlaceSearchResultScreen extends StatefulWidget {
   final String selectedValue;
+  
 
   PlaceSearchResultScreen({required this.selectedValue});
 
@@ -48,6 +49,7 @@ class _PlaceSearchResultScreenState extends State<PlaceSearchResultScreen> {
   }
 
   Future<void> _initViviendaCheck() async {
+    print(widget.selectedValue);
     _viviendaCheck = await _db.verificarViviendaOcupacion(widget.selectedValue);
     setState(() {});
   }
@@ -109,13 +111,13 @@ class PlaceSearchResultDTScreen extends StatefulWidget {
 
 class _PlaceSearchResultDTScreen extends State<PlaceSearchResultDTScreen> {
   late AppDb _db;
-  late Future<vArrendatariosActuale?> arrendatarioDetalleFuture;
+  late Future<vViviendaDetalleData?> viviendaDetalleFuture;
 
   @override
   void initState() {
     super.initState();
     _db = AppDb();
-    arrendatarioDetalleFuture = _loadData(widget.searchQuery);
+    viviendaDetalleFuture = _loadData(widget.searchQuery);
   }
 
   @override
@@ -124,10 +126,10 @@ class _PlaceSearchResultDTScreen extends State<PlaceSearchResultDTScreen> {
     super.dispose();
   }
 
-  Future<vArrendatariosActuale?> _loadData(String searchQuery) async {
+  Future<vViviendaDetalleData?> _loadData(String searchQuery) async {
     try {
-      final arrendatario = await (_db.select(_db.vArrendatariosActuales)..where((tbl) => tbl.identidad.equals(searchQuery))).getSingle();
-      return arrendatario;
+      final vivienda = await (_db.select(_db.vViviendaDetalle)..where((tbl) => tbl.codigoVivienda.equals(searchQuery))).getSingle();
+      return vivienda;
     } catch (e) {
       print('Error loading data: $e');
       return null;
@@ -143,7 +145,7 @@ class _PlaceSearchResultDTScreen extends State<PlaceSearchResultDTScreen> {
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.width,
           child: FutureBuilder(
-            future: arrendatarioDetalleFuture,
+            future: viviendaDetalleFuture,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return _DataTable(snapshot.data!);
@@ -159,7 +161,7 @@ class _PlaceSearchResultDTScreen extends State<PlaceSearchResultDTScreen> {
     );
   }
 
-  Widget _DataTable(vArrendatariosActuale arrendatario) {
+  Widget _DataTable(vViviendaDetalleData vivienda) {
     return DataTable(
       columnSpacing: 30,
       headingRowColor: MaterialStateColor.resolveWith(
@@ -168,22 +170,18 @@ class _PlaceSearchResultDTScreen extends State<PlaceSearchResultDTScreen> {
       headingRowHeight: 40,
       headingTextStyle: TextStyle(color: Colors.white),
       columns: [
-        DataColumn(label: Text('Identidad')),
-        DataColumn(label: Text('Nombre')),
-        DataColumn(label: Text('Codigo Vivienda')),
-        DataColumn(label: Text('Fecha de Entrada')),
-        DataColumn(label: Text('Precio Renta')),
-        DataColumn(label: Text('Observaciones')),
+        DataColumn(label: Text('Código Vivienda')),
+        DataColumn(label: Text('Ubicación')),
+        DataColumn(label: Text('Identidad del Arrendatario')),
+        DataColumn(label: Text('Nombre del Arrendatario')),
       ],
       rows: [
         DataRow(
           cells: [
-            DataCell(Text(arrendatario.identidad.toString())),
-            DataCell(Text(arrendatario.nombre.toString())),
-            DataCell(Text(arrendatario.cVivienda.toString())),
-            DataCell(Text(arrendatario.fechaEntrada.toString())),
-            DataCell(Text(arrendatario.precioRenta.toString())),
-            DataCell(Text(arrendatario.obs.toString())),
+            DataCell(Text(vivienda.codigoVivienda.toString())),
+            DataCell(Text(vivienda.ubicacion.toString())),
+            DataCell(Text(vivienda.identidad.toString())),
+            DataCell(Text(vivienda.nombre.toString())),
           ],
         ),
       ],
@@ -222,7 +220,7 @@ class _PlaceSearchResultDTScreenEmpty extends State<PlaceSearchResultDTScreenEmp
 
   Future<ViviendaUbicacionData?> _loadData(String searchQuery) async {
     try {
-      final vivendaubic = await (_db.select(_db.viviendaUbicacion)..where((tbl) => tbl.codigoVivienda.like('%${searchQuery}%'))).getSingle();
+      final vivendaubic = await (_db.select(_db.viviendaUbicacion)..where((tbl) => tbl.codigoVivienda.equals(searchQuery))).getSingle();
       return vivendaubic;
     } catch (e) {
       print('Error loading data: $e');
@@ -264,12 +262,8 @@ class _PlaceSearchResultDTScreenEmpty extends State<PlaceSearchResultDTScreenEmp
       headingRowHeight: 40,
       headingTextStyle: TextStyle(color: Colors.white),
       columns: [
-        DataColumn(label: Text('Identidad')),
-        DataColumn(label: Text('Nombre')),
-        DataColumn(label: Text('Codigo Vivienda')),
-        DataColumn(label: Text('Fecha de Entrada')),
-        DataColumn(label: Text('Precio Renta')),
-        DataColumn(label: Text('Observaciones')),
+        DataColumn(label: Text('Código Vivienda')),
+        DataColumn(label: Text('Ubicación')),
       ],
       rows: [
         DataRow(

@@ -165,7 +165,7 @@ List<CuentasPSDesocupado> _sumData(List<CuentasPSDesocupado> data) {
                         return DataRow(
                           cells: [
                             DataCell(Text(conexion.cProveedorEnergia)),
-                            DataCell(Text(conexion.cProveedorEnergia)), // Assuming nombre proveedor is same as cProveedorEnergia
+                            DataCell(Text(nombrePS(conexion.cProveedorEnergia))), // Assuming nombre proveedor is same as cProveedorEnergia
                             DataCell(Text(conexion.montoEnergia.toString())),
                           ],
                         );
@@ -186,5 +186,17 @@ List<CuentasPSDesocupado> _sumData(List<CuentasPSDesocupado> data) {
         );
       },
     );
+  }
+  
+  String nombrePS(String cProveedor) {
+    if (cProveedor == 'ENEE') {
+      return 'Empresa Nacional de Energía Eléctrica';
+    } else if (cProveedor == 'APC') {
+      return 'Aguas de Puerto Cortes S.A. de C.V.';
+    } else if (cProveedor == 'ASP') {
+      return 'Aguas de San Pedro';
+    } else {
+      return 'N/D';
+    }
   }
 }
