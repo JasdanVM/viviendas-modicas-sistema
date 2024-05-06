@@ -1,103 +1,157 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:viviendas_modicas_sistema/data/local/db/app_db.dart';
 import 'package:viviendas_modicas_sistema/data/local/entity/arrendatarios_entidad.dart';
 import '../models/asset.dart';
 import '../widgets/appbar.dart';
 import '../widgets/drawer.dart';
-
+import 'package:drift/drift.dart' show OrderBy, OrderingTerm, OrderingMode;
 
 class AccountStatusScreen extends StatelessWidget {
+  final String identidad;
+  final AppDb _db;
+  AccountStatusScreen({required this.identidad}) : _db = AppDb();
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(title: 'Viviendas Módicas', back: true),
-      drawer: CustomDrawer(isMainScreen: false),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const SizedBox(height: 16),
-              Center(
-                child: Text(
-                  'Estado de Cuenta del Arrendatario',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+  return Scaffold(
+    appBar: CustomAppBar(title: 'Viviendas Módicas', back: true),
+    drawer: CustomDrawer(isMainScreen: false),
+    body: Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const SizedBox(height: 16),
+            const Center(
+              child: Text(
+                'Estado de Cuenta del Arrendatario',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+            ),
+            Align(
+              alignment: Alignment.centerRight,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.asset(
+                  getAssetPath(context),
+                  height: 100,
+                  fit: BoxFit.contain,
                 ),
               ),
-              Align(
-                alignment: Alignment.centerRight,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Image.asset(
-                    getAssetPath(context),
-                    height: 100,
-                    fit: BoxFit.contain,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                  'Nombre de Arrendatario: Jesús Armando Torres',
-                  style: TextStyle(fontSize: 16),
-                ),
-              Text(
-                'Identidad de Arrendatario: 0506198723451',
-                style: TextStyle(fontSize: 16),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Text(
-                      'Número de Referencia:',
+            ),
+            const SizedBox(height: 16),
+            FutureBuilder<String>(
+              future: nombreArrendatario(identidad),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasData) {
+                    return Text(
+                      'Nombre de Arrendatario: ${snapshot.data}',
                       style: TextStyle(fontSize: 16),
-                    ),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  }
+                } else {
+                  return CircularProgressIndicator();
+                }
+                return Container();
+              },
+            ),
+            Text(
+              'Identidad de Arrendatario: $identidad',
+              style: TextStyle(fontSize: 16),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // Expanded(
+                //   child: Text(
+                //     'Número de Referencia:',
+                //     style: TextStyle(fontSize: 16),
+                //   ),
+                // ),
+                Expanded(
+                  child: Text(
+                    'Fecha de Emision: ${DateFormat('dd/MM/yyyy').format(DateTime.now())}',
+                    textAlign: TextAlign.end,
+                    style: TextStyle(fontSize: 16),
                   ),
-                  Expanded(
-                    child: Text(
-                      'Fecha de Emision: ${DateFormat('dd/MM/yyyy').format(DateTime.now())}',
-                      textAlign: TextAlign.end,
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              Expanded(
-                child: AccountStatusDTScreen(),
                 ),
-            ],
-          ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Expanded(
+              child: AccountStatusDTScreen(identidad: identidad, db: _db,),
+            ),
+          ],
         ),
       ),
-    );
+    ),
+  );
+}
+  Future<String> nombreArrendatario(String identidad) async {
+    String arrendatarioName = await _db.getArrendatarioName(identidad);
+    return arrendatarioName; 
   }
 }
 
 class AccountStatusDTScreen extends StatefulWidget {
-  const AccountStatusDTScreen({Key? key}) : super(key: key);
+  final String identidad;
+  final AppDb db;
+
+  AccountStatusDTScreen({required this.identidad, required this.db})
+      : _accountStatusDTScreen = _AccountStatusDTScreen(db);
+
+  final _AccountStatusDTScreen _accountStatusDTScreen;
 
   @override
-  State<AccountStatusDTScreen> createState() => _AccountStatusDTScreen();
+  State<AccountStatusDTScreen> createState() => _accountStatusDTScreen;
 }
 
 class _AccountStatusDTScreen extends State<AccountStatusDTScreen> {
+  final AppDb _db;
   int _pageNum = 1;
   int _rowsPerPage = 0;
-  List<int> _filas = [1,2,3,4];
+  List<vEstadoCuentaConArrendatario> _estadoCuentas = [];
+
+  _AccountStatusDTScreen(this._db);
+
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-    final dataTableHeight = screenHeight * 0.5; // adjust this value to fit your needs
-    final rowHeight = 40; // adjust this value to fit your needs
+    final dataTableHeight = screenHeight * 0.5;
+    final rowHeight = 40;
     _rowsPerPage = (dataTableHeight / rowHeight).toInt();
+  }
+
+  @override
+  void dispose() {
+    _db.close();
+    super.dispose();
+  }
+
+  void _loadData() async {
+    final List<vEstadoCuentaConArrendatario> cuentas = await (_db.select(_db.vEstadoCuentaConArrendatarios)
+    ..where((tbl) => tbl.identidad.equals(widget.identidad))
+    ..orderBy([
+        (view) => OrderingTerm(expression: view.estadoId, mode: OrderingMode.desc)
+      ]))
+    .get();
+    setState(() {
+      _estadoCuentas = cuentas;
+    });
   }
 
   @override
@@ -105,109 +159,37 @@ class _AccountStatusDTScreen extends State<AccountStatusDTScreen> {
     return Column(
       children: [
         Expanded(
-          child: 
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  child: SelectionArea(
-                    child: DataTable(
-                      columnSpacing: 10, // Espacio entre las columnas
-                      headingRowColor: MaterialStateColor.resolveWith(
-                        (states) => Theme.of(context).primaryColor,
-                      ),
-                      headingRowHeight: 40, // Set the desired height here
-                      headingTextStyle: TextStyle(color: Colors.white),
-                      columns: [
-                        DataColumn(label: Text('Pago Renta')),
-                        DataColumn(label: Text('Deuda Renta')),
-                        DataColumn(label: Text('Pago Energía Eléctrica')),
-                        DataColumn(label: Text('Deuda Energía Eléctrica')),
-                        DataColumn(label: Text('Pago Agua Potable')),
-                        DataColumn(label: Text('Deuda Agua Potable')),
-                        DataColumn(label: Text('Observaciones')),
-                      ],
-                      rows: [
-                        DataRow(cells: [
-                          DataCell(Text('\ 2000')),
-                          DataCell(Text('\ 50')),
-                          DataCell(Text('\ 100')),
-                          DataCell(Text('\ 20')),
-                          DataCell(Text('\ 30')),
-                          DataCell(Text('\ 10')),
-                          DataCell(Text('\ ninguno')),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text('\ 5000')),
-                          DataCell(Text('\ 500')),
-                          DataCell(Text('\ 450')),
-                          DataCell(Text('\ 0')),
-                          DataCell(Text('\ 100')),
-                          DataCell(Text('\ 0')),
-                          DataCell(Text('\ ninguno')),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text('\ 2500')),
-                          DataCell(Text('\ 0')),
-                          DataCell(Text('\ 500')),
-                          DataCell(Text('\ 0')),
-                          DataCell(Text('\ 250')),
-                          DataCell(Text('\ 0')),
-                          DataCell(Text('\ ninguno')),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text('\ 5500')),
-                          DataCell(Text('\ 1500')),
-                          DataCell(Text('\ 800')),
-                          DataCell(Text('\ 0')),
-                          DataCell(Text('\ 150')),
-                          DataCell(Text('\ 0')),
-                          DataCell(Text('\ ninguno')),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text('\ 2500')),
-                          DataCell(Text('\ 500')),
-                          DataCell(Text('\ 800')),
-                          DataCell(Text('\ 800')),
-                          DataCell(Text('\ 250')),
-                          DataCell(Text('\ 250')),
-                          DataCell(Text('\ ninguno')),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text('\ 2000')),
-                          DataCell(Text('\ 0')),
-                          DataCell(Text('\ 500')),
-                          DataCell(Text('\ 0')),
-                          DataCell(Text('\ 200')),
-                          DataCell(Text('\ 0')),
-                          DataCell(Text('\ ninguno')),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text('\ 3000')),
-                          DataCell(Text('\ 1500')),
-                          DataCell(Text('\ 500')),
-                          DataCell(Text('\ 500')),
-                          DataCell(Text('\ 250')),
-                          DataCell(Text('\ 0')),
-                          DataCell(Text('\ ninguno')),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text('\ 1500')),
-                          DataCell(Text('\ 0')),
-                          DataCell(Text('\ 500')),
-                          DataCell(Text('\ 0')),
-                          DataCell(Text('\ 250')),
-                          DataCell(Text('\ 0')),
-                          DataCell(Text('\ ninguno')),
-                        ]),
-                      ],
-                    ),
-                  ),
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: DataTable(
+                columnSpacing: 10,
+                headingRowColor: MaterialStateColor.resolveWith(
+                  (states) => Theme.of(context).primaryColor,
                 ),
+                headingRowHeight: 40,
+                headingTextStyle: TextStyle(color: Colors.white),
+                columns: [
+                  DataColumn(label: Text('Pago Renta')),
+                  DataColumn(label: Text('Mora Renta')),
+                  DataColumn(label: Text('Deuda Energía Eléctrica')),
+                  DataColumn(label: Text('Deuda Agua Potable')),
+                ],
+                rows: _estadoCuentas
+                  .skip((_pageNum - 1) * _rowsPerPage)
+                  .take(_rowsPerPage)
+                  .map((cuenta) => DataRow(
+                      cells: [
+                        DataCell(Text(NumberFormat.currency(symbol: 'L. ').format(cuenta.pagoRenta))),
+                        DataCell(Text(NumberFormat.currency(symbol: 'L. ').format(cuenta.moraRenta))),
+                        DataCell(Text(NumberFormat.currency(symbol: 'L. ').format(cuenta.deudaElectricidad))),
+                        DataCell(Text(NumberFormat.currency(symbol: 'L. ').format(cuenta.deudaAgua))),
+                      ],
+                    )).toList(),
               ),
-            )
+            ),
+          ),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -225,7 +207,7 @@ class _AccountStatusDTScreen extends State<AccountStatusDTScreen> {
             Text('Página #$_pageNum'),
             IconButton(
               icon: Icon(Icons.arrow_forward),
-              onPressed: _pageNum < (_filas.length / _rowsPerPage).ceil()
+              onPressed: _pageNum < (_estadoCuentas.length / _rowsPerPage).ceil()
               ? () {
                   setState(() {
                     _pageNum++;

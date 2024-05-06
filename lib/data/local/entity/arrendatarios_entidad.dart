@@ -12,6 +12,9 @@ class ActualArrendatarios extends Table {
   DateTimeColumn get fechaEntrada => dateTime()();
   RealColumn get precioRenta => real()();
   TextColumn get obs => text().withLength(min: 0, max: 255).nullable()();
+
+  @override
+  Set<Column> get primaryKey => {idArrendatario, cVivienda};
 }
 
 class HistorialArrendatarios extends Table {
@@ -38,13 +41,14 @@ class PagosPendientes extends Table {
   RealColumn get mora => real()();
 }
 
-class EstadoCuenta extends Table {
+class EstadoCuentas extends Table {
+  IntColumn get estadoId => integer().autoIncrement()();
+  TextColumn get idArrendatario => text().references(ActualArrendatarios, #idArrendatario)();
   RealColumn get pagoRenta => real()();
-  RealColumn get deudaRenta => real()();
-  RealColumn get pagoElectricidad => real()();
+  RealColumn get moraRenta => real()();
   RealColumn get deudaElectricidad => real()();
-  RealColumn get pagoAgua => real()();
   RealColumn get deudaAgua => real()();
+  DateTimeColumn get fechaPago => dateTime()();
 }
 
 class DanosPropiedad extends Table {
@@ -77,11 +81,12 @@ class CuentasPSDesocupados extends Table {
   RealColumn get montoEnergia => real()();
 }
 
-// class FacturaDano extends Table {
-//   TextColumn get idArrendatario => text().references(Arrendatarios, #identidad)();
-//   TextColumn get cVivienda =>
-//       text().references(ViviendaUbicacion, #codigoVivienda)();
-//   TextColumn get motivoFactura => text().withLength(min: 1, max: 255)();
-//   RealColumn get montoDano => real()();
-//   TextColumn get descripcion => text().withLength(min: 1, max: 255)();
-// }
+class FacturaDanos extends Table {
+  IntColumn get facturaId => integer().autoIncrement()();
+  TextColumn get cVivienda => text().references(ViviendaUbicacion, #codigoVivienda)();
+  TextColumn get idArrendatario => text().references(Arrendatarios, #identidad)();
+  TextColumn get motivoFactura => text().withLength(min: 1, max: 255)();
+  RealColumn get montoDano => real()();
+  TextColumn get desc => text().withLength(min: 1, max: 255)();
+}
+

@@ -57,6 +57,16 @@ abstract class vViviendasConArrendatarios extends View {
     static get() {}
 }
 
+abstract class vFacturaDanoConArrendatarios extends View {
+  FacturaDanos get facturadanos;
+  Arrendatarios get arrendatarios;
+
+  @override
+  Query as() => select([facturadanos.cVivienda, arrendatarios.identidad, arrendatarios.nombre, facturadanos.motivoFactura, facturadanos.montoDano, facturadanos.desc])
+    .from(arrendatarios).join([innerJoin(facturadanos, facturadanos.idArrendatario.equalsExp(arrendatarios.identidad))]);
+
+    static get() {}
+}
 // abstract class vViviendasSinArrendatarios extends View {
 //   ViviendaUbicacion get viviendaubicacion;
 //   ActualArrendatarios get actualarrendatarios;
@@ -69,3 +79,14 @@ abstract class vViviendasConArrendatarios extends View {
 
 //     static get() {}
 // }
+
+abstract class vEstadoCuentaConArrendatarios extends View {
+  EstadoCuentas get estadocuentas;
+  Arrendatarios get arrendatarios;
+
+  @override
+  Query as() => select([estadocuentas.estadoId, arrendatarios.identidad, arrendatarios.nombre, estadocuentas.pagoRenta, estadocuentas.moraRenta, estadocuentas.deudaElectricidad, estadocuentas.deudaAgua, estadocuentas.fechaPago])
+    .from(estadocuentas).join([innerJoin(arrendatarios, arrendatarios.identidad.equalsExp(estadocuentas.idArrendatario))]);
+
+    static get() {}
+}

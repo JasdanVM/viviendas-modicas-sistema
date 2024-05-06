@@ -485,7 +485,7 @@ class $ActualArrendatariosTable extends ActualArrendatarios
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => const {};
+  Set<GeneratedColumn> get $primaryKey => {idArrendatario, cVivienda};
   @override
   ActualArrendatario map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
@@ -1333,29 +1333,42 @@ class PagosPendientesCompanion extends UpdateCompanion<PagosPendiente> {
   }
 }
 
-class $EstadoCuentaTable extends EstadoCuenta
-    with TableInfo<$EstadoCuentaTable, EstadoCuentaData> {
+class $EstadoCuentasTable extends EstadoCuentas
+    with TableInfo<$EstadoCuentasTable, EstadoCuenta> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $EstadoCuentaTable(this.attachedDatabase, [this._alias]);
+  $EstadoCuentasTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _estadoIdMeta =
+      const VerificationMeta('estadoId');
+  @override
+  late final GeneratedColumn<int> estadoId = GeneratedColumn<int>(
+      'estado_id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _idArrendatarioMeta =
+      const VerificationMeta('idArrendatario');
+  @override
+  late final GeneratedColumn<String> idArrendatario = GeneratedColumn<String>(
+      'id_arrendatario', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES actual_arrendatarios (id_arrendatario)'));
   static const VerificationMeta _pagoRentaMeta =
       const VerificationMeta('pagoRenta');
   @override
   late final GeneratedColumn<double> pagoRenta = GeneratedColumn<double>(
       'pago_renta', aliasedName, false,
       type: DriftSqlType.double, requiredDuringInsert: true);
-  static const VerificationMeta _deudaRentaMeta =
-      const VerificationMeta('deudaRenta');
+  static const VerificationMeta _moraRentaMeta =
+      const VerificationMeta('moraRenta');
   @override
-  late final GeneratedColumn<double> deudaRenta = GeneratedColumn<double>(
-      'deuda_renta', aliasedName, false,
-      type: DriftSqlType.double, requiredDuringInsert: true);
-  static const VerificationMeta _pagoElectricidadMeta =
-      const VerificationMeta('pagoElectricidad');
-  @override
-  late final GeneratedColumn<double> pagoElectricidad = GeneratedColumn<double>(
-      'pago_electricidad', aliasedName, false,
+  late final GeneratedColumn<double> moraRenta = GeneratedColumn<double>(
+      'mora_renta', aliasedName, false,
       type: DriftSqlType.double, requiredDuringInsert: true);
   static const VerificationMeta _deudaElectricidadMeta =
       const VerificationMeta('deudaElectricidad');
@@ -1363,58 +1376,61 @@ class $EstadoCuentaTable extends EstadoCuenta
   late final GeneratedColumn<double> deudaElectricidad =
       GeneratedColumn<double>('deuda_electricidad', aliasedName, false,
           type: DriftSqlType.double, requiredDuringInsert: true);
-  static const VerificationMeta _pagoAguaMeta =
-      const VerificationMeta('pagoAgua');
-  @override
-  late final GeneratedColumn<double> pagoAgua = GeneratedColumn<double>(
-      'pago_agua', aliasedName, false,
-      type: DriftSqlType.double, requiredDuringInsert: true);
   static const VerificationMeta _deudaAguaMeta =
       const VerificationMeta('deudaAgua');
   @override
   late final GeneratedColumn<double> deudaAgua = GeneratedColumn<double>(
       'deuda_agua', aliasedName, false,
       type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _fechaPagoMeta =
+      const VerificationMeta('fechaPago');
+  @override
+  late final GeneratedColumn<DateTime> fechaPago = GeneratedColumn<DateTime>(
+      'fecha_pago', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns => [
+        estadoId,
+        idArrendatario,
         pagoRenta,
-        deudaRenta,
-        pagoElectricidad,
+        moraRenta,
         deudaElectricidad,
-        pagoAgua,
-        deudaAgua
+        deudaAgua,
+        fechaPago
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'estado_cuenta';
+  static const String $name = 'estado_cuentas';
   @override
-  VerificationContext validateIntegrity(Insertable<EstadoCuentaData> instance,
+  VerificationContext validateIntegrity(Insertable<EstadoCuenta> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
+    if (data.containsKey('estado_id')) {
+      context.handle(_estadoIdMeta,
+          estadoId.isAcceptableOrUnknown(data['estado_id']!, _estadoIdMeta));
+    }
+    if (data.containsKey('id_arrendatario')) {
+      context.handle(
+          _idArrendatarioMeta,
+          idArrendatario.isAcceptableOrUnknown(
+              data['id_arrendatario']!, _idArrendatarioMeta));
+    } else if (isInserting) {
+      context.missing(_idArrendatarioMeta);
+    }
     if (data.containsKey('pago_renta')) {
       context.handle(_pagoRentaMeta,
           pagoRenta.isAcceptableOrUnknown(data['pago_renta']!, _pagoRentaMeta));
     } else if (isInserting) {
       context.missing(_pagoRentaMeta);
     }
-    if (data.containsKey('deuda_renta')) {
-      context.handle(
-          _deudaRentaMeta,
-          deudaRenta.isAcceptableOrUnknown(
-              data['deuda_renta']!, _deudaRentaMeta));
+    if (data.containsKey('mora_renta')) {
+      context.handle(_moraRentaMeta,
+          moraRenta.isAcceptableOrUnknown(data['mora_renta']!, _moraRentaMeta));
     } else if (isInserting) {
-      context.missing(_deudaRentaMeta);
-    }
-    if (data.containsKey('pago_electricidad')) {
-      context.handle(
-          _pagoElectricidadMeta,
-          pagoElectricidad.isAcceptableOrUnknown(
-              data['pago_electricidad']!, _pagoElectricidadMeta));
-    } else if (isInserting) {
-      context.missing(_pagoElectricidadMeta);
+      context.missing(_moraRentaMeta);
     }
     if (data.containsKey('deuda_electricidad')) {
       context.handle(
@@ -1424,261 +1440,272 @@ class $EstadoCuentaTable extends EstadoCuenta
     } else if (isInserting) {
       context.missing(_deudaElectricidadMeta);
     }
-    if (data.containsKey('pago_agua')) {
-      context.handle(_pagoAguaMeta,
-          pagoAgua.isAcceptableOrUnknown(data['pago_agua']!, _pagoAguaMeta));
-    } else if (isInserting) {
-      context.missing(_pagoAguaMeta);
-    }
     if (data.containsKey('deuda_agua')) {
       context.handle(_deudaAguaMeta,
           deudaAgua.isAcceptableOrUnknown(data['deuda_agua']!, _deudaAguaMeta));
     } else if (isInserting) {
       context.missing(_deudaAguaMeta);
     }
+    if (data.containsKey('fecha_pago')) {
+      context.handle(_fechaPagoMeta,
+          fechaPago.isAcceptableOrUnknown(data['fecha_pago']!, _fechaPagoMeta));
+    } else if (isInserting) {
+      context.missing(_fechaPagoMeta);
+    }
     return context;
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => const {};
+  Set<GeneratedColumn> get $primaryKey => {estadoId};
   @override
-  EstadoCuentaData map(Map<String, dynamic> data, {String? tablePrefix}) {
+  EstadoCuenta map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return EstadoCuentaData(
+    return EstadoCuenta(
+      estadoId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}estado_id'])!,
+      idArrendatario: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}id_arrendatario'])!,
       pagoRenta: attachedDatabase.typeMapping
           .read(DriftSqlType.double, data['${effectivePrefix}pago_renta'])!,
-      deudaRenta: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}deuda_renta'])!,
-      pagoElectricidad: attachedDatabase.typeMapping.read(
-          DriftSqlType.double, data['${effectivePrefix}pago_electricidad'])!,
+      moraRenta: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}mora_renta'])!,
       deudaElectricidad: attachedDatabase.typeMapping.read(
           DriftSqlType.double, data['${effectivePrefix}deuda_electricidad'])!,
-      pagoAgua: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}pago_agua'])!,
       deudaAgua: attachedDatabase.typeMapping
           .read(DriftSqlType.double, data['${effectivePrefix}deuda_agua'])!,
+      fechaPago: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}fecha_pago'])!,
     );
   }
 
   @override
-  $EstadoCuentaTable createAlias(String alias) {
-    return $EstadoCuentaTable(attachedDatabase, alias);
+  $EstadoCuentasTable createAlias(String alias) {
+    return $EstadoCuentasTable(attachedDatabase, alias);
   }
 }
 
-class EstadoCuentaData extends DataClass
-    implements Insertable<EstadoCuentaData> {
+class EstadoCuenta extends DataClass implements Insertable<EstadoCuenta> {
+  final int estadoId;
+  final String idArrendatario;
   final double pagoRenta;
-  final double deudaRenta;
-  final double pagoElectricidad;
+  final double moraRenta;
   final double deudaElectricidad;
-  final double pagoAgua;
   final double deudaAgua;
-  const EstadoCuentaData(
-      {required this.pagoRenta,
-      required this.deudaRenta,
-      required this.pagoElectricidad,
+  final DateTime fechaPago;
+  const EstadoCuenta(
+      {required this.estadoId,
+      required this.idArrendatario,
+      required this.pagoRenta,
+      required this.moraRenta,
       required this.deudaElectricidad,
-      required this.pagoAgua,
-      required this.deudaAgua});
+      required this.deudaAgua,
+      required this.fechaPago});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    map['estado_id'] = Variable<int>(estadoId);
+    map['id_arrendatario'] = Variable<String>(idArrendatario);
     map['pago_renta'] = Variable<double>(pagoRenta);
-    map['deuda_renta'] = Variable<double>(deudaRenta);
-    map['pago_electricidad'] = Variable<double>(pagoElectricidad);
+    map['mora_renta'] = Variable<double>(moraRenta);
     map['deuda_electricidad'] = Variable<double>(deudaElectricidad);
-    map['pago_agua'] = Variable<double>(pagoAgua);
     map['deuda_agua'] = Variable<double>(deudaAgua);
+    map['fecha_pago'] = Variable<DateTime>(fechaPago);
     return map;
   }
 
-  EstadoCuentaCompanion toCompanion(bool nullToAbsent) {
-    return EstadoCuentaCompanion(
+  EstadoCuentasCompanion toCompanion(bool nullToAbsent) {
+    return EstadoCuentasCompanion(
+      estadoId: Value(estadoId),
+      idArrendatario: Value(idArrendatario),
       pagoRenta: Value(pagoRenta),
-      deudaRenta: Value(deudaRenta),
-      pagoElectricidad: Value(pagoElectricidad),
+      moraRenta: Value(moraRenta),
       deudaElectricidad: Value(deudaElectricidad),
-      pagoAgua: Value(pagoAgua),
       deudaAgua: Value(deudaAgua),
+      fechaPago: Value(fechaPago),
     );
   }
 
-  factory EstadoCuentaData.fromJson(Map<String, dynamic> json,
+  factory EstadoCuenta.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return EstadoCuentaData(
+    return EstadoCuenta(
+      estadoId: serializer.fromJson<int>(json['estadoId']),
+      idArrendatario: serializer.fromJson<String>(json['idArrendatario']),
       pagoRenta: serializer.fromJson<double>(json['pagoRenta']),
-      deudaRenta: serializer.fromJson<double>(json['deudaRenta']),
-      pagoElectricidad: serializer.fromJson<double>(json['pagoElectricidad']),
+      moraRenta: serializer.fromJson<double>(json['moraRenta']),
       deudaElectricidad: serializer.fromJson<double>(json['deudaElectricidad']),
-      pagoAgua: serializer.fromJson<double>(json['pagoAgua']),
       deudaAgua: serializer.fromJson<double>(json['deudaAgua']),
+      fechaPago: serializer.fromJson<DateTime>(json['fechaPago']),
     );
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
+      'estadoId': serializer.toJson<int>(estadoId),
+      'idArrendatario': serializer.toJson<String>(idArrendatario),
       'pagoRenta': serializer.toJson<double>(pagoRenta),
-      'deudaRenta': serializer.toJson<double>(deudaRenta),
-      'pagoElectricidad': serializer.toJson<double>(pagoElectricidad),
+      'moraRenta': serializer.toJson<double>(moraRenta),
       'deudaElectricidad': serializer.toJson<double>(deudaElectricidad),
-      'pagoAgua': serializer.toJson<double>(pagoAgua),
       'deudaAgua': serializer.toJson<double>(deudaAgua),
+      'fechaPago': serializer.toJson<DateTime>(fechaPago),
     };
   }
 
-  EstadoCuentaData copyWith(
-          {double? pagoRenta,
-          double? deudaRenta,
-          double? pagoElectricidad,
+  EstadoCuenta copyWith(
+          {int? estadoId,
+          String? idArrendatario,
+          double? pagoRenta,
+          double? moraRenta,
           double? deudaElectricidad,
-          double? pagoAgua,
-          double? deudaAgua}) =>
-      EstadoCuentaData(
+          double? deudaAgua,
+          DateTime? fechaPago}) =>
+      EstadoCuenta(
+        estadoId: estadoId ?? this.estadoId,
+        idArrendatario: idArrendatario ?? this.idArrendatario,
         pagoRenta: pagoRenta ?? this.pagoRenta,
-        deudaRenta: deudaRenta ?? this.deudaRenta,
-        pagoElectricidad: pagoElectricidad ?? this.pagoElectricidad,
+        moraRenta: moraRenta ?? this.moraRenta,
         deudaElectricidad: deudaElectricidad ?? this.deudaElectricidad,
-        pagoAgua: pagoAgua ?? this.pagoAgua,
         deudaAgua: deudaAgua ?? this.deudaAgua,
+        fechaPago: fechaPago ?? this.fechaPago,
       );
   @override
   String toString() {
-    return (StringBuffer('EstadoCuentaData(')
+    return (StringBuffer('EstadoCuenta(')
+          ..write('estadoId: $estadoId, ')
+          ..write('idArrendatario: $idArrendatario, ')
           ..write('pagoRenta: $pagoRenta, ')
-          ..write('deudaRenta: $deudaRenta, ')
-          ..write('pagoElectricidad: $pagoElectricidad, ')
+          ..write('moraRenta: $moraRenta, ')
           ..write('deudaElectricidad: $deudaElectricidad, ')
-          ..write('pagoAgua: $pagoAgua, ')
-          ..write('deudaAgua: $deudaAgua')
+          ..write('deudaAgua: $deudaAgua, ')
+          ..write('fechaPago: $fechaPago')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(pagoRenta, deudaRenta, pagoElectricidad,
-      deudaElectricidad, pagoAgua, deudaAgua);
+  int get hashCode => Object.hash(estadoId, idArrendatario, pagoRenta,
+      moraRenta, deudaElectricidad, deudaAgua, fechaPago);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is EstadoCuentaData &&
+      (other is EstadoCuenta &&
+          other.estadoId == this.estadoId &&
+          other.idArrendatario == this.idArrendatario &&
           other.pagoRenta == this.pagoRenta &&
-          other.deudaRenta == this.deudaRenta &&
-          other.pagoElectricidad == this.pagoElectricidad &&
+          other.moraRenta == this.moraRenta &&
           other.deudaElectricidad == this.deudaElectricidad &&
-          other.pagoAgua == this.pagoAgua &&
-          other.deudaAgua == this.deudaAgua);
+          other.deudaAgua == this.deudaAgua &&
+          other.fechaPago == this.fechaPago);
 }
 
-class EstadoCuentaCompanion extends UpdateCompanion<EstadoCuentaData> {
+class EstadoCuentasCompanion extends UpdateCompanion<EstadoCuenta> {
+  final Value<int> estadoId;
+  final Value<String> idArrendatario;
   final Value<double> pagoRenta;
-  final Value<double> deudaRenta;
-  final Value<double> pagoElectricidad;
+  final Value<double> moraRenta;
   final Value<double> deudaElectricidad;
-  final Value<double> pagoAgua;
   final Value<double> deudaAgua;
-  final Value<int> rowid;
-  const EstadoCuentaCompanion({
+  final Value<DateTime> fechaPago;
+  const EstadoCuentasCompanion({
+    this.estadoId = const Value.absent(),
+    this.idArrendatario = const Value.absent(),
     this.pagoRenta = const Value.absent(),
-    this.deudaRenta = const Value.absent(),
-    this.pagoElectricidad = const Value.absent(),
+    this.moraRenta = const Value.absent(),
     this.deudaElectricidad = const Value.absent(),
-    this.pagoAgua = const Value.absent(),
     this.deudaAgua = const Value.absent(),
-    this.rowid = const Value.absent(),
+    this.fechaPago = const Value.absent(),
   });
-  EstadoCuentaCompanion.insert({
+  EstadoCuentasCompanion.insert({
+    this.estadoId = const Value.absent(),
+    required String idArrendatario,
     required double pagoRenta,
-    required double deudaRenta,
-    required double pagoElectricidad,
+    required double moraRenta,
     required double deudaElectricidad,
-    required double pagoAgua,
     required double deudaAgua,
-    this.rowid = const Value.absent(),
-  })  : pagoRenta = Value(pagoRenta),
-        deudaRenta = Value(deudaRenta),
-        pagoElectricidad = Value(pagoElectricidad),
+    required DateTime fechaPago,
+  })  : idArrendatario = Value(idArrendatario),
+        pagoRenta = Value(pagoRenta),
+        moraRenta = Value(moraRenta),
         deudaElectricidad = Value(deudaElectricidad),
-        pagoAgua = Value(pagoAgua),
-        deudaAgua = Value(deudaAgua);
-  static Insertable<EstadoCuentaData> custom({
+        deudaAgua = Value(deudaAgua),
+        fechaPago = Value(fechaPago);
+  static Insertable<EstadoCuenta> custom({
+    Expression<int>? estadoId,
+    Expression<String>? idArrendatario,
     Expression<double>? pagoRenta,
-    Expression<double>? deudaRenta,
-    Expression<double>? pagoElectricidad,
+    Expression<double>? moraRenta,
     Expression<double>? deudaElectricidad,
-    Expression<double>? pagoAgua,
     Expression<double>? deudaAgua,
-    Expression<int>? rowid,
+    Expression<DateTime>? fechaPago,
   }) {
     return RawValuesInsertable({
+      if (estadoId != null) 'estado_id': estadoId,
+      if (idArrendatario != null) 'id_arrendatario': idArrendatario,
       if (pagoRenta != null) 'pago_renta': pagoRenta,
-      if (deudaRenta != null) 'deuda_renta': deudaRenta,
-      if (pagoElectricidad != null) 'pago_electricidad': pagoElectricidad,
+      if (moraRenta != null) 'mora_renta': moraRenta,
       if (deudaElectricidad != null) 'deuda_electricidad': deudaElectricidad,
-      if (pagoAgua != null) 'pago_agua': pagoAgua,
       if (deudaAgua != null) 'deuda_agua': deudaAgua,
-      if (rowid != null) 'rowid': rowid,
+      if (fechaPago != null) 'fecha_pago': fechaPago,
     });
   }
 
-  EstadoCuentaCompanion copyWith(
-      {Value<double>? pagoRenta,
-      Value<double>? deudaRenta,
-      Value<double>? pagoElectricidad,
+  EstadoCuentasCompanion copyWith(
+      {Value<int>? estadoId,
+      Value<String>? idArrendatario,
+      Value<double>? pagoRenta,
+      Value<double>? moraRenta,
       Value<double>? deudaElectricidad,
-      Value<double>? pagoAgua,
       Value<double>? deudaAgua,
-      Value<int>? rowid}) {
-    return EstadoCuentaCompanion(
+      Value<DateTime>? fechaPago}) {
+    return EstadoCuentasCompanion(
+      estadoId: estadoId ?? this.estadoId,
+      idArrendatario: idArrendatario ?? this.idArrendatario,
       pagoRenta: pagoRenta ?? this.pagoRenta,
-      deudaRenta: deudaRenta ?? this.deudaRenta,
-      pagoElectricidad: pagoElectricidad ?? this.pagoElectricidad,
+      moraRenta: moraRenta ?? this.moraRenta,
       deudaElectricidad: deudaElectricidad ?? this.deudaElectricidad,
-      pagoAgua: pagoAgua ?? this.pagoAgua,
       deudaAgua: deudaAgua ?? this.deudaAgua,
-      rowid: rowid ?? this.rowid,
+      fechaPago: fechaPago ?? this.fechaPago,
     );
   }
 
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    if (estadoId.present) {
+      map['estado_id'] = Variable<int>(estadoId.value);
+    }
+    if (idArrendatario.present) {
+      map['id_arrendatario'] = Variable<String>(idArrendatario.value);
+    }
     if (pagoRenta.present) {
       map['pago_renta'] = Variable<double>(pagoRenta.value);
     }
-    if (deudaRenta.present) {
-      map['deuda_renta'] = Variable<double>(deudaRenta.value);
-    }
-    if (pagoElectricidad.present) {
-      map['pago_electricidad'] = Variable<double>(pagoElectricidad.value);
+    if (moraRenta.present) {
+      map['mora_renta'] = Variable<double>(moraRenta.value);
     }
     if (deudaElectricidad.present) {
       map['deuda_electricidad'] = Variable<double>(deudaElectricidad.value);
     }
-    if (pagoAgua.present) {
-      map['pago_agua'] = Variable<double>(pagoAgua.value);
-    }
     if (deudaAgua.present) {
       map['deuda_agua'] = Variable<double>(deudaAgua.value);
     }
-    if (rowid.present) {
-      map['rowid'] = Variable<int>(rowid.value);
+    if (fechaPago.present) {
+      map['fecha_pago'] = Variable<DateTime>(fechaPago.value);
     }
     return map;
   }
 
   @override
   String toString() {
-    return (StringBuffer('EstadoCuentaCompanion(')
+    return (StringBuffer('EstadoCuentasCompanion(')
+          ..write('estadoId: $estadoId, ')
+          ..write('idArrendatario: $idArrendatario, ')
           ..write('pagoRenta: $pagoRenta, ')
-          ..write('deudaRenta: $deudaRenta, ')
-          ..write('pagoElectricidad: $pagoElectricidad, ')
+          ..write('moraRenta: $moraRenta, ')
           ..write('deudaElectricidad: $deudaElectricidad, ')
-          ..write('pagoAgua: $pagoAgua, ')
           ..write('deudaAgua: $deudaAgua, ')
-          ..write('rowid: $rowid')
+          ..write('fechaPago: $fechaPago')
           ..write(')'))
         .toString();
   }
@@ -2046,6 +2073,251 @@ class DanosPropiedadCompanion extends UpdateCompanion<DanosPropiedadData> {
   }
 }
 
+class $ProveedoresServiciosTable extends ProveedoresServicios
+    with TableInfo<$ProveedoresServiciosTable, ProveedoresServicio> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ProveedoresServiciosTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _codigoProveedorMeta =
+      const VerificationMeta('codigoProveedor');
+  @override
+  late final GeneratedColumn<String> codigoProveedor = GeneratedColumn<String>(
+      'codigo_proveedor', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 10),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  static const VerificationMeta _proveedorNombreMeta =
+      const VerificationMeta('proveedorNombre');
+  @override
+  late final GeneratedColumn<String> proveedorNombre = GeneratedColumn<String>(
+      'proveedor_nombre', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 255),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  static const VerificationMeta _servicioMeta =
+      const VerificationMeta('servicio');
+  @override
+  late final GeneratedColumn<String> servicio = GeneratedColumn<String>(
+      'servicio', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 255),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [codigoProveedor, proveedorNombre, servicio];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'proveedores_servicios';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<ProveedoresServicio> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('codigo_proveedor')) {
+      context.handle(
+          _codigoProveedorMeta,
+          codigoProveedor.isAcceptableOrUnknown(
+              data['codigo_proveedor']!, _codigoProveedorMeta));
+    } else if (isInserting) {
+      context.missing(_codigoProveedorMeta);
+    }
+    if (data.containsKey('proveedor_nombre')) {
+      context.handle(
+          _proveedorNombreMeta,
+          proveedorNombre.isAcceptableOrUnknown(
+              data['proveedor_nombre']!, _proveedorNombreMeta));
+    } else if (isInserting) {
+      context.missing(_proveedorNombreMeta);
+    }
+    if (data.containsKey('servicio')) {
+      context.handle(_servicioMeta,
+          servicio.isAcceptableOrUnknown(data['servicio']!, _servicioMeta));
+    } else if (isInserting) {
+      context.missing(_servicioMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => const {};
+  @override
+  ProveedoresServicio map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ProveedoresServicio(
+      codigoProveedor: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}codigo_proveedor'])!,
+      proveedorNombre: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}proveedor_nombre'])!,
+      servicio: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}servicio'])!,
+    );
+  }
+
+  @override
+  $ProveedoresServiciosTable createAlias(String alias) {
+    return $ProveedoresServiciosTable(attachedDatabase, alias);
+  }
+}
+
+class ProveedoresServicio extends DataClass
+    implements Insertable<ProveedoresServicio> {
+  final String codigoProveedor;
+  final String proveedorNombre;
+  final String servicio;
+  const ProveedoresServicio(
+      {required this.codigoProveedor,
+      required this.proveedorNombre,
+      required this.servicio});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['codigo_proveedor'] = Variable<String>(codigoProveedor);
+    map['proveedor_nombre'] = Variable<String>(proveedorNombre);
+    map['servicio'] = Variable<String>(servicio);
+    return map;
+  }
+
+  ProveedoresServiciosCompanion toCompanion(bool nullToAbsent) {
+    return ProveedoresServiciosCompanion(
+      codigoProveedor: Value(codigoProveedor),
+      proveedorNombre: Value(proveedorNombre),
+      servicio: Value(servicio),
+    );
+  }
+
+  factory ProveedoresServicio.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ProveedoresServicio(
+      codigoProveedor: serializer.fromJson<String>(json['codigoProveedor']),
+      proveedorNombre: serializer.fromJson<String>(json['proveedorNombre']),
+      servicio: serializer.fromJson<String>(json['servicio']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'codigoProveedor': serializer.toJson<String>(codigoProveedor),
+      'proveedorNombre': serializer.toJson<String>(proveedorNombre),
+      'servicio': serializer.toJson<String>(servicio),
+    };
+  }
+
+  ProveedoresServicio copyWith(
+          {String? codigoProveedor,
+          String? proveedorNombre,
+          String? servicio}) =>
+      ProveedoresServicio(
+        codigoProveedor: codigoProveedor ?? this.codigoProveedor,
+        proveedorNombre: proveedorNombre ?? this.proveedorNombre,
+        servicio: servicio ?? this.servicio,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('ProveedoresServicio(')
+          ..write('codigoProveedor: $codigoProveedor, ')
+          ..write('proveedorNombre: $proveedorNombre, ')
+          ..write('servicio: $servicio')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(codigoProveedor, proveedorNombre, servicio);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ProveedoresServicio &&
+          other.codigoProveedor == this.codigoProveedor &&
+          other.proveedorNombre == this.proveedorNombre &&
+          other.servicio == this.servicio);
+}
+
+class ProveedoresServiciosCompanion
+    extends UpdateCompanion<ProveedoresServicio> {
+  final Value<String> codigoProveedor;
+  final Value<String> proveedorNombre;
+  final Value<String> servicio;
+  final Value<int> rowid;
+  const ProveedoresServiciosCompanion({
+    this.codigoProveedor = const Value.absent(),
+    this.proveedorNombre = const Value.absent(),
+    this.servicio = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  ProveedoresServiciosCompanion.insert({
+    required String codigoProveedor,
+    required String proveedorNombre,
+    required String servicio,
+    this.rowid = const Value.absent(),
+  })  : codigoProveedor = Value(codigoProveedor),
+        proveedorNombre = Value(proveedorNombre),
+        servicio = Value(servicio);
+  static Insertable<ProveedoresServicio> custom({
+    Expression<String>? codigoProveedor,
+    Expression<String>? proveedorNombre,
+    Expression<String>? servicio,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (codigoProveedor != null) 'codigo_proveedor': codigoProveedor,
+      if (proveedorNombre != null) 'proveedor_nombre': proveedorNombre,
+      if (servicio != null) 'servicio': servicio,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  ProveedoresServiciosCompanion copyWith(
+      {Value<String>? codigoProveedor,
+      Value<String>? proveedorNombre,
+      Value<String>? servicio,
+      Value<int>? rowid}) {
+    return ProveedoresServiciosCompanion(
+      codigoProveedor: codigoProveedor ?? this.codigoProveedor,
+      proveedorNombre: proveedorNombre ?? this.proveedorNombre,
+      servicio: servicio ?? this.servicio,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (codigoProveedor.present) {
+      map['codigo_proveedor'] = Variable<String>(codigoProveedor.value);
+    }
+    if (proveedorNombre.present) {
+      map['proveedor_nombre'] = Variable<String>(proveedorNombre.value);
+    }
+    if (servicio.present) {
+      map['servicio'] = Variable<String>(servicio.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ProveedoresServiciosCompanion(')
+          ..write('codigoProveedor: $codigoProveedor, ')
+          ..write('proveedorNombre: $proveedorNombre, ')
+          ..write('servicio: $servicio, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class $CuentaProveedoresServiciosTable extends CuentaProveedoresServicios
     with
         TableInfo<$CuentaProveedoresServiciosTable, CuentaProveedoresServicio> {
@@ -2323,251 +2595,6 @@ class CuentaProveedoresServiciosCompanion
           ..write('proveedor: $proveedor, ')
           ..write('servicio: $servicio, ')
           ..write('montoTotal: $montoTotal, ')
-          ..write('rowid: $rowid')
-          ..write(')'))
-        .toString();
-  }
-}
-
-class $ProveedoresServiciosTable extends ProveedoresServicios
-    with TableInfo<$ProveedoresServiciosTable, ProveedoresServicio> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  $ProveedoresServiciosTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _codigoProveedorMeta =
-      const VerificationMeta('codigoProveedor');
-  @override
-  late final GeneratedColumn<String> codigoProveedor = GeneratedColumn<String>(
-      'codigo_proveedor', aliasedName, false,
-      additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 10),
-      type: DriftSqlType.string,
-      requiredDuringInsert: true);
-  static const VerificationMeta _proveedorNombreMeta =
-      const VerificationMeta('proveedorNombre');
-  @override
-  late final GeneratedColumn<String> proveedorNombre = GeneratedColumn<String>(
-      'proveedor_nombre', aliasedName, false,
-      additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 255),
-      type: DriftSqlType.string,
-      requiredDuringInsert: true);
-  static const VerificationMeta _servicioMeta =
-      const VerificationMeta('servicio');
-  @override
-  late final GeneratedColumn<String> servicio = GeneratedColumn<String>(
-      'servicio', aliasedName, false,
-      additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 255),
-      type: DriftSqlType.string,
-      requiredDuringInsert: true);
-  @override
-  List<GeneratedColumn> get $columns =>
-      [codigoProveedor, proveedorNombre, servicio];
-  @override
-  String get aliasedName => _alias ?? actualTableName;
-  @override
-  String get actualTableName => $name;
-  static const String $name = 'proveedores_servicios';
-  @override
-  VerificationContext validateIntegrity(
-      Insertable<ProveedoresServicio> instance,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('codigo_proveedor')) {
-      context.handle(
-          _codigoProveedorMeta,
-          codigoProveedor.isAcceptableOrUnknown(
-              data['codigo_proveedor']!, _codigoProveedorMeta));
-    } else if (isInserting) {
-      context.missing(_codigoProveedorMeta);
-    }
-    if (data.containsKey('proveedor_nombre')) {
-      context.handle(
-          _proveedorNombreMeta,
-          proveedorNombre.isAcceptableOrUnknown(
-              data['proveedor_nombre']!, _proveedorNombreMeta));
-    } else if (isInserting) {
-      context.missing(_proveedorNombreMeta);
-    }
-    if (data.containsKey('servicio')) {
-      context.handle(_servicioMeta,
-          servicio.isAcceptableOrUnknown(data['servicio']!, _servicioMeta));
-    } else if (isInserting) {
-      context.missing(_servicioMeta);
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => const {};
-  @override
-  ProveedoresServicio map(Map<String, dynamic> data, {String? tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return ProveedoresServicio(
-      codigoProveedor: attachedDatabase.typeMapping.read(
-          DriftSqlType.string, data['${effectivePrefix}codigo_proveedor'])!,
-      proveedorNombre: attachedDatabase.typeMapping.read(
-          DriftSqlType.string, data['${effectivePrefix}proveedor_nombre'])!,
-      servicio: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}servicio'])!,
-    );
-  }
-
-  @override
-  $ProveedoresServiciosTable createAlias(String alias) {
-    return $ProveedoresServiciosTable(attachedDatabase, alias);
-  }
-}
-
-class ProveedoresServicio extends DataClass
-    implements Insertable<ProveedoresServicio> {
-  final String codigoProveedor;
-  final String proveedorNombre;
-  final String servicio;
-  const ProveedoresServicio(
-      {required this.codigoProveedor,
-      required this.proveedorNombre,
-      required this.servicio});
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['codigo_proveedor'] = Variable<String>(codigoProveedor);
-    map['proveedor_nombre'] = Variable<String>(proveedorNombre);
-    map['servicio'] = Variable<String>(servicio);
-    return map;
-  }
-
-  ProveedoresServiciosCompanion toCompanion(bool nullToAbsent) {
-    return ProveedoresServiciosCompanion(
-      codigoProveedor: Value(codigoProveedor),
-      proveedorNombre: Value(proveedorNombre),
-      servicio: Value(servicio),
-    );
-  }
-
-  factory ProveedoresServicio.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return ProveedoresServicio(
-      codigoProveedor: serializer.fromJson<String>(json['codigoProveedor']),
-      proveedorNombre: serializer.fromJson<String>(json['proveedorNombre']),
-      servicio: serializer.fromJson<String>(json['servicio']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'codigoProveedor': serializer.toJson<String>(codigoProveedor),
-      'proveedorNombre': serializer.toJson<String>(proveedorNombre),
-      'servicio': serializer.toJson<String>(servicio),
-    };
-  }
-
-  ProveedoresServicio copyWith(
-          {String? codigoProveedor,
-          String? proveedorNombre,
-          String? servicio}) =>
-      ProveedoresServicio(
-        codigoProveedor: codigoProveedor ?? this.codigoProveedor,
-        proveedorNombre: proveedorNombre ?? this.proveedorNombre,
-        servicio: servicio ?? this.servicio,
-      );
-  @override
-  String toString() {
-    return (StringBuffer('ProveedoresServicio(')
-          ..write('codigoProveedor: $codigoProveedor, ')
-          ..write('proveedorNombre: $proveedorNombre, ')
-          ..write('servicio: $servicio')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => Object.hash(codigoProveedor, proveedorNombre, servicio);
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is ProveedoresServicio &&
-          other.codigoProveedor == this.codigoProveedor &&
-          other.proveedorNombre == this.proveedorNombre &&
-          other.servicio == this.servicio);
-}
-
-class ProveedoresServiciosCompanion
-    extends UpdateCompanion<ProveedoresServicio> {
-  final Value<String> codigoProveedor;
-  final Value<String> proveedorNombre;
-  final Value<String> servicio;
-  final Value<int> rowid;
-  const ProveedoresServiciosCompanion({
-    this.codigoProveedor = const Value.absent(),
-    this.proveedorNombre = const Value.absent(),
-    this.servicio = const Value.absent(),
-    this.rowid = const Value.absent(),
-  });
-  ProveedoresServiciosCompanion.insert({
-    required String codigoProveedor,
-    required String proveedorNombre,
-    required String servicio,
-    this.rowid = const Value.absent(),
-  })  : codigoProveedor = Value(codigoProveedor),
-        proveedorNombre = Value(proveedorNombre),
-        servicio = Value(servicio);
-  static Insertable<ProveedoresServicio> custom({
-    Expression<String>? codigoProveedor,
-    Expression<String>? proveedorNombre,
-    Expression<String>? servicio,
-    Expression<int>? rowid,
-  }) {
-    return RawValuesInsertable({
-      if (codigoProveedor != null) 'codigo_proveedor': codigoProveedor,
-      if (proveedorNombre != null) 'proveedor_nombre': proveedorNombre,
-      if (servicio != null) 'servicio': servicio,
-      if (rowid != null) 'rowid': rowid,
-    });
-  }
-
-  ProveedoresServiciosCompanion copyWith(
-      {Value<String>? codigoProveedor,
-      Value<String>? proveedorNombre,
-      Value<String>? servicio,
-      Value<int>? rowid}) {
-    return ProveedoresServiciosCompanion(
-      codigoProveedor: codigoProveedor ?? this.codigoProveedor,
-      proveedorNombre: proveedorNombre ?? this.proveedorNombre,
-      servicio: servicio ?? this.servicio,
-      rowid: rowid ?? this.rowid,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (codigoProveedor.present) {
-      map['codigo_proveedor'] = Variable<String>(codigoProveedor.value);
-    }
-    if (proveedorNombre.present) {
-      map['proveedor_nombre'] = Variable<String>(proveedorNombre.value);
-    }
-    if (servicio.present) {
-      map['servicio'] = Variable<String>(servicio.value);
-    }
-    if (rowid.present) {
-      map['rowid'] = Variable<int>(rowid.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('ProveedoresServiciosCompanion(')
-          ..write('codigoProveedor: $codigoProveedor, ')
-          ..write('proveedorNombre: $proveedorNombre, ')
-          ..write('servicio: $servicio, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -2889,6 +2916,349 @@ class CuentasPSDesocupadosCompanion
           ..write('cProveedorEnergia: $cProveedorEnergia, ')
           ..write('montoEnergia: $montoEnergia, ')
           ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $FacturaDanosTable extends FacturaDanos
+    with TableInfo<$FacturaDanosTable, FacturaDano> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $FacturaDanosTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _facturaIdMeta =
+      const VerificationMeta('facturaId');
+  @override
+  late final GeneratedColumn<int> facturaId = GeneratedColumn<int>(
+      'factura_id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _cViviendaMeta =
+      const VerificationMeta('cVivienda');
+  @override
+  late final GeneratedColumn<String> cVivienda = GeneratedColumn<String>(
+      'c_vivienda', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES vivienda_ubicacion (codigo_vivienda)'));
+  static const VerificationMeta _idArrendatarioMeta =
+      const VerificationMeta('idArrendatario');
+  @override
+  late final GeneratedColumn<String> idArrendatario = GeneratedColumn<String>(
+      'id_arrendatario', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES arrendatarios (identidad)'));
+  static const VerificationMeta _motivoFacturaMeta =
+      const VerificationMeta('motivoFactura');
+  @override
+  late final GeneratedColumn<String> motivoFactura = GeneratedColumn<String>(
+      'motivo_factura', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 255),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  static const VerificationMeta _montoDanoMeta =
+      const VerificationMeta('montoDano');
+  @override
+  late final GeneratedColumn<double> montoDano = GeneratedColumn<double>(
+      'monto_dano', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _descMeta = const VerificationMeta('desc');
+  @override
+  late final GeneratedColumn<String> desc = GeneratedColumn<String>(
+      'desc', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 255),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [facturaId, cVivienda, idArrendatario, motivoFactura, montoDano, desc];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'factura_danos';
+  @override
+  VerificationContext validateIntegrity(Insertable<FacturaDano> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('factura_id')) {
+      context.handle(_facturaIdMeta,
+          facturaId.isAcceptableOrUnknown(data['factura_id']!, _facturaIdMeta));
+    }
+    if (data.containsKey('c_vivienda')) {
+      context.handle(_cViviendaMeta,
+          cVivienda.isAcceptableOrUnknown(data['c_vivienda']!, _cViviendaMeta));
+    } else if (isInserting) {
+      context.missing(_cViviendaMeta);
+    }
+    if (data.containsKey('id_arrendatario')) {
+      context.handle(
+          _idArrendatarioMeta,
+          idArrendatario.isAcceptableOrUnknown(
+              data['id_arrendatario']!, _idArrendatarioMeta));
+    } else if (isInserting) {
+      context.missing(_idArrendatarioMeta);
+    }
+    if (data.containsKey('motivo_factura')) {
+      context.handle(
+          _motivoFacturaMeta,
+          motivoFactura.isAcceptableOrUnknown(
+              data['motivo_factura']!, _motivoFacturaMeta));
+    } else if (isInserting) {
+      context.missing(_motivoFacturaMeta);
+    }
+    if (data.containsKey('monto_dano')) {
+      context.handle(_montoDanoMeta,
+          montoDano.isAcceptableOrUnknown(data['monto_dano']!, _montoDanoMeta));
+    } else if (isInserting) {
+      context.missing(_montoDanoMeta);
+    }
+    if (data.containsKey('desc')) {
+      context.handle(
+          _descMeta, desc.isAcceptableOrUnknown(data['desc']!, _descMeta));
+    } else if (isInserting) {
+      context.missing(_descMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {facturaId};
+  @override
+  FacturaDano map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return FacturaDano(
+      facturaId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}factura_id'])!,
+      cVivienda: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}c_vivienda'])!,
+      idArrendatario: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}id_arrendatario'])!,
+      motivoFactura: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}motivo_factura'])!,
+      montoDano: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}monto_dano'])!,
+      desc: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}desc'])!,
+    );
+  }
+
+  @override
+  $FacturaDanosTable createAlias(String alias) {
+    return $FacturaDanosTable(attachedDatabase, alias);
+  }
+}
+
+class FacturaDano extends DataClass implements Insertable<FacturaDano> {
+  final int facturaId;
+  final String cVivienda;
+  final String idArrendatario;
+  final String motivoFactura;
+  final double montoDano;
+  final String desc;
+  const FacturaDano(
+      {required this.facturaId,
+      required this.cVivienda,
+      required this.idArrendatario,
+      required this.motivoFactura,
+      required this.montoDano,
+      required this.desc});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['factura_id'] = Variable<int>(facturaId);
+    map['c_vivienda'] = Variable<String>(cVivienda);
+    map['id_arrendatario'] = Variable<String>(idArrendatario);
+    map['motivo_factura'] = Variable<String>(motivoFactura);
+    map['monto_dano'] = Variable<double>(montoDano);
+    map['desc'] = Variable<String>(desc);
+    return map;
+  }
+
+  FacturaDanosCompanion toCompanion(bool nullToAbsent) {
+    return FacturaDanosCompanion(
+      facturaId: Value(facturaId),
+      cVivienda: Value(cVivienda),
+      idArrendatario: Value(idArrendatario),
+      motivoFactura: Value(motivoFactura),
+      montoDano: Value(montoDano),
+      desc: Value(desc),
+    );
+  }
+
+  factory FacturaDano.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return FacturaDano(
+      facturaId: serializer.fromJson<int>(json['facturaId']),
+      cVivienda: serializer.fromJson<String>(json['cVivienda']),
+      idArrendatario: serializer.fromJson<String>(json['idArrendatario']),
+      motivoFactura: serializer.fromJson<String>(json['motivoFactura']),
+      montoDano: serializer.fromJson<double>(json['montoDano']),
+      desc: serializer.fromJson<String>(json['desc']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'facturaId': serializer.toJson<int>(facturaId),
+      'cVivienda': serializer.toJson<String>(cVivienda),
+      'idArrendatario': serializer.toJson<String>(idArrendatario),
+      'motivoFactura': serializer.toJson<String>(motivoFactura),
+      'montoDano': serializer.toJson<double>(montoDano),
+      'desc': serializer.toJson<String>(desc),
+    };
+  }
+
+  FacturaDano copyWith(
+          {int? facturaId,
+          String? cVivienda,
+          String? idArrendatario,
+          String? motivoFactura,
+          double? montoDano,
+          String? desc}) =>
+      FacturaDano(
+        facturaId: facturaId ?? this.facturaId,
+        cVivienda: cVivienda ?? this.cVivienda,
+        idArrendatario: idArrendatario ?? this.idArrendatario,
+        motivoFactura: motivoFactura ?? this.motivoFactura,
+        montoDano: montoDano ?? this.montoDano,
+        desc: desc ?? this.desc,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('FacturaDano(')
+          ..write('facturaId: $facturaId, ')
+          ..write('cVivienda: $cVivienda, ')
+          ..write('idArrendatario: $idArrendatario, ')
+          ..write('motivoFactura: $motivoFactura, ')
+          ..write('montoDano: $montoDano, ')
+          ..write('desc: $desc')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      facturaId, cVivienda, idArrendatario, motivoFactura, montoDano, desc);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is FacturaDano &&
+          other.facturaId == this.facturaId &&
+          other.cVivienda == this.cVivienda &&
+          other.idArrendatario == this.idArrendatario &&
+          other.motivoFactura == this.motivoFactura &&
+          other.montoDano == this.montoDano &&
+          other.desc == this.desc);
+}
+
+class FacturaDanosCompanion extends UpdateCompanion<FacturaDano> {
+  final Value<int> facturaId;
+  final Value<String> cVivienda;
+  final Value<String> idArrendatario;
+  final Value<String> motivoFactura;
+  final Value<double> montoDano;
+  final Value<String> desc;
+  const FacturaDanosCompanion({
+    this.facturaId = const Value.absent(),
+    this.cVivienda = const Value.absent(),
+    this.idArrendatario = const Value.absent(),
+    this.motivoFactura = const Value.absent(),
+    this.montoDano = const Value.absent(),
+    this.desc = const Value.absent(),
+  });
+  FacturaDanosCompanion.insert({
+    this.facturaId = const Value.absent(),
+    required String cVivienda,
+    required String idArrendatario,
+    required String motivoFactura,
+    required double montoDano,
+    required String desc,
+  })  : cVivienda = Value(cVivienda),
+        idArrendatario = Value(idArrendatario),
+        motivoFactura = Value(motivoFactura),
+        montoDano = Value(montoDano),
+        desc = Value(desc);
+  static Insertable<FacturaDano> custom({
+    Expression<int>? facturaId,
+    Expression<String>? cVivienda,
+    Expression<String>? idArrendatario,
+    Expression<String>? motivoFactura,
+    Expression<double>? montoDano,
+    Expression<String>? desc,
+  }) {
+    return RawValuesInsertable({
+      if (facturaId != null) 'factura_id': facturaId,
+      if (cVivienda != null) 'c_vivienda': cVivienda,
+      if (idArrendatario != null) 'id_arrendatario': idArrendatario,
+      if (motivoFactura != null) 'motivo_factura': motivoFactura,
+      if (montoDano != null) 'monto_dano': montoDano,
+      if (desc != null) 'desc': desc,
+    });
+  }
+
+  FacturaDanosCompanion copyWith(
+      {Value<int>? facturaId,
+      Value<String>? cVivienda,
+      Value<String>? idArrendatario,
+      Value<String>? motivoFactura,
+      Value<double>? montoDano,
+      Value<String>? desc}) {
+    return FacturaDanosCompanion(
+      facturaId: facturaId ?? this.facturaId,
+      cVivienda: cVivienda ?? this.cVivienda,
+      idArrendatario: idArrendatario ?? this.idArrendatario,
+      motivoFactura: motivoFactura ?? this.motivoFactura,
+      montoDano: montoDano ?? this.montoDano,
+      desc: desc ?? this.desc,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (facturaId.present) {
+      map['factura_id'] = Variable<int>(facturaId.value);
+    }
+    if (cVivienda.present) {
+      map['c_vivienda'] = Variable<String>(cVivienda.value);
+    }
+    if (idArrendatario.present) {
+      map['id_arrendatario'] = Variable<String>(idArrendatario.value);
+    }
+    if (motivoFactura.present) {
+      map['motivo_factura'] = Variable<String>(motivoFactura.value);
+    }
+    if (montoDano.present) {
+      map['monto_dano'] = Variable<double>(montoDano.value);
+    }
+    if (desc.present) {
+      map['desc'] = Variable<String>(desc.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('FacturaDanosCompanion(')
+          ..write('facturaId: $facturaId, ')
+          ..write('cVivienda: $cVivienda, ')
+          ..write('idArrendatario: $idArrendatario, ')
+          ..write('motivoFactura: $motivoFactura, ')
+          ..write('montoDano: $montoDano, ')
+          ..write('desc: $desc')
           ..write(')'))
         .toString();
   }
@@ -3495,6 +3865,368 @@ class $vViviendasConArrendatariosView
       const {'vivienda_ubicacion', 'actual_arrendatarios'};
 }
 
+class vFacturaDanoConArrendatario extends DataClass {
+  final String cVivienda;
+  final String identidad;
+  final String nombre;
+  final String motivoFactura;
+  final double montoDano;
+  final String desc;
+  const vFacturaDanoConArrendatario(
+      {required this.cVivienda,
+      required this.identidad,
+      required this.nombre,
+      required this.motivoFactura,
+      required this.montoDano,
+      required this.desc});
+  factory vFacturaDanoConArrendatario.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return vFacturaDanoConArrendatario(
+      cVivienda: serializer.fromJson<String>(json['cVivienda']),
+      identidad: serializer.fromJson<String>(json['identidad']),
+      nombre: serializer.fromJson<String>(json['nombre']),
+      motivoFactura: serializer.fromJson<String>(json['motivoFactura']),
+      montoDano: serializer.fromJson<double>(json['montoDano']),
+      desc: serializer.fromJson<String>(json['desc']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'cVivienda': serializer.toJson<String>(cVivienda),
+      'identidad': serializer.toJson<String>(identidad),
+      'nombre': serializer.toJson<String>(nombre),
+      'motivoFactura': serializer.toJson<String>(motivoFactura),
+      'montoDano': serializer.toJson<double>(montoDano),
+      'desc': serializer.toJson<String>(desc),
+    };
+  }
+
+  vFacturaDanoConArrendatario copyWith(
+          {String? cVivienda,
+          String? identidad,
+          String? nombre,
+          String? motivoFactura,
+          double? montoDano,
+          String? desc}) =>
+      vFacturaDanoConArrendatario(
+        cVivienda: cVivienda ?? this.cVivienda,
+        identidad: identidad ?? this.identidad,
+        nombre: nombre ?? this.nombre,
+        motivoFactura: motivoFactura ?? this.motivoFactura,
+        montoDano: montoDano ?? this.montoDano,
+        desc: desc ?? this.desc,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('vFacturaDanoConArrendatario(')
+          ..write('cVivienda: $cVivienda, ')
+          ..write('identidad: $identidad, ')
+          ..write('nombre: $nombre, ')
+          ..write('motivoFactura: $motivoFactura, ')
+          ..write('montoDano: $montoDano, ')
+          ..write('desc: $desc')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(cVivienda, identidad, nombre, motivoFactura, montoDano, desc);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is vFacturaDanoConArrendatario &&
+          other.cVivienda == this.cVivienda &&
+          other.identidad == this.identidad &&
+          other.nombre == this.nombre &&
+          other.motivoFactura == this.motivoFactura &&
+          other.montoDano == this.montoDano &&
+          other.desc == this.desc);
+}
+
+class $vFacturaDanoConArrendatariosView extends ViewInfo<
+    $vFacturaDanoConArrendatariosView,
+    vFacturaDanoConArrendatario> implements HasResultSet {
+  final String? _alias;
+  @override
+  final _$AppDb attachedDatabase;
+  $vFacturaDanoConArrendatariosView(this.attachedDatabase, [this._alias]);
+  $FacturaDanosTable get facturadanos =>
+      attachedDatabase.facturaDanos.createAlias('t0');
+  $ArrendatariosTable get arrendatarios =>
+      attachedDatabase.arrendatarios.createAlias('t1');
+  @override
+  List<GeneratedColumn> get $columns =>
+      [cVivienda, identidad, nombre, motivoFactura, montoDano, desc];
+  @override
+  String get aliasedName => _alias ?? entityName;
+  @override
+  String get entityName => 'v_factura_dano_con_arrendatarios';
+  @override
+  Map<SqlDialect, String>? get createViewStatements => null;
+  @override
+  $vFacturaDanoConArrendatariosView get asDslTable => this;
+  @override
+  vFacturaDanoConArrendatario map(Map<String, dynamic> data,
+      {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return vFacturaDanoConArrendatario(
+      cVivienda: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}c_vivienda'])!,
+      identidad: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}identidad'])!,
+      nombre: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}nombre'])!,
+      motivoFactura: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}motivo_factura'])!,
+      montoDano: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}monto_dano'])!,
+      desc: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}desc'])!,
+    );
+  }
+
+  late final GeneratedColumn<String> cVivienda = GeneratedColumn<String>(
+      'c_vivienda', aliasedName, false,
+      generatedAs: GeneratedAs(facturadanos.cVivienda, false),
+      type: DriftSqlType.string);
+  late final GeneratedColumn<String> identidad = GeneratedColumn<String>(
+      'identidad', aliasedName, false,
+      generatedAs: GeneratedAs(arrendatarios.identidad, false),
+      type: DriftSqlType.string);
+  late final GeneratedColumn<String> nombre = GeneratedColumn<String>(
+      'nombre', aliasedName, false,
+      generatedAs: GeneratedAs(arrendatarios.nombre, false),
+      type: DriftSqlType.string);
+  late final GeneratedColumn<String> motivoFactura = GeneratedColumn<String>(
+      'motivo_factura', aliasedName, false,
+      generatedAs: GeneratedAs(facturadanos.motivoFactura, false),
+      type: DriftSqlType.string);
+  late final GeneratedColumn<double> montoDano = GeneratedColumn<double>(
+      'monto_dano', aliasedName, false,
+      generatedAs: GeneratedAs(facturadanos.montoDano, false),
+      type: DriftSqlType.double);
+  late final GeneratedColumn<String> desc = GeneratedColumn<String>(
+      'desc', aliasedName, false,
+      generatedAs: GeneratedAs(facturadanos.desc, false),
+      type: DriftSqlType.string);
+  @override
+  $vFacturaDanoConArrendatariosView createAlias(String alias) {
+    return $vFacturaDanoConArrendatariosView(attachedDatabase, alias);
+  }
+
+  @override
+  Query? get query =>
+      (attachedDatabase.selectOnly(arrendatarios)..addColumns($columns)).join([
+        innerJoin(facturadanos,
+            facturadanos.idArrendatario.equalsExp(arrendatarios.identidad))
+      ]);
+  @override
+  Set<String> get readTables => const {'factura_danos', 'arrendatarios'};
+}
+
+class vEstadoCuentaConArrendatario extends DataClass {
+  final int estadoId;
+  final String identidad;
+  final String nombre;
+  final double pagoRenta;
+  final double moraRenta;
+  final double deudaElectricidad;
+  final double deudaAgua;
+  final DateTime fechaPago;
+  const vEstadoCuentaConArrendatario(
+      {required this.estadoId,
+      required this.identidad,
+      required this.nombre,
+      required this.pagoRenta,
+      required this.moraRenta,
+      required this.deudaElectricidad,
+      required this.deudaAgua,
+      required this.fechaPago});
+  factory vEstadoCuentaConArrendatario.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return vEstadoCuentaConArrendatario(
+      estadoId: serializer.fromJson<int>(json['estadoId']),
+      identidad: serializer.fromJson<String>(json['identidad']),
+      nombre: serializer.fromJson<String>(json['nombre']),
+      pagoRenta: serializer.fromJson<double>(json['pagoRenta']),
+      moraRenta: serializer.fromJson<double>(json['moraRenta']),
+      deudaElectricidad: serializer.fromJson<double>(json['deudaElectricidad']),
+      deudaAgua: serializer.fromJson<double>(json['deudaAgua']),
+      fechaPago: serializer.fromJson<DateTime>(json['fechaPago']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'estadoId': serializer.toJson<int>(estadoId),
+      'identidad': serializer.toJson<String>(identidad),
+      'nombre': serializer.toJson<String>(nombre),
+      'pagoRenta': serializer.toJson<double>(pagoRenta),
+      'moraRenta': serializer.toJson<double>(moraRenta),
+      'deudaElectricidad': serializer.toJson<double>(deudaElectricidad),
+      'deudaAgua': serializer.toJson<double>(deudaAgua),
+      'fechaPago': serializer.toJson<DateTime>(fechaPago),
+    };
+  }
+
+  vEstadoCuentaConArrendatario copyWith(
+          {int? estadoId,
+          String? identidad,
+          String? nombre,
+          double? pagoRenta,
+          double? moraRenta,
+          double? deudaElectricidad,
+          double? deudaAgua,
+          DateTime? fechaPago}) =>
+      vEstadoCuentaConArrendatario(
+        estadoId: estadoId ?? this.estadoId,
+        identidad: identidad ?? this.identidad,
+        nombre: nombre ?? this.nombre,
+        pagoRenta: pagoRenta ?? this.pagoRenta,
+        moraRenta: moraRenta ?? this.moraRenta,
+        deudaElectricidad: deudaElectricidad ?? this.deudaElectricidad,
+        deudaAgua: deudaAgua ?? this.deudaAgua,
+        fechaPago: fechaPago ?? this.fechaPago,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('vEstadoCuentaConArrendatario(')
+          ..write('estadoId: $estadoId, ')
+          ..write('identidad: $identidad, ')
+          ..write('nombre: $nombre, ')
+          ..write('pagoRenta: $pagoRenta, ')
+          ..write('moraRenta: $moraRenta, ')
+          ..write('deudaElectricidad: $deudaElectricidad, ')
+          ..write('deudaAgua: $deudaAgua, ')
+          ..write('fechaPago: $fechaPago')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(estadoId, identidad, nombre, pagoRenta,
+      moraRenta, deudaElectricidad, deudaAgua, fechaPago);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is vEstadoCuentaConArrendatario &&
+          other.estadoId == this.estadoId &&
+          other.identidad == this.identidad &&
+          other.nombre == this.nombre &&
+          other.pagoRenta == this.pagoRenta &&
+          other.moraRenta == this.moraRenta &&
+          other.deudaElectricidad == this.deudaElectricidad &&
+          other.deudaAgua == this.deudaAgua &&
+          other.fechaPago == this.fechaPago);
+}
+
+class $vEstadoCuentaConArrendatariosView extends ViewInfo<
+    $vEstadoCuentaConArrendatariosView,
+    vEstadoCuentaConArrendatario> implements HasResultSet {
+  final String? _alias;
+  @override
+  final _$AppDb attachedDatabase;
+  $vEstadoCuentaConArrendatariosView(this.attachedDatabase, [this._alias]);
+  $EstadoCuentasTable get estadocuentas =>
+      attachedDatabase.estadoCuentas.createAlias('t0');
+  $ArrendatariosTable get arrendatarios =>
+      attachedDatabase.arrendatarios.createAlias('t1');
+  @override
+  List<GeneratedColumn> get $columns => [
+        estadoId,
+        identidad,
+        nombre,
+        pagoRenta,
+        moraRenta,
+        deudaElectricidad,
+        deudaAgua,
+        fechaPago
+      ];
+  @override
+  String get aliasedName => _alias ?? entityName;
+  @override
+  String get entityName => 'v_estado_cuenta_con_arrendatarios';
+  @override
+  Map<SqlDialect, String>? get createViewStatements => null;
+  @override
+  $vEstadoCuentaConArrendatariosView get asDslTable => this;
+  @override
+  vEstadoCuentaConArrendatario map(Map<String, dynamic> data,
+      {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return vEstadoCuentaConArrendatario(
+      estadoId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}estado_id'])!,
+      identidad: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}identidad'])!,
+      nombre: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}nombre'])!,
+      pagoRenta: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}pago_renta'])!,
+      moraRenta: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}mora_renta'])!,
+      deudaElectricidad: attachedDatabase.typeMapping.read(
+          DriftSqlType.double, data['${effectivePrefix}deuda_electricidad'])!,
+      deudaAgua: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}deuda_agua'])!,
+      fechaPago: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}fecha_pago'])!,
+    );
+  }
+
+  late final GeneratedColumn<int> estadoId = GeneratedColumn<int>(
+      'estado_id', aliasedName, false,
+      generatedAs: GeneratedAs(estadocuentas.estadoId, false),
+      type: DriftSqlType.int);
+  late final GeneratedColumn<String> identidad = GeneratedColumn<String>(
+      'identidad', aliasedName, false,
+      generatedAs: GeneratedAs(arrendatarios.identidad, false),
+      type: DriftSqlType.string);
+  late final GeneratedColumn<String> nombre = GeneratedColumn<String>(
+      'nombre', aliasedName, false,
+      generatedAs: GeneratedAs(arrendatarios.nombre, false),
+      type: DriftSqlType.string);
+  late final GeneratedColumn<double> pagoRenta = GeneratedColumn<double>(
+      'pago_renta', aliasedName, false,
+      generatedAs: GeneratedAs(estadocuentas.pagoRenta, false),
+      type: DriftSqlType.double);
+  late final GeneratedColumn<double> moraRenta = GeneratedColumn<double>(
+      'mora_renta', aliasedName, false,
+      generatedAs: GeneratedAs(estadocuentas.moraRenta, false),
+      type: DriftSqlType.double);
+  late final GeneratedColumn<double> deudaElectricidad =
+      GeneratedColumn<double>('deuda_electricidad', aliasedName, false,
+          generatedAs: GeneratedAs(estadocuentas.deudaElectricidad, false),
+          type: DriftSqlType.double);
+  late final GeneratedColumn<double> deudaAgua = GeneratedColumn<double>(
+      'deuda_agua', aliasedName, false,
+      generatedAs: GeneratedAs(estadocuentas.deudaAgua, false),
+      type: DriftSqlType.double);
+  late final GeneratedColumn<DateTime> fechaPago = GeneratedColumn<DateTime>(
+      'fecha_pago', aliasedName, false,
+      generatedAs: GeneratedAs(estadocuentas.fechaPago, false),
+      type: DriftSqlType.dateTime);
+  @override
+  $vEstadoCuentaConArrendatariosView createAlias(String alias) {
+    return $vEstadoCuentaConArrendatariosView(attachedDatabase, alias);
+  }
+
+  @override
+  Query? get query =>
+      (attachedDatabase.selectOnly(estadocuentas)..addColumns($columns)).join([
+        innerJoin(arrendatarios,
+            arrendatarios.identidad.equalsExp(estadocuentas.idArrendatario))
+      ]);
+  @override
+  Set<String> get readTables => const {'estado_cuentas', 'arrendatarios'};
+}
+
 abstract class _$AppDb extends GeneratedDatabase {
   _$AppDb(QueryExecutor e) : super(e);
   late final $ArrendatariosTable arrendatarios = $ArrendatariosTable(this);
@@ -3506,14 +4238,15 @@ abstract class _$AppDb extends GeneratedDatabase {
       $HistorialArrendatariosTable(this);
   late final $PagosPendientesTable pagosPendientes =
       $PagosPendientesTable(this);
-  late final $EstadoCuentaTable estadoCuenta = $EstadoCuentaTable(this);
+  late final $EstadoCuentasTable estadoCuentas = $EstadoCuentasTable(this);
   late final $DanosPropiedadTable danosPropiedad = $DanosPropiedadTable(this);
-  late final $CuentaProveedoresServiciosTable cuentaProveedoresServicios =
-      $CuentaProveedoresServiciosTable(this);
   late final $ProveedoresServiciosTable proveedoresServicios =
       $ProveedoresServiciosTable(this);
+  late final $CuentaProveedoresServiciosTable cuentaProveedoresServicios =
+      $CuentaProveedoresServiciosTable(this);
   late final $CuentasPSDesocupadosTable cuentasPSDesocupados =
       $CuentasPSDesocupadosTable(this);
+  late final $FacturaDanosTable facturaDanos = $FacturaDanosTable(this);
   late final $vArrendatariosActualesView vArrendatariosActuales =
       $vArrendatariosActualesView(this);
   late final $vArrendatariosHistorialView vArrendatariosHistorial =
@@ -3522,6 +4255,10 @@ abstract class _$AppDb extends GeneratedDatabase {
       $vViviendaDetalleView(this);
   late final $vViviendasConArrendatariosView vViviendasConArrendatarios =
       $vViviendasConArrendatariosView(this);
+  late final $vFacturaDanoConArrendatariosView vFacturaDanoConArrendatarios =
+      $vFacturaDanoConArrendatariosView(this);
+  late final $vEstadoCuentaConArrendatariosView vEstadoCuentaConArrendatarios =
+      $vEstadoCuentaConArrendatariosView(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -3532,14 +4269,17 @@ abstract class _$AppDb extends GeneratedDatabase {
         actualArrendatarios,
         historialArrendatarios,
         pagosPendientes,
-        estadoCuenta,
+        estadoCuentas,
         danosPropiedad,
-        cuentaProveedoresServicios,
         proveedoresServicios,
+        cuentaProveedoresServicios,
         cuentasPSDesocupados,
+        facturaDanos,
         vArrendatariosActuales,
         vArrendatariosHistorial,
         vViviendaDetalle,
-        vViviendasConArrendatarios
+        vViviendasConArrendatarios,
+        vFacturaDanoConArrendatarios,
+        vEstadoCuentaConArrendatarios
       ];
 }

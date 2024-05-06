@@ -17,12 +17,13 @@ enum Rutas {
   historialArre,
   actualArre,
   estadoCuenta,
-  pagosPendienteArre,
+  pagosRecientesArre,
   viviendasOcupadas,
   cuentasPagarServicios,
   facturaDanoPropiedad,
   anadirArre,
   removerArre,
   introducirPagosMoras,
-  editarPagosDesocupadas
+  editarPagosDesocupadas,
+  registrarFacturaDano
 }

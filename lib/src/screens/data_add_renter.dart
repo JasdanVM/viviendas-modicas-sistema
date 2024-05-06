@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import '../shared/constantes.dart';
 import 'package:viviendas_modicas_sistema/data/local/db/app_db.dart';
 import '../widgets/appbar.dart';
 import '../widgets/drawer.dart';
@@ -218,7 +217,7 @@ class _NewEntryScreenState extends State<NewEntryScreen> {
                           }
                           return null;
                         },
-                        inputFormatters:_allowForeignID? null : [
+                        inputFormatters: _allowForeignID? null : [
                           FilteringTextInputFormatter.digitsOnly,
                           LengthLimitingTextInputFormatter(13),
                         ],
@@ -522,7 +521,6 @@ class _NewEntryScreenState extends State<NewEntryScreen> {
   //   );
   //   return choice ?? false; // Regresa null en caso de que no se escoja ninguna opción
   // }
-
   
 
 }

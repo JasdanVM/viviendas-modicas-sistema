@@ -6,8 +6,10 @@ import 'package:viviendas_modicas_sistema/data/local/entity/arrendatarios_entida
 import '../models/asset.dart';
 import '../widgets/appbar.dart';
 import '../widgets/drawer.dart';
+import 'package:drift/drift.dart' show OrderBy, OrderingTerm,  OrderingMode;
 
-class RentersCurrentcreen extends StatelessWidget {
+
+class RecentPaymentsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,7 +25,7 @@ class RentersCurrentcreen extends StatelessWidget {
               const SizedBox(height: 16),
               const Center(
                 child: Text(
-                  'Lista de Arrendatarios Actuales',
+                  'Pagos y Moras Recientes de Arrendatarios',
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
               ),
@@ -51,7 +53,7 @@ class RentersCurrentcreen extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               Expanded(
-                child: RentersCurrentDTScreen(),
+                child: RecentPaymentsDTScreen(),
               ),
             ],
           ),
@@ -61,18 +63,18 @@ class RentersCurrentcreen extends StatelessWidget {
   }
 }
 
-class RentersCurrentDTScreen extends StatefulWidget {
-  const RentersCurrentDTScreen({Key? key}) : super(key: key);
+class RecentPaymentsDTScreen extends StatefulWidget {
+  const RecentPaymentsDTScreen({Key? key}) : super(key: key);
 
   @override
-  State<RentersCurrentDTScreen> createState() => _RentersCurrentDTScreen();
+  State<RecentPaymentsDTScreen> createState() => _RecentPaymentsDTScreen();
 }
 
-class _RentersCurrentDTScreen extends State<RentersCurrentDTScreen> {
+class _RecentPaymentsDTScreen extends State<RecentPaymentsDTScreen> {
   late AppDb _db;
   int _pageNum = 1;
   int _rowsPerPage = 0;
-  List<vArrendatariosActuale> _arrendatariosActuales = [];
+  List<vEstadoCuentaConArrendatario> _estadoCuentas = [];
 
   @override
   void initState() {
@@ -98,12 +100,25 @@ class _RentersCurrentDTScreen extends State<RentersCurrentDTScreen> {
   }
 
   void _loadData() async {
-    // (await _db.select(_db.vArrendatariosActuales).get()).forEach(print);
-    final List<vArrendatariosActuale> arrendatarios = await _db.select(_db.vArrendatariosActuales).get();
+    // (await _db.select(_db.vEstadoCuentaConArrendatarios).get()).forEach(print);
+    // final List<EstadoCuenta> cuentas = await _db.getEstadoCuentas();
+    // final List<vEstadoCuentaConArrendatario> cuentas = await _db.select(_db.vEstadoCuentaConArrendatarios).get();
+    final List<vEstadoCuentaConArrendatario> cuentas = await (_db.select(_db.vEstadoCuentaConArrendatarios)
+  ..orderBy([
+    (view) => OrderingTerm(expression: view.estadoId,  mode: OrderingMode.desc)
+  ]))
+  .get();
     setState(() {
-      _arrendatariosActuales = arrendatarios;
+      _estadoCuentas = cuentas;
     });
   }
+
+  // void _loadData() async {
+  //   final List<Arrendatario> arrendatarios = await _db.getArrendatarios();
+  //   setState(() {
+  //     _arrendatarios = arrendatarios;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -125,22 +140,24 @@ class _RentersCurrentDTScreen extends State<RentersCurrentDTScreen> {
                 columns: [
                   DataColumn(label: Text('Identidad')),
                   DataColumn(label: Text('Nombre')),
-                  DataColumn(label: Text('Codigo Vivienda')),
-                  DataColumn(label: Text('Fecha de Entrada')),
-                  DataColumn(label: Text('Precio Renta')),
-                  DataColumn(label: Text('Observaciones')),
+                  DataColumn(label: Text('Monto Pago de Renta')),
+                  DataColumn(label: Text('Monto Mora de Renta')),
+                  DataColumn(label: Text('Deuda de Electricidad')),
+                  DataColumn(label: Text('Deuda de Agua')),
+                  DataColumn(label: Text('Fecha de Pago')),
                 ],
-                rows: _arrendatariosActuales
+                rows: _estadoCuentas
                   .skip((_pageNum - 1) * _rowsPerPage)
                   .take(_rowsPerPage)
-                  .map((arrendatario) => DataRow(
+                  .map((cuenta) => DataRow(
                       cells: [
-                        DataCell(Text(arrendatario.identidad.toString())),
-                        DataCell(Text(arrendatario.nombre.toString())),
-                        DataCell(Text(arrendatario.cVivienda.toString())),
-                        DataCell(Text(DateFormat('dd-MM-yyyy').format(arrendatario.fechaEntrada))),
-                        DataCell(Text(NumberFormat.currency(symbol: 'L. ').format(arrendatario.precioRenta)),),
-                        DataCell(Text(arrendatario.obs.toString())),
+                        DataCell(Text(cuenta.identidad.toString())),
+                        DataCell(Text(cuenta.nombre.toString())),
+                        DataCell(Text(NumberFormat.currency(symbol: 'L. ').format(cuenta.pagoRenta)),),
+                        DataCell(Text(NumberFormat.currency(symbol: 'L. ').format(cuenta.moraRenta)),),
+                        DataCell(Text(NumberFormat.currency(symbol: 'L. ').format(cuenta.deudaElectricidad)),),
+                        DataCell(Text(NumberFormat.currency(symbol: 'L. ').format(cuenta.deudaAgua)),),
+                        DataCell(Text(DateFormat('dd-MM-yyyy').format(cuenta.fechaPago))),
                       ],
                     )).toList(),
               ),
@@ -163,7 +180,7 @@ class _RentersCurrentDTScreen extends State<RentersCurrentDTScreen> {
             Text('Página #$_pageNum'),
             IconButton(
               icon: Icon(Icons.arrow_forward),
-              onPressed: _pageNum < (_arrendatariosActuales.length / _rowsPerPage).ceil()
+              onPressed: _pageNum < (_estadoCuentas.length / _rowsPerPage).ceil()
               ? () {
                   setState(() {
                     _pageNum++;

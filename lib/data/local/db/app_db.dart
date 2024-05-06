@@ -23,16 +23,20 @@ LazyDatabase _openConnection() {
     HistorialArrendatarios,
     ViviendaUbicacion,
     PagosPendientes,
-    EstadoCuenta,
+    EstadoCuentas,
     DanosPropiedad,
+    ProveedoresServicios,
     CuentaProveedoresServicios,
-    CuentasPSDesocupados
+    CuentasPSDesocupados,
+    FacturaDanos
   ],
   views: [
     vArrendatariosActuales,
     vArrendatariosHistorial,
     vViviendaDetalle,
-    vViviendasConArrendatarios
+    vViviendasConArrendatarios,
+    vFacturaDanoConArrendatarios,
+    vEstadoCuentaConArrendatarios
   ]
 )
 class AppDb extends _$AppDb {
@@ -40,6 +44,16 @@ class AppDb extends _$AppDb {
 
   @override
   int get schemaVersion => 1;
+
+  @override
+  MigrationStrategy get migration {
+    return MigrationStrategy(
+    // you can keep your onCreate and onUpgrade callbacks
+      beforeOpen: (details) async {
+        await customStatement('PRAGMA foreign_keys = OFF;');
+      }
+    );
+  }
 
   Future<List<Arrendatario>> getArrendatarios() async {
     return await select(arrendatarios).get();
@@ -64,6 +78,13 @@ class AppDb extends _$AppDb {
           ..where((tbl) => tbl.nombre.equals(nombre)))
         .go();
   }
+
+  Future<String> getArrendatarioName(String identidad) async {
+  final arrendatario = await (select(arrendatarios)
+      ..where((tbl) => tbl.identidad.equals(identidad)))
+    .getSingle();
+  return arrendatario.nombre;
+}
 
   //Actual arrendatarios
   Future<List<ActualArrendatario>> getActualArrendatarios() async {
@@ -118,6 +139,46 @@ class AppDb extends _$AppDb {
 
   Future<int> deleteActualArrendatario(String idArrendatario) async {
     return await (delete(actualArrendatarios)
+      ..where((tbl) => tbl.idArrendatario.equals(idArrendatario)))
+    .go();
+  }
+  Future<int> verificarArrendatarioExistencia(String identidad) async {
+    final existe = await (select(arrendatarios)
+        ..where((tbl) => tbl.identidad.equals(identidad)))
+      .get()
+      .then((rows) => rows.length);
+    return existe;
+  }
+
+  Future<int> verificarActualArrendatarioExistencia(String identidad) async {
+    final existe = await (select(actualArrendatarios)
+        ..where((tbl) => tbl.idArrendatario.equals(identidad)))
+      .get()
+      .then((rows) => rows.length);
+    return existe;
+  }
+
+  Future<List<EstadoCuenta>> getEstadoCuentas() async {
+    return await select(estadoCuentas).get();
+  }
+
+  Future<EstadoCuenta> getEstadoCuenta(
+      String idArrendatario) async {
+    return await (select(estadoCuentas)
+          ..where((tbl) => tbl.idArrendatario.equals(idArrendatario)))
+        .getSingle();
+  }
+
+  Future<bool> updateEstadoCuenta(EstadoCuentasCompanion entity) async {
+    return await update(estadoCuentas).replace(entity);
+  }
+
+  Future<int> insertEstadoCuenta(EstadoCuentasCompanion entity) async {
+    return await into(estadoCuentas).insert(entity);
+  }
+
+  Future<int> deleteEstadoCuenta(String idArrendatario) async {
+    return await (delete(estadoCuentas)
       ..where((tbl) => tbl.idArrendatario.equals(idArrendatario)))
     .go();
   }
@@ -240,6 +301,17 @@ class AppDb extends _$AppDb {
         }
       }
     }
+  }
+
+  Future<int> insertFacturaDano(
+      FacturaDanosCompanion entity) async {
+    return await into(facturaDanos).insert(entity);
+  }
+
+  Future<int> deleteFacturaDano(int facturaId) async {
+    return await (delete(facturaDanos)
+      ..where((tbl) => tbl.facturaId.equals(facturaId)))
+    .go();
   }
 
   @override

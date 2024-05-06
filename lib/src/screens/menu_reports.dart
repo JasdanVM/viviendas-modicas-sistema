@@ -73,16 +73,16 @@ class ReportsMenu extends StatelessWidget {
                     width: 600,
                     height: 50,
                     child: CustomTooltip(
-                      message: 'Ver la cantidad total que debe un arrendatario',
+                      message: 'Ver los pagos y moras más recientes almacenadas en el sistema',
                       child: ElevatedButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, Rutas.pagosPendienteArre.name);
+                          Navigator.pushNamed(context, Rutas.pagosRecientesArre.name);
                         },
                         style: ElevatedButton.styleFrom(
                           minimumSize: const Size(500, 50),
                           textStyle: const TextStyle(fontSize: 22),
                         ),
-                        child: const Text('Pagos Pendientes de Arrendatarios'),
+                        child: const Text('Pagos Recientes de Arrendatarios'),
                       ),
                     ),
                   ),
@@ -94,7 +94,7 @@ class ReportsMenu extends StatelessWidget {
                       message: 'Ver la información de pagos y moras mensuales de un Arrendatario',
                       child: ElevatedButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, Rutas.estadoCuenta.name);
+                          Navigator.pushNamed(context, Rutas.buscarArre.name, arguments: Rutas.estadoCuenta.name);
                         },
                         style: ElevatedButton.styleFrom(
                           minimumSize: const Size(500, 50),
@@ -148,7 +148,7 @@ class ReportsMenu extends StatelessWidget {
                       message: 'Ver un reporte de daños ocasionados a una vivienda de los que un arrendatario es responsable',
                       child: ElevatedButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, Rutas.facturaDanoPropiedad.name);
+                          Navigator.pushNamed(context, Rutas.buscarArre.name, arguments: Rutas.facturaDanoPropiedad.name);
                         },
                         style: ElevatedButton.styleFrom(
                           minimumSize: const Size(500, 50),

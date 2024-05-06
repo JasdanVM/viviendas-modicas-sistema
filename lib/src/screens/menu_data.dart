@@ -91,7 +91,7 @@ class AdminDataScreen extends StatelessWidget {
                     width: 600,
                     height: 50,
                     child: CustomTooltip(
-                      message: 'Cmabiar la información de pago de servicios en viviendas desocupadas',
+                      message: 'Cambiar la información de pago de servicios en viviendas desocupadas',
                       child: ElevatedButton(
                         onPressed: () {
                           Navigator.pushNamed(context, Rutas.editarPagosDesocupadas.name);
@@ -104,7 +104,25 @@ class AdminDataScreen extends StatelessWidget {
                       ),
                       )
                   ),
-                  
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    width: 600,
+                    height: 50,
+                    child: CustomTooltip(
+                      message: 'Agregar una nueva factura por daños a la propiedad a un Arrendatario',
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, Rutas.registrarFacturaDano.name);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: const Size(500, 50),
+                          textStyle: const TextStyle(fontSize: 22),
+                        ),
+                        child: const Text('Registrar Factura por Daños a la Propiedad'),
+                      ),
+                    ),
+                  ),
+
                 ],
               ),
             )

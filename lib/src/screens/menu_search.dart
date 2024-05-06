@@ -31,7 +31,7 @@ class SearchDataMenu extends StatelessWidget {
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
-                        return SearchRenterPopup(ruta: Rutas.buscarAResult.name,);
+                        return SearchRenterPopup(ruta: Rutas.buscarAResult.name,setId: true,);
                       },
                     );
                   },

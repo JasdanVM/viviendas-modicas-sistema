@@ -82,7 +82,7 @@ class AccounstToPayServicesDTScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          const Text(
             'Proveedores de Servicios',
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
@@ -108,11 +108,6 @@ class AccounstToPayServicesDTScreen extends StatelessWidget {
                           DataColumn(label: Text('Monto Total')),
                         ],
                         rows: [
-                          DataRow(cells: [
-                            DataCell(Text('Tren de aseo')),
-                            DataCell(Text('Recolector de Basura')),
-                            DataCell(Text('\ 5000 lps')),
-                          ]),
                           DataRow(cells: [
                             DataCell(Text('Aguas del Puerto')),
                             DataCell(Text('Agua Potable')),

@@ -86,7 +86,6 @@ class _EditPaymentsEmptyPlaceState extends State<EditPaymentsEmptyPlace> {
   //   }
   // }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -5,9 +5,10 @@ import '../widgets/tooltip.dart';
 
 class SearchRenterPopup extends StatefulWidget {
   String? ruta;
+  bool? setId;
   @override
   _SearchRenterPopupState createState() => _SearchRenterPopupState();
-  SearchRenterPopup({super.key, this.ruta = null});
+  SearchRenterPopup({super.key, this.ruta = null, this.setId = false});
 }
 
 class _SearchRenterPopupState extends State<SearchRenterPopup> {
@@ -182,9 +183,12 @@ class _SearchRenterPopupState extends State<SearchRenterPopup> {
                               _formKeyNumeroDeIdentidad.currentState!.save();
                               if (_numeroDeIdentidad!= null && _numeroDeIdentidad!.isNotEmpty) {
                                 print('Search by ID button pressed');
-                                if (widget.ruta!= null) {
+                                if (widget.setId != null && widget.setId! && widget.ruta !=null) {
                                   _numeroDeIdentidad = ('#' + _numeroDeIdentidad!);
                                   Navigator.popAndPushNamed(context, widget.ruta!, arguments: _numeroDeIdentidad);
+                                } else if (widget.setId != null && widget.setId!) {
+                                  _numeroDeIdentidad = ('#' + _numeroDeIdentidad!);
+                                  Navigator.pop(context, _numeroDeIdentidad);
                                 } else {
                                   Navigator.pop(context, _numeroDeIdentidad);
                                 }
