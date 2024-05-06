@@ -2616,21 +2616,6 @@ class $CuentasPSDesocupadosTable extends CuentasPSDesocupados
       requiredDuringInsert: true,
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'REFERENCES vivienda_ubicacion (codigo_vivienda)'));
-  static const VerificationMeta _cProveedorAguaMeta =
-      const VerificationMeta('cProveedorAgua');
-  @override
-  late final GeneratedColumn<String> cProveedorAgua = GeneratedColumn<String>(
-      'c_proveedor_agua', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'REFERENCES proveedores_servicios (codigo_proveedor)'));
-  static const VerificationMeta _montoAguaMeta =
-      const VerificationMeta('montoAgua');
-  @override
-  late final GeneratedColumn<double> montoAgua = GeneratedColumn<double>(
-      'monto_agua', aliasedName, false,
-      type: DriftSqlType.double, requiredDuringInsert: true);
   static const VerificationMeta _cProveedorEnergiaMeta =
       const VerificationMeta('cProveedorEnergia');
   @override
@@ -2646,9 +2631,24 @@ class $CuentasPSDesocupadosTable extends CuentasPSDesocupados
   late final GeneratedColumn<double> montoEnergia = GeneratedColumn<double>(
       'monto_energia', aliasedName, false,
       type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _cProveedorAguaMeta =
+      const VerificationMeta('cProveedorAgua');
+  @override
+  late final GeneratedColumn<String> cProveedorAgua = GeneratedColumn<String>(
+      'c_proveedor_agua', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES proveedores_servicios (codigo_proveedor)'));
+  static const VerificationMeta _montoAguaMeta =
+      const VerificationMeta('montoAgua');
+  @override
+  late final GeneratedColumn<double> montoAgua = GeneratedColumn<double>(
+      'monto_agua', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns =>
-      [cVivienda, cProveedorAgua, montoAgua, cProveedorEnergia, montoEnergia];
+      [cVivienda, cProveedorEnergia, montoEnergia, cProveedorAgua, montoAgua];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -2666,20 +2666,6 @@ class $CuentasPSDesocupadosTable extends CuentasPSDesocupados
     } else if (isInserting) {
       context.missing(_cViviendaMeta);
     }
-    if (data.containsKey('c_proveedor_agua')) {
-      context.handle(
-          _cProveedorAguaMeta,
-          cProveedorAgua.isAcceptableOrUnknown(
-              data['c_proveedor_agua']!, _cProveedorAguaMeta));
-    } else if (isInserting) {
-      context.missing(_cProveedorAguaMeta);
-    }
-    if (data.containsKey('monto_agua')) {
-      context.handle(_montoAguaMeta,
-          montoAgua.isAcceptableOrUnknown(data['monto_agua']!, _montoAguaMeta));
-    } else if (isInserting) {
-      context.missing(_montoAguaMeta);
-    }
     if (data.containsKey('c_proveedor_energia')) {
       context.handle(
           _cProveedorEnergiaMeta,
@@ -2696,25 +2682,39 @@ class $CuentasPSDesocupadosTable extends CuentasPSDesocupados
     } else if (isInserting) {
       context.missing(_montoEnergiaMeta);
     }
+    if (data.containsKey('c_proveedor_agua')) {
+      context.handle(
+          _cProveedorAguaMeta,
+          cProveedorAgua.isAcceptableOrUnknown(
+              data['c_proveedor_agua']!, _cProveedorAguaMeta));
+    } else if (isInserting) {
+      context.missing(_cProveedorAguaMeta);
+    }
+    if (data.containsKey('monto_agua')) {
+      context.handle(_montoAguaMeta,
+          montoAgua.isAcceptableOrUnknown(data['monto_agua']!, _montoAguaMeta));
+    } else if (isInserting) {
+      context.missing(_montoAguaMeta);
+    }
     return context;
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => const {};
+  Set<GeneratedColumn> get $primaryKey => {cVivienda};
   @override
   CuentasPSDesocupado map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return CuentasPSDesocupado(
       cVivienda: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}c_vivienda'])!,
-      cProveedorAgua: attachedDatabase.typeMapping.read(
-          DriftSqlType.string, data['${effectivePrefix}c_proveedor_agua'])!,
-      montoAgua: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}monto_agua'])!,
       cProveedorEnergia: attachedDatabase.typeMapping.read(
           DriftSqlType.string, data['${effectivePrefix}c_proveedor_energia'])!,
       montoEnergia: attachedDatabase.typeMapping
           .read(DriftSqlType.double, data['${effectivePrefix}monto_energia'])!,
+      cProveedorAgua: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}c_proveedor_agua'])!,
+      montoAgua: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}monto_agua'])!,
     );
   }
 
@@ -2727,34 +2727,34 @@ class $CuentasPSDesocupadosTable extends CuentasPSDesocupados
 class CuentasPSDesocupado extends DataClass
     implements Insertable<CuentasPSDesocupado> {
   final String cVivienda;
-  final String cProveedorAgua;
-  final double montoAgua;
   final String cProveedorEnergia;
   final double montoEnergia;
+  final String cProveedorAgua;
+  final double montoAgua;
   const CuentasPSDesocupado(
       {required this.cVivienda,
-      required this.cProveedorAgua,
-      required this.montoAgua,
       required this.cProveedorEnergia,
-      required this.montoEnergia});
+      required this.montoEnergia,
+      required this.cProveedorAgua,
+      required this.montoAgua});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['c_vivienda'] = Variable<String>(cVivienda);
-    map['c_proveedor_agua'] = Variable<String>(cProveedorAgua);
-    map['monto_agua'] = Variable<double>(montoAgua);
     map['c_proveedor_energia'] = Variable<String>(cProveedorEnergia);
     map['monto_energia'] = Variable<double>(montoEnergia);
+    map['c_proveedor_agua'] = Variable<String>(cProveedorAgua);
+    map['monto_agua'] = Variable<double>(montoAgua);
     return map;
   }
 
   CuentasPSDesocupadosCompanion toCompanion(bool nullToAbsent) {
     return CuentasPSDesocupadosCompanion(
       cVivienda: Value(cVivienda),
-      cProveedorAgua: Value(cProveedorAgua),
-      montoAgua: Value(montoAgua),
       cProveedorEnergia: Value(cProveedorEnergia),
       montoEnergia: Value(montoEnergia),
+      cProveedorAgua: Value(cProveedorAgua),
+      montoAgua: Value(montoAgua),
     );
   }
 
@@ -2763,10 +2763,10 @@ class CuentasPSDesocupado extends DataClass
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return CuentasPSDesocupado(
       cVivienda: serializer.fromJson<String>(json['cVivienda']),
-      cProveedorAgua: serializer.fromJson<String>(json['cProveedorAgua']),
-      montoAgua: serializer.fromJson<double>(json['montoAgua']),
       cProveedorEnergia: serializer.fromJson<String>(json['cProveedorEnergia']),
       montoEnergia: serializer.fromJson<double>(json['montoEnergia']),
+      cProveedorAgua: serializer.fromJson<String>(json['cProveedorAgua']),
+      montoAgua: serializer.fromJson<double>(json['montoAgua']),
     );
   }
   @override
@@ -2774,111 +2774,111 @@ class CuentasPSDesocupado extends DataClass
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'cVivienda': serializer.toJson<String>(cVivienda),
-      'cProveedorAgua': serializer.toJson<String>(cProveedorAgua),
-      'montoAgua': serializer.toJson<double>(montoAgua),
       'cProveedorEnergia': serializer.toJson<String>(cProveedorEnergia),
       'montoEnergia': serializer.toJson<double>(montoEnergia),
+      'cProveedorAgua': serializer.toJson<String>(cProveedorAgua),
+      'montoAgua': serializer.toJson<double>(montoAgua),
     };
   }
 
   CuentasPSDesocupado copyWith(
           {String? cVivienda,
-          String? cProveedorAgua,
-          double? montoAgua,
           String? cProveedorEnergia,
-          double? montoEnergia}) =>
+          double? montoEnergia,
+          String? cProveedorAgua,
+          double? montoAgua}) =>
       CuentasPSDesocupado(
         cVivienda: cVivienda ?? this.cVivienda,
-        cProveedorAgua: cProveedorAgua ?? this.cProveedorAgua,
-        montoAgua: montoAgua ?? this.montoAgua,
         cProveedorEnergia: cProveedorEnergia ?? this.cProveedorEnergia,
         montoEnergia: montoEnergia ?? this.montoEnergia,
+        cProveedorAgua: cProveedorAgua ?? this.cProveedorAgua,
+        montoAgua: montoAgua ?? this.montoAgua,
       );
   @override
   String toString() {
     return (StringBuffer('CuentasPSDesocupado(')
           ..write('cVivienda: $cVivienda, ')
-          ..write('cProveedorAgua: $cProveedorAgua, ')
-          ..write('montoAgua: $montoAgua, ')
           ..write('cProveedorEnergia: $cProveedorEnergia, ')
-          ..write('montoEnergia: $montoEnergia')
+          ..write('montoEnergia: $montoEnergia, ')
+          ..write('cProveedorAgua: $cProveedorAgua, ')
+          ..write('montoAgua: $montoAgua')
           ..write(')'))
         .toString();
   }
 
   @override
   int get hashCode => Object.hash(
-      cVivienda, cProveedorAgua, montoAgua, cProveedorEnergia, montoEnergia);
+      cVivienda, cProveedorEnergia, montoEnergia, cProveedorAgua, montoAgua);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is CuentasPSDesocupado &&
           other.cVivienda == this.cVivienda &&
-          other.cProveedorAgua == this.cProveedorAgua &&
-          other.montoAgua == this.montoAgua &&
           other.cProveedorEnergia == this.cProveedorEnergia &&
-          other.montoEnergia == this.montoEnergia);
+          other.montoEnergia == this.montoEnergia &&
+          other.cProveedorAgua == this.cProveedorAgua &&
+          other.montoAgua == this.montoAgua);
 }
 
 class CuentasPSDesocupadosCompanion
     extends UpdateCompanion<CuentasPSDesocupado> {
   final Value<String> cVivienda;
-  final Value<String> cProveedorAgua;
-  final Value<double> montoAgua;
   final Value<String> cProveedorEnergia;
   final Value<double> montoEnergia;
+  final Value<String> cProveedorAgua;
+  final Value<double> montoAgua;
   final Value<int> rowid;
   const CuentasPSDesocupadosCompanion({
     this.cVivienda = const Value.absent(),
-    this.cProveedorAgua = const Value.absent(),
-    this.montoAgua = const Value.absent(),
     this.cProveedorEnergia = const Value.absent(),
     this.montoEnergia = const Value.absent(),
+    this.cProveedorAgua = const Value.absent(),
+    this.montoAgua = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   CuentasPSDesocupadosCompanion.insert({
     required String cVivienda,
-    required String cProveedorAgua,
-    required double montoAgua,
     required String cProveedorEnergia,
     required double montoEnergia,
+    required String cProveedorAgua,
+    required double montoAgua,
     this.rowid = const Value.absent(),
   })  : cVivienda = Value(cVivienda),
-        cProveedorAgua = Value(cProveedorAgua),
-        montoAgua = Value(montoAgua),
         cProveedorEnergia = Value(cProveedorEnergia),
-        montoEnergia = Value(montoEnergia);
+        montoEnergia = Value(montoEnergia),
+        cProveedorAgua = Value(cProveedorAgua),
+        montoAgua = Value(montoAgua);
   static Insertable<CuentasPSDesocupado> custom({
     Expression<String>? cVivienda,
-    Expression<String>? cProveedorAgua,
-    Expression<double>? montoAgua,
     Expression<String>? cProveedorEnergia,
     Expression<double>? montoEnergia,
+    Expression<String>? cProveedorAgua,
+    Expression<double>? montoAgua,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (cVivienda != null) 'c_vivienda': cVivienda,
-      if (cProveedorAgua != null) 'c_proveedor_agua': cProveedorAgua,
-      if (montoAgua != null) 'monto_agua': montoAgua,
       if (cProveedorEnergia != null) 'c_proveedor_energia': cProveedorEnergia,
       if (montoEnergia != null) 'monto_energia': montoEnergia,
+      if (cProveedorAgua != null) 'c_proveedor_agua': cProveedorAgua,
+      if (montoAgua != null) 'monto_agua': montoAgua,
       if (rowid != null) 'rowid': rowid,
     });
   }
 
   CuentasPSDesocupadosCompanion copyWith(
       {Value<String>? cVivienda,
-      Value<String>? cProveedorAgua,
-      Value<double>? montoAgua,
       Value<String>? cProveedorEnergia,
       Value<double>? montoEnergia,
+      Value<String>? cProveedorAgua,
+      Value<double>? montoAgua,
       Value<int>? rowid}) {
     return CuentasPSDesocupadosCompanion(
       cVivienda: cVivienda ?? this.cVivienda,
-      cProveedorAgua: cProveedorAgua ?? this.cProveedorAgua,
-      montoAgua: montoAgua ?? this.montoAgua,
       cProveedorEnergia: cProveedorEnergia ?? this.cProveedorEnergia,
       montoEnergia: montoEnergia ?? this.montoEnergia,
+      cProveedorAgua: cProveedorAgua ?? this.cProveedorAgua,
+      montoAgua: montoAgua ?? this.montoAgua,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -2889,17 +2889,17 @@ class CuentasPSDesocupadosCompanion
     if (cVivienda.present) {
       map['c_vivienda'] = Variable<String>(cVivienda.value);
     }
-    if (cProveedorAgua.present) {
-      map['c_proveedor_agua'] = Variable<String>(cProveedorAgua.value);
-    }
-    if (montoAgua.present) {
-      map['monto_agua'] = Variable<double>(montoAgua.value);
-    }
     if (cProveedorEnergia.present) {
       map['c_proveedor_energia'] = Variable<String>(cProveedorEnergia.value);
     }
     if (montoEnergia.present) {
       map['monto_energia'] = Variable<double>(montoEnergia.value);
+    }
+    if (cProveedorAgua.present) {
+      map['c_proveedor_agua'] = Variable<String>(cProveedorAgua.value);
+    }
+    if (montoAgua.present) {
+      map['monto_agua'] = Variable<double>(montoAgua.value);
     }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
@@ -2911,10 +2911,10 @@ class CuentasPSDesocupadosCompanion
   String toString() {
     return (StringBuffer('CuentasPSDesocupadosCompanion(')
           ..write('cVivienda: $cVivienda, ')
-          ..write('cProveedorAgua: $cProveedorAgua, ')
-          ..write('montoAgua: $montoAgua, ')
           ..write('cProveedorEnergia: $cProveedorEnergia, ')
           ..write('montoEnergia: $montoEnergia, ')
+          ..write('cProveedorAgua: $cProveedorAgua, ')
+          ..write('montoAgua: $montoAgua, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();

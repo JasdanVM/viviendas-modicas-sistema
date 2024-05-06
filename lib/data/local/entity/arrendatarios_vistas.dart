@@ -67,18 +67,6 @@ abstract class vFacturaDanoConArrendatarios extends View {
 
     static get() {}
 }
-// abstract class vViviendasSinArrendatarios extends View {
-//   ViviendaUbicacion get viviendaubicacion;
-//   ActualArrendatarios get actualarrendatarios;
-
-//   @override
-//   Query as() => select(viviendaubicacion)
-//     ..where((tbl) => tbl.codigoVivienda.isNotInQuery(
-//       select([actualarrendatarios.cVivienda]).from(actualarrendatarios)
-//     ));
-
-//     static get() {}
-// }
 
 abstract class vEstadoCuentaConArrendatarios extends View {
   EstadoCuentas get estadocuentas;
@@ -90,3 +78,32 @@ abstract class vEstadoCuentaConArrendatarios extends View {
 
     static get() {}
 }
+
+// abstract class vResumenCuentas extends View {
+//   CuentasPSDesocupados get cuentas;
+
+//   @override
+//   Query as() => select([
+//         cuentas.cProveedorEnergia.('Proveedor'),
+//         sum(cuentas.montoEnergia).alias('Total')
+//       ]).from(cuentas)
+//       .groupBy([cuentas.cProveedorEnergia])
+//       .unionAll(
+//         select([
+//           cuentas.cProveedorAgua.alias('Proveedor'),
+//           sum(cuentas.montoAgua).alias('Total')
+//         ]).from(cuentas).groupBy([cuentas.cProveedorAgua])
+//       );
+// }
+
+
+// abstract class vCuentasTotalesProveedores extends View {
+//   ProveedoresServicios get proveedoresservicios;
+//   CuentasPSDesocupados get cuentaspsdesocupados;
+
+//   @override
+//   Query as() => select([estadocuentas.estadoId, arrendatarios.identidad, arrendatarios.nombre, estadocuentas.pagoRenta, estadocuentas.moraRenta, estadocuentas.deudaElectricidad, estadocuentas.deudaAgua, estadocuentas.fechaPago])
+//     .from(cuentaspsdesocupados).join([innerJoin(proveedoresservicios, proveedoresservicios.codigoProveedor.equalsExp(cuentaspsdesocupados.cP))]);
+
+//     static get() {}
+// }

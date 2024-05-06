@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:viviendas_modicas_sistema/data/local/db/app_db.dart';
-import 'package:viviendas_modicas_sistema/data/local/entity/arrendatarios_entidad.dart';
 import '../models/asset.dart';
 import '../widgets/appbar.dart';
 import '../widgets/drawer.dart';

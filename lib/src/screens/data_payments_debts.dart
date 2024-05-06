@@ -412,48 +412,48 @@ class _PaymentAndMorosoInfoScreenState extends State<PaymentAndMorosoInfoScreen>
     // } else {
       // Aquí puedes agregar la lógica para registrar el pago
       // y guardar la información sobre el moroso del arrendatario
-  if (_formKey.currentState!.validate()) {
-  final EstadoCuentaEntity = EstadoCuentasCompanion(
-    idArrendatario: drift.Value(_identidadController.text),
-    pagoRenta: drift.Value(double.parse(_montoPagoController.text)),
-    moraRenta: drift.Value(double.parse(_montoMoraController.text)),
-    deudaElectricidad: drift.Value(double.parse(_deudaElectricidadController.text)),
-    deudaAgua: drift.Value(double.parse(_deudaAguaController.text)),
-    fechaPago: drift.Value(DateTime.parse(_selectedDate)),
-  );
-  try {
-    await _db.insertEstadoCuenta(EstadoCuentaEntity);
-    showDialog(
-      context: context,
-      builder: (context) {
-        Timer? timer;
-        timer = Timer(Duration(seconds: 3), (){
-          Navigator.of(context, rootNavigator: true).pop();
-          Navigator.of(context).pop();
-        });
-        return AlertDialog(
-          title: Text('Información guardada'),
-          content: Text('La información de pagos y moras se ha guardado correctamente.'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                timer?.cancel();
-                Navigator.of(context).pop();
-                Navigator.of(context).pop();
-              },
-              child: Text('Aceptar'),
-            ),
-          ],
+    if (_formKey.currentState!.validate()) {
+      final EstadoCuentaEntity = EstadoCuentasCompanion(
+        idArrendatario: drift.Value(_identidadController.text),
+        pagoRenta: drift.Value(double.parse(_montoPagoController.text)),
+        moraRenta: drift.Value(double.parse(_montoMoraController.text)),
+        deudaElectricidad: drift.Value(double.parse(_deudaElectricidadController.text)),
+        deudaAgua: drift.Value(double.parse(_deudaAguaController.text)),
+        fechaPago: drift.Value(DateTime.parse(_selectedDate)),
+      );
+      try {
+        await _db.insertEstadoCuenta(EstadoCuentaEntity);
+        showDialog(
+          context: context,
+          builder: (context) {
+            Timer? timer;
+            timer = Timer(Duration(seconds: 3), (){
+              Navigator.of(context, rootNavigator: true).pop();
+              Navigator.of(context).pop();
+            });
+            return AlertDialog(
+              title: Text('Información guardada'),
+              content: Text('La información de pagos y moras se ha guardado correctamente.'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    timer?.cancel();
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Aceptar'),
+                ),
+              ],
+            );
+          },
         );
-      },
-    );
-  } catch (e) {
-    // Handle error
-    print('Error inserting FacturaDano: $e');
-  }
-} else {
-  faltaDatos();
-}
+      } catch (e) {
+        // Handle error
+        print('Error inserting FacturaDano: $e');
+      }
+    } else {
+      faltaDatos();
+    }
       // Marca el pago de la vivienda como registrado
       // _isPaymentViviendaSubmitted = true;
     // }

@@ -7,7 +7,6 @@ import '../widgets/drawer.dart';
 import '../widgets/popup_a.dart';
 import 'package:drift/drift.dart' as drift;
 
-final AppDb _db = AppDb();
 // class PropertyDamageScreen extends StatelessWidget {
 
 //   @override
@@ -157,6 +156,7 @@ class PropertyDamageResultScreen extends StatefulWidget {
 }
 
 class _PropertyDamageResultScreenState extends State<PropertyDamageResultScreen> {
+  late AppDb _db;
   int _pageNum = 1;
   int _rowsPerPage = 0;
   List<vFacturaDanoConArrendatario> _facturas = [];
@@ -165,6 +165,7 @@ class _PropertyDamageResultScreenState extends State<PropertyDamageResultScreen>
   void initState() {
     super.initState();
     _loadData(widget.searchResult);
+    _db = AppDb();
   }
 
   @override
@@ -179,6 +180,7 @@ class _PropertyDamageResultScreenState extends State<PropertyDamageResultScreen>
 
   @override
   void dispose() {
+    _db.close();
     super.dispose();
   }
 

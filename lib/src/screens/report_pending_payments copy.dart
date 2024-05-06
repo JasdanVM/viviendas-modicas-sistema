@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../models/asset.dart';
-import '../shared/constantes.dart';
 import '../widgets/appbar.dart';
 import '../widgets/drawer.dart';
 
@@ -19,7 +18,7 @@ class PendingPaymentsScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const SizedBox(height: 16),
-              Center(
+              const Center(
                 child: Text(
                   'Pagos Pendientes de Arrendatarios',
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),

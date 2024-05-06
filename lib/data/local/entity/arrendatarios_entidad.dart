@@ -75,10 +75,13 @@ class ProveedoresServicios extends Table {
 }
 class CuentasPSDesocupados extends Table {
   TextColumn get cVivienda => text().references(ViviendaUbicacion, #codigoVivienda)();
-  TextColumn get cProveedorAgua => text().references(ProveedoresServicios, #codigoProveedor)();
-  RealColumn get montoAgua => real()();
   TextColumn get cProveedorEnergia => text().references(ProveedoresServicios, #codigoProveedor)();
   RealColumn get montoEnergia => real()();
+  TextColumn get cProveedorAgua => text().references(ProveedoresServicios, #codigoProveedor)();
+  RealColumn get montoAgua => real()();
+
+  @override
+  Set<Column> get primaryKey => {cVivienda};
 }
 
 class FacturaDanos extends Table {

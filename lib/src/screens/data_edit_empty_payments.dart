@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import '../../data/local/entity/arrendatarios_entidad.dart';
 import '../widgets/appbar.dart';
 import '../widgets/drawer.dart';
 import '../widgets/tooltip.dart';
 import '../widgets/popup_v.dart';
 import 'package:viviendas_modicas_sistema/data/local/db/app_db.dart';
-import 'package:viviendas_modicas_sistema/data/local/entity/arrendatarios_entidad.dart';
+
+import 'package:drift/drift.dart' as drift;
+
+
 class EditPaymentsEmptyPlace extends StatefulWidget {
   @override
   _EditPaymentsEmptyPlaceState createState() => _EditPaymentsEmptyPlaceState();
@@ -15,18 +19,46 @@ class EditPaymentsEmptyPlace extends StatefulWidget {
 class _EditPaymentsEmptyPlaceState extends State<EditPaymentsEmptyPlace> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _hasUnsavedChanges = false;
+  late int _viviendaCheck = 0;
   final FocusNode _focusNode = FocusNode();
+  late AppDb _db;
+  List<CuentasPSDesocupado> _cuentasPSDesocupados = [];
+  List<Map<String, TextEditingController>> _rows = [];
 
-  List<Map<String, TextEditingController>> _rows = [
-    {
-      'codigoVivienda': TextEditingController(),
-      'ubicacion': TextEditingController(),
-      'proveedorEnergia': TextEditingController(),
-      'montoEnergia': TextEditingController(),
-      'proveedorAgua': TextEditingController(),
-      'montoAgua': TextEditingController(),
-    },
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _db = AppDb();
+    _loadData();
+  }
+
+  void _loadData() async {
+  final List<CuentasPSDesocupado> cuentasPSDesocupados = await _db.getCuentasPSDesocupados();
+  setState(() {
+    _cuentasPSDesocupados = cuentasPSDesocupados;
+    _rows = _cuentasPSDesocupados.map((cuenta) => {
+      'codigoVivienda': TextEditingController(text: cuenta.cVivienda),
+      'ubicacion': TextEditingController(text: _getUbicacionFromCVivienda(cuenta.cVivienda)),
+      'proveedorEnergia': TextEditingController(text: cuenta.cProveedorEnergia),
+      'montoEnergia': TextEditingController(text: cuenta.montoEnergia.toString()),
+      'proveedorAgua': TextEditingController(text: cuenta.cProveedorAgua),
+      'montoAgua': TextEditingController(text: cuenta.montoAgua.toString()),
+    }).toList();
+  });
+}
+
+String _getUbicacionFromCVivienda(String cVivienda) {
+  switch (cVivienda.substring(0, 3)) {
+    case 'LLG':
+      return 'La Laguna';
+    case 'EPV':
+      return 'El Porvenir';
+    case '23A':
+      return '23 de Abril';
+    default:
+      return '';
+  }
+}
 
   void _addRow() {
     setState(() {
@@ -55,7 +87,7 @@ class _EditPaymentsEmptyPlaceState extends State<EditPaymentsEmptyPlace> {
           return SearchByHousingPopup();
         },
       );
-      if (picked != null) {
+      if (picked!= null) {
         setState(() {
           controllerData.text = picked;
         });
@@ -63,28 +95,37 @@ class _EditPaymentsEmptyPlaceState extends State<EditPaymentsEmptyPlace> {
     }
   }
 
-  // Future<void> _save() async {
-  //   if (_formKey.currentState!.validate()) {
-  //     for (var row in _rows) {
-  //       // Create or update CuentasPSDesocupados objects based on form data
-  //       CuentasPSDesocupados cuenta = CuentasPSDesocupados(
-  //         cVivienda: row['codigoVivienda'].text,
-  //         // Set other fields based on the form data in the row map
-  //         cProveedorEnergia: row['proveedorEnergia'].text,
-  //         montoEnergia: double.parse(row['montoEnergia'].text),
-  //         cProveedorAgua: row['proveedorAgua'].text,
-  //         montoAgua: double.parse(row['montoAgua'].text),
-  //       );
+  Future<void> _save() async {
+    if (_formKey.currentState!.validate()) {
+      for (var row in _rows) {
+        _viviendaCheck = await _db.verificarViviendaOcupacion(row['codigoVivienda']!.text);
+        if(_viviendaCheck > 0){
+          ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Introduce vivendas desocupadas')),);
+        } else {
+          // Create or update CuentasPSDesocupados objects based on form data
+          final String viviendaCode = (row['codigoVivienda']!.text);
+          final CuentasPSDesocupadoEntity = CuentasPSDesocupadosCompanion(
+          cVivienda: drift.Value(row['codigoVivienda']!.text),
+          cProveedorEnergia: drift.Value(row['proveedorEnergia']!.text),
+          montoEnergia: drift.Value(double.parse(row['montoEnergia']!.text)),
+          cProveedorAgua: drift.Value(row['proveedorAgua']!.text),
+          montoAgua: drift.Value(double.parse(row['montoAgua']!.text)),
+        );
 
-  //       // Use appropriate methods from your database package to insert or update
-  //       await _database.cuentasPSDesocupadosDao.insert(cuenta); // Or update based on logic
-  //     }
-  //     // Show success message or perform other actions after saving
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(content: Text('Información guardada exitosamente')),
-  //     );
-  //   }
-  // }
+          bool updated = await _db.updateCuentaPSDesocupado(viviendaCode, CuentasPSDesocupadoEntity);
+          if (!updated) {
+            await _db.insertCuentasPSDesocupados(CuentasPSDesocupadoEntity);
+          }
+        }
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Información guardada exitosamente')),
+      );
+      _hasUnsavedChanges = false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -118,82 +159,90 @@ class _EditPaymentsEmptyPlaceState extends State<EditPaymentsEmptyPlace> {
                         DataColumn(label: Text('Monto Agua', style: TextStyle(fontSize: 18))),
                       ],
                       rows: _rows
-                        .map(
-                            (row) => DataRow(
-                          cells: [
-                            DataCell(
-                              TextFormField(
-                                readOnly: true,
-                                controller: row['codigoVivienda'],
-                                decoration: InputDecoration(
-                                  labelText: 'Código Vivienda',
-                                  border: OutlineInputBorder(),
+                          .map(
+                              (row) => DataRow(
+                            cells: [
+                              DataCell(
+                                TextFormField(
+                                  readOnly: true,
+                                  controller: row['codigoVivienda'],
+                                  decoration: InputDecoration(
+                                    labelText: 'Código Vivienda',
+                                    border: OutlineInputBorder(),
+                                  ),
+                                  style: TextStyle(fontSize: 18),
+                                  mouseCursor: SystemMouseCursors.click,
+                                  onTap: () => _selectPlace(context, row['codigoVivienda']),
+                                  onChanged: (value) => setState(() => _hasUnsavedChanges = true),
+                                  validator:  (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Selecciona el código de vivienda';
+                                    } else if ( _viviendaCheck > 0 ) {
+                                      return 'Esa vivienda ya está ocupada por un arrendatario';
+                                    }
+                                    return null;
+                                  },
                                 ),
-                                style: TextStyle(fontSize: 18),
-                                mouseCursor: SystemMouseCursors.click,
-                                onTap: () => _selectPlace(context, row['codigoVivienda']),
-                                onChanged: (value) => setState(() => _hasUnsavedChanges = true),
                               ),
-                            ),
-                            DataCell(
-                              TextFormField(
-                                enabled: false,
-                                controller: row['ubicacion'],
-                                decoration: InputDecoration(
-                                  labelText: 'Ubicación',
-                                  border: OutlineInputBorder(),
+                              DataCell(
+                                TextFormField(
+                                  enabled: false,
+                                  controller: row['ubicacion'],
+                                  decoration: InputDecoration(
+                                    labelText: 'Ubicación',
+                                    border: OutlineInputBorder(),
+                                  ),
+                                  style: TextStyle(fontSize: 18),
                                 ),
-                                style: TextStyle(fontSize: 18),
                               ),
-                            ),
-                            DataCell(
-                              TextFormField(
-                                controller: row['proveedorEnergia'],
-                                decoration: InputDecoration(
-                                  labelText: 'Proveedor de Energía Electrica',
-                                  border: OutlineInputBorder(),
+                              DataCell(
+                                TextFormField(
+                                  controller: row['proveedorEnergia'],
+                                  decoration: InputDecoration(
+                                    labelText: 'Proveedor de Energía Electrica',
+                                    border: OutlineInputBorder(),
+                                  ),
+                                  style: TextStyle(fontSize: 18),
+                                  onChanged: (value) => setState(() => _hasUnsavedChanges = true),
                                 ),
-                                style: TextStyle(fontSize: 18),
-                                onChanged: (value) => setState(() => _hasUnsavedChanges = true),
                               ),
-                            ),
-                            DataCell(
-                              TextFormField(
-                                controller: row['montoEnergia'],
-                                decoration: InputDecoration(
-                                  labelText: 'Monto Electricidad',
-                                  border: OutlineInputBorder(),
+                              DataCell(
+                                TextFormField(
+                                  controller: row['montoEnergia'],
+                                  decoration: InputDecoration(
+                                    labelText: 'Monto Electricidad',
+                                    border: OutlineInputBorder(),
+                                  ),
+                                  style: TextStyle(fontSize: 18),
+                                  onChanged: (value) => setState(() => _hasUnsavedChanges = true),
                                 ),
-                                style: TextStyle(fontSize: 18),
-                                onChanged: (value) => setState(() => _hasUnsavedChanges = true),
                               ),
-                            ),
-                            DataCell(
-                              TextFormField(
-                                controller: row['proveedorAgua'],
-                                decoration: InputDecoration(
-                                  labelText: 'Proveedor Agua Potable',
-                                  border: OutlineInputBorder(),
+                              DataCell(
+                                TextFormField(
+                                  controller: row['proveedorAgua'],
+                                  decoration: InputDecoration(
+                                    labelText: 'Proveedor Agua Potable',
+                                    border: OutlineInputBorder(),
+                                  ),
+                                  style: TextStyle(fontSize: 18),
+                                  onChanged: (value) => setState(() => _hasUnsavedChanges = true),
                                 ),
-                                style: TextStyle(fontSize: 18),
-                                onChanged: (value) => setState(() => _hasUnsavedChanges = true),
                               ),
-                            ),
-                            DataCell(
-                              TextFormField(
-                                controller: row['montoAgua'],
-                                decoration: InputDecoration(
-                                  labelText: 'Monto Agua',
-                                  border: OutlineInputBorder(),
+                              DataCell(
+                                TextFormField(
+                                  controller: row['montoAgua'],
+                                  decoration: InputDecoration(
+                                    labelText: 'Monto Agua',
+                                    border: OutlineInputBorder(),
+                                  ),
+                                  style: TextStyle(fontSize: 18),
+                                  onChanged: (value) => setState(() => _hasUnsavedChanges = true),
                                 ),
-                                style: TextStyle(fontSize: 18),
-                                onChanged: (value) => setState(() => _hasUnsavedChanges = true),
                               ),
-                            ),
-                          ],
-                        ),
+                            ],
+                          ),
                       )
-                      .toList(),
+                        .toList(),
                     ),
                   ),
                 ),
@@ -214,8 +263,11 @@ class _EditPaymentsEmptyPlaceState extends State<EditPaymentsEmptyPlace> {
                       width: 150,
                       height: 50,
                       child: ElevatedButton(
-                        onPressed: () {
-                          // Handle save button press
+                        onPressed: () async {
+                          // await _db.into(_db.proveedoresServicios).insert(ProveedoresServiciosCompanion.insert(codigoProveedor: 'ENEE', proveedorNombre: 'Empresa Nacional de Energía Eléctrica', servicio: 'Energía Eléctrica'));
+                          // await _db.into(_db.proveedoresServicios).insert(ProveedoresServiciosCompanion.insert(codigoProveedor: 'APC', proveedorNombre: 'Aguas de Puerto Cortes S.A. de C.V.', servicio: 'Agua Potable'));
+                            _save();
+                          _hasUnsavedChanges = false;
                         },
                         child: const Text('Guardar'),
                       ),

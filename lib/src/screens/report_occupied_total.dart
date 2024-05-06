@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:intl/intl.dart';
 import 'package:viviendas_modicas_sistema/data/local/db/app_db.dart';
-import 'package:viviendas_modicas_sistema/data/local/entity/arrendatarios_vistas.dart';
 import '../models/asset.dart';
-import '../shared/constantes.dart';
 import '../widgets/appbar.dart';
 import '../widgets/drawer.dart';
 

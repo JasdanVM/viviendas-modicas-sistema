@@ -313,9 +313,67 @@ class AppDb extends _$AppDb {
       ..where((tbl) => tbl.facturaId.equals(facturaId)))
     .go();
   }
+  
+  Future<List<CuentasPSDesocupado>> getCuentasPSDesocupados() async {
+    return await select(cuentasPSDesocupados).get();
+  }
+
+  Future<bool> updateCuentasPSDesocupados(CuentasPSDesocupadosCompanion entity) async {
+    return await update(cuentasPSDesocupados).replace(entity);
+  }
+//   Future updateCuentaPSDesocupado(String cViviendaValue, CuentasPSDesocupadosCompanion entity) async {
+//   return await (update(cuentasPSDesocupados)
+//   ..where((tbl) => tbl.cVivienda.equals(cViviendaValue)))
+//   .write(entity);
+// }
+  Future<bool> updateCuentaPSDesocupado(String cViviendaValue, CuentasPSDesocupadosCompanion entity) async {
+  final count = await (update(cuentasPSDesocupados)
+    ..where((tbl) => tbl.cVivienda.equals(cViviendaValue)))
+    .write(entity);
+
+    return count > 0;
+  }
+//   Future updateCuentaPSDesocupado(Category target) {
+//   // for updates, we use the "companion" version of a generated class. This wraps the
+//   // fields in a "Value" type which can be set to be absent using "Value.absent()". This
+//   // allows us to separate between "SET category = NULL" (`category: Value(null)`) and not
+//   // updating the category at all: `category: Value.absent()`.
+//   return (update(cuentasPSDesocupados)
+//       ..where((t) => t.title.like('%Important%'))
+//     ).write(TodosCompanion(
+//       category: Value(target.id),
+//     ),
+//   );
+// }
+
+  Future<int> insertCuentasPSDesocupados(CuentasPSDesocupadosCompanion entity) async {
+    return await into(cuentasPSDesocupados).insert(entity);
+  }
+
+  Future<int> deleteCuentasPSDesocupados(String codigovivienda) async {
+    return await (delete(cuentasPSDesocupados)
+          ..where((tbl) => tbl.cVivienda.equals(codigovivienda)))
+        .go();
+  }
+
+  Future<void> fillProveedoresServicios() async {
+    await into(proveedoresServicios).insert(ProveedoresServiciosCompanion.insert(
+      codigoProveedor: 'ENEE',
+      proveedorNombre: 'Empresa Nacional de Energía Eléctrica',
+      servicio: 'Energía Eléctrica',
+    ));
+
+    await into(proveedoresServicios).insert(ProveedoresServiciosCompanion.insert(
+      codigoProveedor: 'APC',
+      proveedorNombre: 'Aguas de Puerto Cortes S.A. de C.V.',
+      servicio: 'Agua Potable',
+    ));
+  }
 
   @override
   Future<void> onCreate(DatabaseConnection db, int version) async {
     await fillViviendaUbicacion();
+    await fillProveedoresServicios();
   }
+
 }
