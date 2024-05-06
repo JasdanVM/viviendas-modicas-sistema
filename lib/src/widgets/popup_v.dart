@@ -166,7 +166,7 @@ class _SearchByHousingPopupState extends State<SearchByHousingPopup> {
   }
 
   void _getAllCodigoDeViviendaOptions() async {
-    List<String> codes = await getCodigoDeViviendaOptions();
+    List<String> codes = await _db.getCodigoDeViviendaOptions();
     setState(() {
       _allCodigoDeViviendaOptions = codes;
       _codigoDeViviendaOptions = codes;
@@ -187,10 +187,10 @@ class _SearchByHousingPopupState extends State<SearchByHousingPopup> {
     _codigoDeViviendaValue = null;
   }
 
-    Future<List<String>> getCodigoDeViviendaOptions() async {
-    final viviendaUbicaciones = await _db.select(_db.viviendaUbicacion).get();
-    return viviendaUbicaciones.map((e) => e.codigoVivienda).toList();
-  }
+  //   Future<List<String>> getCodigoDeViviendaOptions() async {
+  //   final viviendaUbicaciones = await _db.select(_db.viviendaUbicacion).get();
+  //   return viviendaUbicaciones.map((e) => e.codigoVivienda).toList();
+  // }
   
 }
 

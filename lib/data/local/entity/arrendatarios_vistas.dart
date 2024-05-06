@@ -33,15 +33,39 @@ abstract class vArrendatariosHistorial extends View{
 }
 
 abstract class vViviendaDetalle extends View{
+  ViviendaUbicacion get viviendaubicacion;
   Arrendatarios get arrendatarios;
   ActualArrendatarios get actualarrendatarios;
 
   @override
   Query as() => select([
-    arrendatarios.identidad, arrendatarios.nombre, actualarrendatarios.cVivienda, actualarrendatarios.fechaEntrada, actualarrendatarios.precioRenta, actualarrendatarios.obs
-  ]).from(arrendatarios).join([innerJoin(actualarrendatarios, actualarrendatarios.idArrendatario.equalsExp(arrendatarios.identidad))]);
+    viviendaubicacion.codigoVivienda, viviendaubicacion.ubicacion, arrendatarios.identidad, arrendatarios.nombre,
+  ]).from(viviendaubicacion).join([innerJoin(actualarrendatarios, actualarrendatarios.cVivienda.equalsExp(viviendaubicacion.codigoVivienda))])
+  .join([innerJoin(arrendatarios, arrendatarios.identidad.equalsExp(actualarrendatarios.idArrendatario))]);
 
   static get() {}
 }
 
+abstract class vViviendasConArrendatarios extends View {
+  ViviendaUbicacion get viviendaubicacion;
+  ActualArrendatarios get actualarrendatarios;
 
+  @override
+  Query as() => select([actualarrendatarios.cVivienda, viviendaubicacion.ubicacion])
+    .from(actualarrendatarios).join([innerJoin(viviendaubicacion, viviendaubicacion.codigoVivienda.equalsExp(actualarrendatarios.cVivienda))]);
+
+    static get() {}
+}
+
+// abstract class vViviendasSinArrendatarios extends View {
+//   ViviendaUbicacion get viviendaubicacion;
+//   ActualArrendatarios get actualarrendatarios;
+
+//   @override
+//   Query as() => select(viviendaubicacion)
+//     ..where((tbl) => tbl.codigoVivienda.isNotInQuery(
+//       select([actualarrendatarios.cVivienda]).from(actualarrendatarios)
+//     ));
+
+//     static get() {}
+// }

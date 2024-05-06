@@ -89,7 +89,7 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                         decoration: InputDecoration(
                           labelText: 'Usuario',
                           border: OutlineInputBorder(),
-                          prefixIcon: Icon(Icons.person),
+                          prefixIcon: Icon(Icons.person, color: Colors.grey,),
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -104,7 +104,7 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                         decoration: InputDecoration(
                           labelText: 'Contraseña',
                           border: OutlineInputBorder(),
-                          prefixIcon: Icon(Icons.lock),
+                          prefixIcon: Icon(Icons.lock, color: Colors.grey),
                         ),
                         obscureText: true,
                         validator: (value) {

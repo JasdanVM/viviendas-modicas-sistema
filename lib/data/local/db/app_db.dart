@@ -30,7 +30,9 @@ LazyDatabase _openConnection() {
   ],
   views: [
     vArrendatariosActuales,
-    vArrendatariosHistorial
+    vArrendatariosHistorial,
+    vViviendaDetalle,
+    vViviendasConArrendatarios
   ]
 )
 class AppDb extends _$AppDb {
@@ -104,22 +106,6 @@ class AppDb extends _$AppDb {
   //   return (await query.getSingle())![0] as int;
   // }
 
-Future<int> verificarViviendaOcupacion(String codigoVivienda) async {
-  final existe = await (select(actualArrendatarios)
-      ..where((tbl) => tbl.cVivienda.equals(codigoVivienda)))
-    .get()
-    .then((rows) => rows.length);
-  return existe;
-}
-
-
-  Future<int> countViviendaUbicaciones() async {
-    final count = viviendaUbicacion.codigoVivienda.count();
-    final query = selectOnly(viviendaUbicacion)..addColumns([count]);
-    final result = await query.getSingle();
-    return result.read(count)!;
-  }
-
   Future<bool> updateActualArrendatario(
       ActualArrendatariosCompanion entity) async {
     return await update(actualArrendatarios).replace(entity);
@@ -132,9 +118,59 @@ Future<int> verificarViviendaOcupacion(String codigoVivienda) async {
 
   Future<int> deleteActualArrendatario(String idArrendatario) async {
     return await (delete(actualArrendatarios)
-          ..where((tbl) => tbl.idArrendatario.equals(idArrendatario)))
-        .go();
+      ..where((tbl) => tbl.idArrendatario.equals(idArrendatario)))
+    .go();
   }
+
+  Future<List<ViviendaUbicacionData>> getViviendaUbicacion() async {
+    return await select(viviendaUbicacion).get();
+  }
+
+  Future<List<String>> getCodigoDeViviendaOptions() async {
+    final viviendaUbicaciones = await select(viviendaUbicacion).get();
+    return viviendaUbicaciones.map((e) => e.codigoVivienda).toList();
+  }
+
+  Future<int> verificarViviendaOcupacion(String codigoVivienda) async {
+    final existe = await (select(actualArrendatarios)
+        ..where((tbl) => tbl.cVivienda.equals(codigoVivienda)))
+      .get()
+      .then((rows) => rows.length);
+    return existe;
+  }
+
+  Future<int> countViviendaUbicaciones() async {
+    final count = viviendaUbicacion.codigoVivienda.count();
+    final query = selectOnly(viviendaUbicacion)..addColumns([count]);
+    final result = await query.getSingle();
+    return result.read(count)!;
+  }
+
+  Future<List<ViviendaUbicacionData>> fViviendasSinArrendatario() async {
+    final viviendasOcupadas = selectOnly(actualArrendatarios)
+      ..addColumns([actualArrendatarios.cVivienda]);
+
+    final query = select(viviendaUbicacion).join(
+        [innerJoin(actualArrendatarios, viviendaUbicacion.codigoVivienda.isNotInQuery(viviendasOcupadas))]);
+
+    return query
+        .map((row) => (row.readTable(viviendaUbicacion)))
+        .get();
+  }
+
+  // Future<List<(ViviendaUbicacionData, ActualArrendatario)>> fViviendasSinArrendatario() async {
+  //   // final phoneNumbersForContact =
+  //   //     contacts.data.jsonEach(this, r'$.phoneNumbers');
+  //   final viviendasOcupadas = selectOnly(actualArrendatarios)
+  //     ..addColumns([actualArrendatarios.cVivienda]);
+
+  //   final query = select(viviendaUbicacion).join(
+  //       [innerJoin(actualArrendatarios, viviendaUbicacion.codigoVivienda.isNotInQuery(viviendasOcupadas))]);
+
+  //   return query
+  //       .map((row) => (row.readTable(viviendaUbicacion), row.readTable(actualArrendatarios)))
+  //       .get();
+  // }
 
   Future<void> fillViviendaUbicacion() async {
     final existingCodigos = (select(viviendaUbicacion)

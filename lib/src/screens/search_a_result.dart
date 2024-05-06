@@ -66,10 +66,10 @@ class RentersSearchResultDTScreen extends StatefulWidget {
 
   @override
   State<RentersSearchResultDTScreen> createState() =>
-      _RentersCurrentDTScreenState();
+      _RentersSearchResultDTScreen();
 }
 
-class _RentersCurrentDTScreenState extends State<RentersSearchResultDTScreen> {
+class _RentersSearchResultDTScreen extends State<RentersSearchResultDTScreen> {
   late AppDb _db;
   late Future<vArrendatariosActuale?> arrendatarioDetalleFuture;
 

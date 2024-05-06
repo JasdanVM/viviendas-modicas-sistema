@@ -1,6 +1,9 @@
+
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:intl/intl.dart';
+import 'package:viviendas_modicas_sistema/data/local/db/app_db.dart';
+import 'package:viviendas_modicas_sistema/data/local/entity/arrendatarios_vistas.dart';
 import '../models/asset.dart';
 import '../shared/constantes.dart';
 import '../widgets/appbar.dart';
@@ -8,7 +11,7 @@ import '../widgets/drawer.dart';
 
 class OccupiedHousingScreen extends StatelessWidget {
   late int total;
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,15 +69,97 @@ class OccupiedHousingScreen extends StatelessWidget {
   }
 }
 
-class OccupiedHousingDTScreen extends StatelessWidget {
-  final int _totalPlaces = 20; // Replace with your total houses variable
-  final int _occupiedPlaces = 5; // Replace with your occupied houses variable
-  final List<Place> _places = [
-    Place(code: 'LLG-A01', location: 'La Laguna'),
-    Place(code: 'EPV-C02', location: 'El Porvenir'),
-    Place(code: '23A-B03', location: 'La 23 de Abril'),
-    // Add more houses to this list
-  ];
+class OccupiedHousingDTScreen extends StatefulWidget {
+  const OccupiedHousingDTScreen({Key? key}) : super(key: key);
+
+  @override
+  State<OccupiedHousingDTScreen> createState() => _OccupiedHousingDTScreen();
+}
+
+class _OccupiedHousingDTScreen extends State<OccupiedHousingDTScreen> {
+  late AppDb _db;
+  List<ViviendaUbicacionData> _places = [];
+  int _occupiedPlaces = 0;
+  int _totalPlaces = 0;
+  
+
+  @override
+  void initState() {
+    super.initState();
+    _db = AppDb();
+    _loadData();
+  }
+
+  void _loadData() async {
+    // (await _db.select(_db.vArrendatariosActuales).get()).forEach(print);
+    final List<ViviendaUbicacionData> places = await _db.fViviendasSinArrendatario();
+    final List<ViviendaUbicacionData> total = await _db.select(_db.viviendaUbicacion).get();
+
+    setState(() {
+      _places = removeDuplicates(places);
+      print('HEY'); 
+      print(_places.length);
+      print('HEY'); 
+      print(total.length);
+      print('HEY'); 
+      print(places.length - total.length);
+      print('HEY');
+      _totalPlaces = total.length;
+      _occupiedPlaces = _totalPlaces - _places.length;
+    });
+  }
+
+  List<ViviendaUbicacionData> removeDuplicates(List<ViviendaUbicacionData> places) {
+  List<ViviendaUbicacionData> uniquePlaces = [];
+
+  for (ViviendaUbicacionData place in places) {
+    if (!uniquePlaces.contains(place)) {
+      uniquePlaces.add(place);
+    }
+  }
+
+  return uniquePlaces;
+}
+
+//   void _loadData() async {
+//   // Get data from fViviendasSinArrendatario
+//   final List<ViviendaUbicacionData> places = (await _db.fViviendasSinArrendatario())
+//       .map((data) => data.item1) // Extract ViviendaUbicacionData
+//       .toList();
+
+//   // Update state with the loaded places
+//   setState(() {
+//     _occupiedPlaces = places.length;
+//   });
+// }
+
+// void _loadData() async {
+//   void printFunctionResult() async {
+//     final result = await _db.fViviendasSinArrendatario();
+//     print(result);
+//   }
+
+//   final List<ViviendaUbicacionData> places = await _db.fViviendasSinArrendatario();
+
+//   setState(() {
+//     _places = places;
+//     // _occupiedPlaces = places.length;
+//   });
+// }
+
+
+// void _loadData() async {
+//   // Get data from fViviendasSinArrendatario
+//   final List places = await _db.select(_db.fViviendasSinArrendatario as ResultSetImplementation<HasResultSet, dynamic>).get();
+
+//   // Update state with the loaded places
+//   setState(() {
+//     _places = places;
+//     _occupiedPlaces = places.length;
+//   });
+// }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -125,8 +210,8 @@ class OccupiedHousingDTScreen extends StatelessWidget {
                       ],
                       rows: _places.map((place) {
                         return DataRow(cells: [
-                          DataCell(Text(place.code)),
-                          DataCell(Text(place.location)),
+                          DataCell(Text(place.codigoVivienda.toString())),
+                          DataCell(Text(place.ubicacion.toString())),
                         ]);
                       }).toList(),
                     ),

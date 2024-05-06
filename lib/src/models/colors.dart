@@ -25,28 +25,6 @@ ThemeData lightMode = ThemeData(
   primarySwatch: CustomColor.cVerde,
 );
 
-// ThemeData darkMode = ThemeData(
-//   brightness: Brightness.dark,
-//   useMaterial3: false,
-//   primarySwatch: CustomColor.cVerde,
-//   buttonTheme: ButtonThemeData(
-//     buttonColor: CustomColor.cVerde, // Set button background color
-//     textTheme: ButtonTextTheme.primary, // Ensure primary text color is used
-//   ),
-//   floatingActionButtonTheme: FloatingActionButtonThemeData(
-//     backgroundColor: CustomColor.cVerde, // Set FAB background color
-//     foregroundColor: Colors.white, // Set FAB icon color to white
-//   ),
-//   popupMenuTheme: PopupMenuThemeData(
-//     color: CustomColor.cVerde, // Set popup menu background color
-//   ),
-//   // For text buttons, we create a custom text theme
-//   textButtonTheme: TextButtonThemeData(
-//     style: TextButton.styleFrom(
-//       foregroundColor: Color(0xFF107C10), // Set text button text color to a lighter shade of green
-//     ),
-//   ),
-// );
 ThemeData darkMode = ThemeData.dark().copyWith(
   useMaterial3: false,
   colorScheme: ColorScheme.fromSwatch(
@@ -76,4 +54,5 @@ ThemeData darkMode = ThemeData.dark().copyWith(
   popupMenuTheme: PopupMenuThemeData(
     color: CustomColor.cVerde,
   ),
+  primaryColor: CustomColor.cVerde,
 );

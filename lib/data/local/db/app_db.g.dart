@@ -3245,6 +3245,256 @@ class $vArrendatariosHistorialView
       const {'arrendatarios', 'historial_arrendatarios'};
 }
 
+class vViviendaDetalleData extends DataClass {
+  final String codigoVivienda;
+  final String ubicacion;
+  final String identidad;
+  final String nombre;
+  const vViviendaDetalleData(
+      {required this.codigoVivienda,
+      required this.ubicacion,
+      required this.identidad,
+      required this.nombre});
+  factory vViviendaDetalleData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return vViviendaDetalleData(
+      codigoVivienda: serializer.fromJson<String>(json['codigoVivienda']),
+      ubicacion: serializer.fromJson<String>(json['ubicacion']),
+      identidad: serializer.fromJson<String>(json['identidad']),
+      nombre: serializer.fromJson<String>(json['nombre']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'codigoVivienda': serializer.toJson<String>(codigoVivienda),
+      'ubicacion': serializer.toJson<String>(ubicacion),
+      'identidad': serializer.toJson<String>(identidad),
+      'nombre': serializer.toJson<String>(nombre),
+    };
+  }
+
+  vViviendaDetalleData copyWith(
+          {String? codigoVivienda,
+          String? ubicacion,
+          String? identidad,
+          String? nombre}) =>
+      vViviendaDetalleData(
+        codigoVivienda: codigoVivienda ?? this.codigoVivienda,
+        ubicacion: ubicacion ?? this.ubicacion,
+        identidad: identidad ?? this.identidad,
+        nombre: nombre ?? this.nombre,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('vViviendaDetalleData(')
+          ..write('codigoVivienda: $codigoVivienda, ')
+          ..write('ubicacion: $ubicacion, ')
+          ..write('identidad: $identidad, ')
+          ..write('nombre: $nombre')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(codigoVivienda, ubicacion, identidad, nombre);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is vViviendaDetalleData &&
+          other.codigoVivienda == this.codigoVivienda &&
+          other.ubicacion == this.ubicacion &&
+          other.identidad == this.identidad &&
+          other.nombre == this.nombre);
+}
+
+class $vViviendaDetalleView
+    extends ViewInfo<$vViviendaDetalleView, vViviendaDetalleData>
+    implements HasResultSet {
+  final String? _alias;
+  @override
+  final _$AppDb attachedDatabase;
+  $vViviendaDetalleView(this.attachedDatabase, [this._alias]);
+  $ViviendaUbicacionTable get viviendaubicacion =>
+      attachedDatabase.viviendaUbicacion.createAlias('t0');
+  $ArrendatariosTable get arrendatarios =>
+      attachedDatabase.arrendatarios.createAlias('t1');
+  $ActualArrendatariosTable get actualarrendatarios =>
+      attachedDatabase.actualArrendatarios.createAlias('t2');
+  @override
+  List<GeneratedColumn> get $columns =>
+      [codigoVivienda, ubicacion, identidad, nombre];
+  @override
+  String get aliasedName => _alias ?? entityName;
+  @override
+  String get entityName => 'v_vivienda_detalle';
+  @override
+  Map<SqlDialect, String>? get createViewStatements => null;
+  @override
+  $vViviendaDetalleView get asDslTable => this;
+  @override
+  vViviendaDetalleData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return vViviendaDetalleData(
+      codigoVivienda: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}codigo_vivienda'])!,
+      ubicacion: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}ubicacion'])!,
+      identidad: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}identidad'])!,
+      nombre: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}nombre'])!,
+    );
+  }
+
+  late final GeneratedColumn<String> codigoVivienda = GeneratedColumn<String>(
+      'codigo_vivienda', aliasedName, false,
+      generatedAs: GeneratedAs(viviendaubicacion.codigoVivienda, false),
+      type: DriftSqlType.string);
+  late final GeneratedColumn<String> ubicacion = GeneratedColumn<String>(
+      'ubicacion', aliasedName, false,
+      generatedAs: GeneratedAs(viviendaubicacion.ubicacion, false),
+      type: DriftSqlType.string);
+  late final GeneratedColumn<String> identidad = GeneratedColumn<String>(
+      'identidad', aliasedName, false,
+      generatedAs: GeneratedAs(arrendatarios.identidad, false),
+      type: DriftSqlType.string);
+  late final GeneratedColumn<String> nombre = GeneratedColumn<String>(
+      'nombre', aliasedName, false,
+      generatedAs: GeneratedAs(arrendatarios.nombre, false),
+      type: DriftSqlType.string);
+  @override
+  $vViviendaDetalleView createAlias(String alias) {
+    return $vViviendaDetalleView(attachedDatabase, alias);
+  }
+
+  @override
+  Query? get query =>
+      (attachedDatabase.selectOnly(viviendaubicacion)..addColumns($columns))
+          .join([
+        innerJoin(
+            actualarrendatarios,
+            actualarrendatarios.cVivienda
+                .equalsExp(viviendaubicacion.codigoVivienda))
+      ]).join([
+        innerJoin(
+            arrendatarios,
+            arrendatarios.identidad
+                .equalsExp(actualarrendatarios.idArrendatario))
+      ]);
+  @override
+  Set<String> get readTables =>
+      const {'vivienda_ubicacion', 'arrendatarios', 'actual_arrendatarios'};
+}
+
+class vViviendasConArrendatario extends DataClass {
+  final String cVivienda;
+  final String ubicacion;
+  const vViviendasConArrendatario(
+      {required this.cVivienda, required this.ubicacion});
+  factory vViviendasConArrendatario.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return vViviendasConArrendatario(
+      cVivienda: serializer.fromJson<String>(json['cVivienda']),
+      ubicacion: serializer.fromJson<String>(json['ubicacion']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'cVivienda': serializer.toJson<String>(cVivienda),
+      'ubicacion': serializer.toJson<String>(ubicacion),
+    };
+  }
+
+  vViviendasConArrendatario copyWith({String? cVivienda, String? ubicacion}) =>
+      vViviendasConArrendatario(
+        cVivienda: cVivienda ?? this.cVivienda,
+        ubicacion: ubicacion ?? this.ubicacion,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('vViviendasConArrendatario(')
+          ..write('cVivienda: $cVivienda, ')
+          ..write('ubicacion: $ubicacion')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(cVivienda, ubicacion);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is vViviendasConArrendatario &&
+          other.cVivienda == this.cVivienda &&
+          other.ubicacion == this.ubicacion);
+}
+
+class $vViviendasConArrendatariosView
+    extends ViewInfo<$vViviendasConArrendatariosView, vViviendasConArrendatario>
+    implements HasResultSet {
+  final String? _alias;
+  @override
+  final _$AppDb attachedDatabase;
+  $vViviendasConArrendatariosView(this.attachedDatabase, [this._alias]);
+  $ViviendaUbicacionTable get viviendaubicacion =>
+      attachedDatabase.viviendaUbicacion.createAlias('t0');
+  $ActualArrendatariosTable get actualarrendatarios =>
+      attachedDatabase.actualArrendatarios.createAlias('t1');
+  @override
+  List<GeneratedColumn> get $columns => [cVivienda, ubicacion];
+  @override
+  String get aliasedName => _alias ?? entityName;
+  @override
+  String get entityName => 'v_viviendas_con_arrendatarios';
+  @override
+  Map<SqlDialect, String>? get createViewStatements => null;
+  @override
+  $vViviendasConArrendatariosView get asDslTable => this;
+  @override
+  vViviendasConArrendatario map(Map<String, dynamic> data,
+      {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return vViviendasConArrendatario(
+      cVivienda: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}c_vivienda'])!,
+      ubicacion: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}ubicacion'])!,
+    );
+  }
+
+  late final GeneratedColumn<String> cVivienda = GeneratedColumn<String>(
+      'c_vivienda', aliasedName, false,
+      generatedAs: GeneratedAs(actualarrendatarios.cVivienda, false),
+      type: DriftSqlType.string);
+  late final GeneratedColumn<String> ubicacion = GeneratedColumn<String>(
+      'ubicacion', aliasedName, false,
+      generatedAs: GeneratedAs(viviendaubicacion.ubicacion, false),
+      type: DriftSqlType.string);
+  @override
+  $vViviendasConArrendatariosView createAlias(String alias) {
+    return $vViviendasConArrendatariosView(attachedDatabase, alias);
+  }
+
+  @override
+  Query? get query =>
+      (attachedDatabase.selectOnly(actualarrendatarios)..addColumns($columns))
+          .join([
+        innerJoin(
+            viviendaubicacion,
+            viviendaubicacion.codigoVivienda
+                .equalsExp(actualarrendatarios.cVivienda))
+      ]);
+  @override
+  Set<String> get readTables =>
+      const {'vivienda_ubicacion', 'actual_arrendatarios'};
+}
+
 abstract class _$AppDb extends GeneratedDatabase {
   _$AppDb(QueryExecutor e) : super(e);
   late final $ArrendatariosTable arrendatarios = $ArrendatariosTable(this);
@@ -3268,6 +3518,10 @@ abstract class _$AppDb extends GeneratedDatabase {
       $vArrendatariosActualesView(this);
   late final $vArrendatariosHistorialView vArrendatariosHistorial =
       $vArrendatariosHistorialView(this);
+  late final $vViviendaDetalleView vViviendaDetalle =
+      $vViviendaDetalleView(this);
+  late final $vViviendasConArrendatariosView vViviendasConArrendatarios =
+      $vViviendasConArrendatariosView(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -3284,6 +3538,8 @@ abstract class _$AppDb extends GeneratedDatabase {
         proveedoresServicios,
         cuentasPSDesocupados,
         vArrendatariosActuales,
-        vArrendatariosHistorial
+        vArrendatariosHistorial,
+        vViviendaDetalle,
+        vViviendasConArrendatarios
       ];
 }
