@@ -165,7 +165,7 @@ List<CuentasPSDesocupado> _sumData(List<CuentasPSDesocupado> data) {
                         return DataRow(
                           cells: [
                             DataCell(Text(conexion.cProveedorEnergia)),
-                            DataCell(Text(nombrePS(conexion.cProveedorEnergia))), // Assuming nombre proveedor is same as cProveedorEnergia
+                            DataCell(Text(nombrePS(conexion.cProveedorEnergia))),
                             DataCell(Text(conexion.montoEnergia.toString())),
                           ],
                         );

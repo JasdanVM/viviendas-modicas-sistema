@@ -261,7 +261,7 @@ class _PlaceSearchResultDTScreenEmpty extends State<PlaceSearchResultDTScreenEmp
       ),
       headingRowHeight: 40,
       headingTextStyle: TextStyle(color: Colors.white),
-      columns: [
+      columns: const [
         DataColumn(label: Text('Código Vivienda')),
         DataColumn(label: Text('Ubicación')),
       ],

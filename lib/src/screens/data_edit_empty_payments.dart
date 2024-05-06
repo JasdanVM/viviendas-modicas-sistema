@@ -197,13 +197,19 @@ String _getUbicacionFromCVivienda(String cVivienda) {
                               ),
                               DataCell(
                                 TextFormField(
+                                  initialValue: 'ENEE',
                                   controller: row['proveedorEnergia'],
-                                  decoration: InputDecoration(
-                                    labelText: 'Proveedor de Energía Electrica',
+                                  decoration: const InputDecoration(
+                                    labelText: 'Proveedor de Energía Eléctrica',
                                     border: OutlineInputBorder(),
                                   ),
                                   style: TextStyle(fontSize: 18),
                                   onChanged: (value) => setState(() => _hasUnsavedChanges = true),
+                                  validator:  (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Ingresa el proveedor de energía eléctrica';
+                                    }
+                                  }
                                 ),
                               ),
                               DataCell(
@@ -219,6 +225,7 @@ String _getUbicacionFromCVivienda(String cVivienda) {
                               ),
                               DataCell(
                                 TextFormField(
+                                  initialValue: 'APC',
                                   controller: row['proveedorAgua'],
                                   decoration: InputDecoration(
                                     labelText: 'Proveedor Agua Potable',
@@ -226,6 +233,11 @@ String _getUbicacionFromCVivienda(String cVivienda) {
                                   ),
                                   style: TextStyle(fontSize: 18),
                                   onChanged: (value) => setState(() => _hasUnsavedChanges = true),
+                                  validator:  (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Ingresa el proveedor de agua potable';
+                                    }
+                                  }
                                 ),
                               ),
                               DataCell(

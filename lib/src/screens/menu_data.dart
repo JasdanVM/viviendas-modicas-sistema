@@ -55,24 +55,6 @@ class AdminDataScreen extends StatelessWidget {
                     width: 600,
                     height: 50,
                     child: CustomTooltip(
-                      message: 'Indicar que un individuo ha dejado de arrendar su vivienda, y que se le añada al Historial',
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, Rutas.removerArre.name);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          minimumSize: const Size(500, 50),
-                          textStyle: const TextStyle(fontSize: 22),
-                        ),
-                        child: const Text('Remover Arrendatario del sistema'),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  SizedBox(
-                    width: 600,
-                    height: 50,
-                    child: CustomTooltip(
                       message: 'Actualizar la informaciuón respecto a los pagos y deudas de arrendatarios',
                       child: ElevatedButton(
                         onPressed: () {
@@ -122,7 +104,24 @@ class AdminDataScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    width: 600,
+                    height: 50,
+                    child: CustomTooltip(
+                      message: 'Indicar que un individuo ha dejado de arrendar su vivienda, y que se le añada al Historial',
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, Rutas.removerArre.name);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: const Size(500, 50),
+                          textStyle: const TextStyle(fontSize: 22),
+                        ),
+                        child: const Text('Remover Arrendatario del sistema'),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             )

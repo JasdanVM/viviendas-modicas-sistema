@@ -270,7 +270,7 @@ class _PaymentAndMorosoInfoScreenState extends State<PaymentAndMorosoInfoScreen>
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Ingresa el monto de la deuda de electricidad';
+                            return 'Ingresa el monto de la deuda de electricidad, o escribe 0 en caso de que no haya';
                           }
                           if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
                             return 'El monto de la deuda de electricidad solo debe contener números';
@@ -294,7 +294,7 @@ class _PaymentAndMorosoInfoScreenState extends State<PaymentAndMorosoInfoScreen>
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Ingresa el monto de la deuda de agua';
+                            return 'Ingresa el monto de la deuda de agua, o escribe 0 en caso de que no haya';
                           }
                           if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
                             return 'El monto de la deuda de agua solo debe contener números';

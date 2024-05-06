@@ -19,7 +19,7 @@ class _RemoveTenantScreenState extends State<RemoveTenantScreen> {
   void _findTenant() {
     // Aquí puedes agregar la lógica para buscar al arrendatario
     // utilizando el ID proporcionado en el campo de texto
-    int id = int.tryParse(_idController.text)?? 0;
+    String identidad = (_idController.text);
     // Lógica para buscar al arrendatario con el ID proporcionado
     // y actualizar _tenantName y _tenantLocation si se encuentra
     setState(() {
@@ -30,7 +30,7 @@ class _RemoveTenantScreenState extends State<RemoveTenantScreen> {
   void _removeTenant() {
     // Aquí puedes agregar la lógica para eliminar al arrendatario
     // utilizando el ID proporcionado en el campo de texto
-    int id = int.tryParse(_idController.text)?? 0;
+    String identidad = (_idController.text);
     // Lógica para eliminar al arrendatario con el ID proporcionado
   }
 
