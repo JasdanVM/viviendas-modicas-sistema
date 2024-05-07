@@ -39,7 +39,7 @@ class PlaceSearchResultScreen extends StatefulWidget {
 
 class _PlaceSearchResultScreenState extends State<PlaceSearchResultScreen> {
   late AppDb _db;
-  late int _viviendaCheck;
+  late int _viviendaCheck = 0;
 
   @override
   void initState() {
